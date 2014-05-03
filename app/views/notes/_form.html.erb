@@ -1,0 +1,31 @@
+<%= form_for(@note, :html => {:style => 'margin: 0 auto'}) do |f| %>
+  <%= f.hidden_field :date %>
+  <input type="hidden" name="previous_note_id" value="<%= @note.previous_id %>" />
+  <div class="row-fluid">
+    <div class="span8 offset2">
+      <% if @note.errors.any? %>
+        <div id="error_explanation">
+	  <h2><%= pluralize(@note.errors.count, "error") %> prohibited this note from being saved:</h2>
+	  <ul>
+	    <% @note.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+	    <% end %>
+	  </ul>
+	</div>
+      <% end %>
+      <div class="field">
+	<%= f.text_field :title, :style => 'width: 100%',
+	                 :placeholder => @note.new_record? ? 'title...' : 'edit title...' %>
+      </div>
+      <div class="field preview">
+	<%= f.text_area :body, :style => 'width: 100%',
+	                 :placeholder => @note.new_record? ? 'note...' : 'edit note...' %>
+      </div>
+      <div class="field">
+	<%= f.text_field :tag_list, :style => 'width: 85%; margin: 0',
+	                 :placeholder => @note.new_record? ? 'tags...' : 'edit tags...' %>
+	<%= f.submit :style => 'width: 10%' %>
+      </div>
+    </div>
+  </div>
+<% end %>

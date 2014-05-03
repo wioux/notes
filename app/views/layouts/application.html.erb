@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Notes</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<div class="filter_header">
+  <div class="row-fluid">
+    <div class="span8 offset2" style="padding-top: 2px;">
+      <form id="filter" style="position: relative">
+	<span style="position: absolute; margin-top: 5px; margin-left: 8px;
+		     -webkit-touch-callout: none; -webkit-user-select: none;
+		     -khtml-user-select: none; -moz-user-select: none;
+		     -ms-user-select: none; user-select: none;
+		     cursor: pointer; color: #888"
+	      class="input_label"
+	      onclick="$(this).parents('form').find('input').focus()">
+	  <img src="/spinner.gif" style="position: absolute; left: 0px; top: 3px; z-index: 100; visibility: hidden" />
+	  <span><i class="icon-filter"></i></span>
+	</span>
+	<input type="text" value="<%= params[:filter] %>"
+	       style="width: 100%; padding-left: 28px; height: 30px;
+		      -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box" />
+      </form>
+      <span>
+	<input type="checkbox" id="collapse_results" <%= 'checked' unless params[:collapse].blank? %> />
+	<label style="display:inline" for="collapse_results">Collapse all</label>
+      </span>
+      <span style="margin-left: 16px">
+	<input type="checkbox" id="order_by_version" <%= 'checked' if params[:order] == 'version_date' %> />
+	<label style="display:inline" for="order_by_version">Order by revision date</label>
+      </span>
+    </div>
+  </div>
+</div>
+
+<%= yield %>
+
+
+<div style="position: fixed; bottom: 0px; left: 0px; right: 0px;
+	    background-color: #fff; z-index: 5;
+	    padding-top: 12px;" class="note_footer collapsed">
+  <% @note = Note.new %>
+  <%= render 'form' %>
+</div>
+
+</body>
+</html>

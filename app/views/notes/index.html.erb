@@ -1,0 +1,48 @@
+<div class="row-fluid content">
+  <div class="span8 offset2 cascades">
+    <%= render 'cascades' %>
+  </div>
+  <div class="span2">
+    <a style="width: 150px" class="btn btn-default"
+       onclick="setFilter('')">clear filter</a>
+    <% tag_groups = Tag.groups %>
+    <% tag_groups.keys.sort.each_with_index do |tag, itag| %>
+      <div style="margin-top: 4px; margin-bottom: 4px">
+	<% if tag_groups[tag].empty? %>
+	  <a style="width: 150px; text-align: left"
+	     data-tag="<%= tag %>"
+	     class="btn btn-default tag
+		    <%= 'btn-info' if @filter.has_tag?(tag) %>">
+	    <%= tag %>
+	  </a>
+	<% else %>
+	  <div class="btn-group tag-group expanded">
+	    <a href="/?filter=.<%= tag %>"
+	       data-tag="<%= tag %>"
+	       style="width: 125px; text-align: left"
+	       class="btn btn-default tag <%= 'btn-info' if @filter.has_tag? tag %>">
+	      <%= tag %>
+	    </a>
+	    <button style="width: 26px"
+		    class="btn <%= 'collapsed' unless @filter.has_subtag? tag %>"
+		    data-toggle="collapse" data-target="#tag_group_<%=itag%>">
+	      <i class="caret"></i>
+	    </button>
+	  </div>
+	  <div class="collapse <%= 'in' if @filter.has_subtag? tag %>"
+	       id="tag_group_<%=itag%>">
+	    <% tag_groups[tag].each do |subtag| %>
+	    <a href="/?filter=.<%= tag %>:<%= subtag %>"
+		 data-tag="<%= tag %>:<%= subtag %>"
+		 style="width: 176px; margin-top: -1px"
+		 class="btn btn-default tag
+			<%= 'btn-info' if @filter.has_tag? tag+':'+subtag %>">
+	      &nbsp;&nbsp;&nbsp;<%= subtag %>
+	      </a>
+	    <% end %>
+	  </div>
+	<% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
