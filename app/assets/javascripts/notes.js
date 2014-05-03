@@ -57,10 +57,13 @@ $(document).ready(function() {
 	});
     };
     window.onpopstate = function(e) {
+	var query_filter = location.search || "?filter=";
+	query_filter = (query_filter.match(/filter=([^&]*)/) || ['',''])[1];
+	query_filter = decodeURIComponent(query_filter)
 	if (e.state) {
 	    setFilter(e.state);
 	} else {
-	    setFilter('');
+	    setFilter(query_filter);
 	}
     };
 
