@@ -75,6 +75,30 @@ header.date.collapsed + div {
 .note .body table {
     width: auto;
 }
+.note .body h1 {
+    font-size: 1.9em;
+    margin-bottom: 0px;
+    font-weight: normal;
+    text-decoration: underline;
+}
+.note .body h2 {
+    font-size: 1.5em;
+    margin-bottom: 0px;
+    font-weight: normal;
+    text-decoration: underline;
+}
+.note .body h3 {
+    font-size: 1.3em;
+    margin-bottom: 0px;
+    font-weight: normal;
+    text-decoration: underline;
+}
+.note .body h4 {
+    font-size: 1.2em;
+    margin-bottom: 0px;
+    font-weight: normal;
+    text-decoration: underline;
+}
 .note {
     padding-bottom: 3px;
 //    border-bottom: 1px solid #bbb;
