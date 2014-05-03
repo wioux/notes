@@ -10,7 +10,13 @@
 
 <div class="filter_header">
   <div class="row-fluid">
-    <div class="span8 offset2" style="padding-top: 2px;">
+    <div class="span1 offset1">
+      <h1><%= current_user.login_name %></h1>
+      <%= form_tag("/session", :method => 'delete') do %>
+        <input type="submit" class="btn btn-default" value="Log Out" />
+      <% end %>
+    </div>
+    <div class="span8" style="padding-top: 2px;">
       <form id="filter" style="position: relative">
 	<span style="position: absolute; margin-top: 5px; margin-left: 8px;
 		     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -35,16 +41,10 @@
 	<label style="display:inline" for="order_by_version">Order by revision date</label>
       </span>
     </div>
-    <div class="span2">
-      <%= form_tag("/session", :method => 'delete') do %>
-        <input type="submit" class="btn btn-default" style="width: 174px" value="Log Out" />
-      <% end %>
-    </div>
   </div>
 </div>
 
 <%= yield %>
-
 
 <div style="position: fixed; bottom: 0px; left: 0px; right: 0px;
 	    background-color: #fff; z-index: 5;
