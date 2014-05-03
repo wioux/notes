@@ -119,14 +119,22 @@ $(document).ready(function() {
 	    return;
 	$('.note_footer').addClass('collapsed');
     });
+
+    var last_timestamp = 0;
     $('body').keyup(function(e) {
 	if (e.which != 27)
 	    return;
-	if ($('.note_footer').hasClass('collapsed')) {
-	    $('.note_footer').removeClass('collapsed');
-	    $('.note_footer').find('textarea').focus();
+
+	var timestamp = new Date().getTime();
+	if (timestamp - last_timestamp < 400) {
+	    if ($('.note_footer').hasClass('collapsed')) {
+		$('.note_footer').removeClass('collapsed');
+		$('.note_footer').find('textarea').focus();
+	    } else {
+		$('.note_footer').addClass('collapsed');
+	    }
 	} else {
-	    $('.note_footer').addClass('collapsed');
+	    last_timestamp = new Date().getTime();
 	}
     });
     var exitWarning = function(e) {
