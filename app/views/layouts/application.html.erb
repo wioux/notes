@@ -35,6 +35,11 @@
 	<label style="display:inline" for="order_by_version">Order by revision date</label>
       </span>
     </div>
+    <div class="span2">
+      <%= form_tag("/session", :method => 'delete') do %>
+        <input type="submit" class="btn btn-default" style="width: 174px" value="Log Out" />
+      <% end %>
+    </div>
   </div>
 </div>
 
