@@ -5,8 +5,8 @@ Notes::Application.routes.draw do
     end
   end
 
-  post '/sessions', :to => 'application#login'
-  delete '/session', :to => 'application#logout'
+  post '/login', :to => 'application#login'
+  get '/logout', :to => 'application#logout'
 
   root :to => 'notes#index'
 

@@ -42,11 +42,6 @@
 	<input type="checkbox" id="order_by_version" <%= 'checked' if params[:order] == 'version_date' %> />
 	<label style="display:inline" for="order_by_version">Order by revision date</label>
       </span>
-      <span style="float: right">
-	<%= form_tag("/session", :method => 'delete') do %>
-          <input type="submit" class="btn btn-mini" value="Log Out" />
-	<% end %>
-      </span>
     </div>
   </div>
 </div>
