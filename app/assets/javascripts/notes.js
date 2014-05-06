@@ -78,9 +78,11 @@ $(document).ready(function() {
     });
 
     $('body').on('click', 'a .tag, a.tag, button.tag', function(e) {
-	e.preventDefault();
-	var tag = $(this).data('tag') || $(this).text();
-	setFilter('.'+tag);
+	if (!e.ctrlKey) {
+	    var tag = $(this).data('tag') || $(this).text();
+	    e.preventDefault();
+	    setFilter('.'+tag);
+	}
     });
     $('form#filter').submit(function(e) {
 	e.preventDefault();
