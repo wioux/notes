@@ -20,7 +20,7 @@ $(document).ready(function() {
     var order = query_param('order');
     var collapse = query_param('collapse');
     var filter_string = query_param('filter');
-    setFilter = function(filter) {
+    setFilter = function(filter, skipPushState) {
 	var spinner = $('#filter .input_label img');
 	var label = $('#filter .input_label span');
 	var input = $('#filter input');
@@ -49,12 +49,16 @@ $(document).ready(function() {
 	input.val(filter);
 	label.css('visibility', 'hidden');
 	spinner.css('visibility', 'visible');
-	$('.content').load(load_href, function() {
-	    spinner.css('visibility', 'hidden');
-	    label.css('visibility', 'visible');
-	    history.pushState(filter, '', hist_href);
-	    filter_string = filter;
-	    $('body').scrollTop(0);
+	$.ajax({
+	    url: load_href,
+	    success: function(cascades) {
+		$('.content').html(cascades);
+		spinner.css('visibility', 'hidden');
+		label.css('visibility', 'visible');
+		!skipPushState && history.pushState(filter, '', hist_href);
+		filter_string = filter;
+		$('body').scrollTop(0);
+	    }
 	});
     };
     window.onpopstate = function(e) {
@@ -62,7 +66,7 @@ $(document).ready(function() {
 	query_filter = (query_filter.match(/filter=([^&]*)/) || ['',''])[1];
 	query_filter = decodeURIComponent(query_filter)
 	if (e.state) {
-	    setFilter(e.state);
+	    setFilter(e.state, true);
 	} else {
 	    setFilter(query_filter);
 	}
