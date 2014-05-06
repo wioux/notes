@@ -54,6 +54,7 @@ $(document).ready(function() {
 	    label.css('visibility', 'visible');
 	    history.pushState(filter, '', hist_href);
 	    filter_string = filter;
+	    $('body').scrollTop(0);
 	});
     };
     window.onpopstate = function(e) {
