@@ -11,6 +11,8 @@ gem 'json'
 
 gem 'annotate'
 
+gem 'abcjs-rails'
+
 group :development, :test do
   gem 'rspec-rails'
 end

@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    abcjs-rails (1.8)
+      railties
     actionmailer (3.2.8)
       actionpack (= 3.2.8)
       mail (~> 2.4.4)
@@ -122,6 +124,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  abcjs-rails
   annotate
   bcrypt-ruby
   bootstrap-sass (~> 2.3.2.1)

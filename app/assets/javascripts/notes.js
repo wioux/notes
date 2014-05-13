@@ -10,6 +10,15 @@ var get_editted_note = function() {
     return note;
 };
 
+var renderAbc = function() {
+    $('div.abc').each(function() {
+	var abc = $(this).text();
+	ABCJS.renderAbc(this, abc);
+    });
+}
+$(document).ready(renderAbc);
+
+
 $(document).ready(function() {
     var order = query_param('order');
     var collapse = query_param('collapse');
@@ -52,6 +61,7 @@ $(document).ready(function() {
 		!skipPushState && history.pushState(filter, '', hist_href);
 		filter_string = filter;
 		$('body').scrollTop(0);
+		renderAbc();
 	    }
 	});
     };

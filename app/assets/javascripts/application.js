@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require_tree .
 //= require bootstrap
+//= require abcjs-rails
 //= require_tree ../../../vendor/assets/javascripts
 
 var query_param = function(key) {
