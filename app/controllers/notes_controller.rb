@@ -28,6 +28,7 @@ class NotesController < ApplicationController
       format.json { render :json => @notes }
     end
   end
+
   def show
     note = Note.find(params[:id])
     @notes = Note.includes(:tags).where('notes.original_id = ? OR notes.id = ?',
