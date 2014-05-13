@@ -13,7 +13,7 @@ var get_editted_note = function() {
 var renderAbc = function() {
     $('div.abc').each(function() {
 	var abc = $(this).text();
-	ABCJS.renderAbc(this, abc);
+	ABCJS.renderAbc(this, abc, {}, {staffwidth: 800});
     });
 }
 $(document).ready(renderAbc);
