@@ -27,6 +27,8 @@ class Note < ActiveRecord::Base
   has_many :successors, :class_name => 'Note', :foreign_key => 'previous_id'
   belongs_to :previous, :class_name => 'Note', :counter_cache => 'successor_count'
 
+  scope :current_versions, where(:successor_count => 0)
+
   def original
     super || self
   end

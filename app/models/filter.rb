@@ -58,6 +58,6 @@ class Filter
   end
 
   def notes
-    scope.where(:successor_count => 0)
+    scope.current_versions
   end
 end
