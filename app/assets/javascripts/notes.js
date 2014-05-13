@@ -9,12 +9,6 @@ var get_editted_note = function() {
     note.tag_list = form.find('*[name=note\\[tag_list\\]]').val();
     return note;
 };
-var query_param = function(key) {
-    var pairs = location.search.replace(/^\?/, '').split('&');
-    for (var i=0; i < pairs.length; ++i)
-	if (pairs[i].substr(0, key.length) == key)
-	    return pairs[i].substr(key.length+1);
-};
 
 $(document).ready(function() {
     var order = query_param('order');
