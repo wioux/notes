@@ -61,37 +61,6 @@ class Note < ActiveRecord::Base
     lines.length > 1 ? "#{lines.first}..." : lines.first
   end
 
-  def self.filter(string=nil)
-    return Note.includes(:tags) if string.blank?
-
-    tags = []
-    strings = []
-    until string.blank?
-      if string =~ /\A\s+/
-        string = $'
-      elsif string =~ /\A\.(\S+)/
-        tag, string = $1, $'
-        tags << tag
-      elsif string =~ /\A"([^"]+)"/ || string =~ /\A(\S+)/
-        search, string = $1, $'
-        strings << search
-      end
-    end
-
-    cond = ''
-    tags.each do |tag|
-      cond << ' OR' unless cond.empty?
-      cond << '(tags.label = ? OR tags.label LIKE ?)'
-    end
-    args = [tags.map{ |t| [t, "#{t}:%"] }].flatten
-    strings.each do |search|
-      cond << ' OR' unless cond.empty?
-      cond << '(notes.title LIKE ? OR notes.body LIKE ?)'
-      args << "%#{search}%" << "%#{search}%"
-    end
-    Note.includes(:tags).where(cond, *args)
-  end
-
   scope :order_by_original_date,
      order('strftime("%Y/%m/%d", notes.original_date) DESC, strftime("%H:%M:%f", notes.original_date) ASC')
 
