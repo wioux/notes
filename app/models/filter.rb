@@ -3,7 +3,6 @@ class Filter
 
   def initialize(string, fields={})
     @string = string
-    @unscoped = string.blank?
     @fields = fields
 
     @tags = []
@@ -23,7 +22,7 @@ class Filter
 
   def scope
     if @string.blank?
-      scope = Note.includes(:tags) if @unscoped
+      scope = Note.includes(:tags)
     else
       cond = ''
       @tags.each do |tag|
