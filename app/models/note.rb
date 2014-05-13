@@ -16,7 +16,7 @@
 #
 
 class Note < ActiveRecord::Base
-  attr_accessible :body, :date, :title
+  attr_accessible :body, :date, :title, :tag_list
   validates_presence_of :body
 
   has_many :tags, :dependent => :destroy
@@ -44,13 +44,13 @@ class Note < ActiveRecord::Base
     self.original_date ||= self.date
   end
 
-  attr_accessible :tag_list
   def tag_list
     tags.map(&:label).join(', ')
   end
+
   def tag_list=(list)
     list = list.split(/\s*,\s*/)
-    list.map{ |label| tags.build(:label => label) }
+    self.tags = list.map{ |label| tags.build(:label => label) }
   end
 
   def preview(maxlen=40)
