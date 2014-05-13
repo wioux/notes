@@ -56,14 +56,10 @@ $(document).ready(function() {
 	});
     };
     window.onpopstate = function(e) {
-	var query_filter = location.search || "?filter=";
-	query_filter = (query_filter.match(/filter=([^&]*)/) || ['',''])[1];
-	query_filter = decodeURIComponent(query_filter)
-	if (e.state) {
+	if (e.state)
 	    setFilter(e.state, true);
-	} else {
-	    setFilter(query_filter);
-	}
+	else
+	    setFilter(query_param('filter'));
     };
 
     $('.note .body table').tablesorter();

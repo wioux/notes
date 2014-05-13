@@ -1,5 +1,3 @@
-... query_param() in notes.js -- does it unescape?
-
 the way the exitWarning is cancelled on note save is weird?
 
 add like #formatted_date= to note, don't break apart the param in notes_controller.rb
