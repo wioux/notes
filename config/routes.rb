@@ -1,14 +1,10 @@
 Notes::Application.routes.draw do
-  resources :notes do
-    member do
-      post 'derivatives' => 'notes#create_derivative'
-    end
-  end
-
   post '/login', :to => 'application#login'
   get '/logout', :to => 'application#logout'
 
   root :to => 'notes#index'
+
+  resources :notes
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
