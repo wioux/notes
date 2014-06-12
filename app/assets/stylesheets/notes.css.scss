@@ -107,6 +107,13 @@ header.date.collapsed + div {
 .note:last-child {
 //    border-bottom: 0;
 }
+.note blockquote p {
+    margin-top: 15px;
+}
+.note blockquote p:nth-child(1) {
+    margin-top: 0px;
+}
+
 .note footer {
     padding-top: 8px;    
     margin-top: 4px;    
