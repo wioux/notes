@@ -4,7 +4,14 @@ Notes::Application.routes.draw do
 
   root :to => 'notes#index'
 
-  resources :notes
+  resources :notes do
+    get 'editor'
+    collection do
+      get 'filter'
+      get 'browse'
+      get 'scratch'
+    end
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

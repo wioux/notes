@@ -10,10 +10,30 @@ var get_editted_note = function() {
     return note;
 };
 
+function submitNote(form, callback) {
+    var date = '';
+    var now = new Date();
+    date += 1900 + now.getYear() + '/';
+    date += 1 + now.getMonth() + '/';
+    date += now.getDate() + '/';
+    date += now.getHours() + '/';
+    date += now.getMinutes() + '/';
+    date += now.getSeconds();
+    form.find('input[name=note\\[date\\]]').val(date);
+    form.each(function() {
+	$.ajax({
+	    url: form.attr('action'),
+	    method: form.attr('method'),
+	    data: form.serialize(),
+	    success: callback
+	});
+    });
+}
+
 var renderAbc = function() {
     $('div.abc').each(function() {
 	var abc = $(this).text();
-	ABCJS.renderAbc(this, abc, {}, {staffwidth: 800});
+	ABCJS.renderAbc(this, abc, {}, {staffwidth: 800, paddingbottom: -30});
     });
 }
 $(document).ready(renderAbc);
@@ -23,6 +43,7 @@ $(document).ready(function() {
     var order = query_param('order');
     var collapse = query_param('collapse');
     var filter_string = query_param('filter');
+    if (!location.pathname.match(/scratch/))
     setFilter = function(filter, skipPushState) {
 	var spinner = $('#filter .input_label img');
 	var label = $('#filter .input_label span');
@@ -65,6 +86,7 @@ $(document).ready(function() {
 	    }
 	});
     };
+    if (!location.pathname.match(/scratch/))
     window.onpopstate = function(e) {
 	if (e.state)
 	    setFilter(e.state, true);
@@ -74,10 +96,15 @@ $(document).ready(function() {
 
     $('.note .body table').tablesorter();
     $('.note .body table').addClass('table table-striped');
+    $('#note table').tablesorter();
+    $('#note table').addClass('table table-striped');
     $.ajaxSetup({
 	complete: function() {
 	    $('.note .body table').tablesorter();
 	    $('.note .body table').addClass('table table-striped');
+	    
+	    $('#note table').tablesorter();
+	    $('#note table').addClass('table table-striped');
 	}
     });
 

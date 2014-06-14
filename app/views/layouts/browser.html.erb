@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Notes</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+  <%= yield %>
+</head>
+<body>
+  <div id="filterer">
+    <form action="<%= request.fullpath %>" style="position: relative">
+      
+      <span id="filter-focuser">
+	<img src="/spinner.gif" />
+	<span><i class="icon-filter"></i></span>
+      </span>
+      
+      <span id="filter-clearer">
+	<span><i class="icon-ban-circle"></i></span>
+      </span>
+      
+      <input type="search" value="<%= params[:f] %>" />
+      
+    </form>
+  </div>
+
+  <div id="browser">
+    <ul>
+    </ul>
+  </div>
+
+  <div id="viewer">
+  </div>
+</body>
+</html>

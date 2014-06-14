@@ -29,17 +29,32 @@ class NotesController < ApplicationController
     end
   end
 
+  def filter
+    @filter = Filter.new(params[:filter])
+    render :json => @filter.notes, :only => :id, :include => [:tags => {:only => [], :methods => :short_label}], :methods => :preview
+  end
+  
+  def browse
+    render :layout => 'browser'
+  end
+  
+  def scratch
+    render :layout => 'browser'
+  end
+
   def show
-    note = Note.find(params[:id])
-    @notes = Note.includes(:tags).where('notes.original_id = ? OR notes.id = ?',
-                                        note.original_id, note.original_id)
-    index
+    @note = Note.find(params[:id])
+    if request.xhr?
+      render :partial => 'note'
+    end
   end
 
   # GET /notes/1/edit
   def edit
     @note = Note.find(params[:id]).successors.build
-    render :partial => 'form', :layout => nil
+    if request.xhr?
+      render :partial => 'edit'
+    end
   end
 
   # POST /notes

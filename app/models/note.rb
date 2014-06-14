@@ -27,7 +27,7 @@ class Note < ActiveRecord::Base
   has_many :successors, :class_name => 'Note', :foreign_key => 'previous_id'
   belongs_to :previous, :class_name => 'Note', :counter_cache => 'successor_count'
 
-  scope :current_versions, where(:successor_count => 0)
+  scope :current_versions, -> { where(:successor_count => 0) }
 
   def original
     super || self
@@ -63,8 +63,10 @@ class Note < ActiveRecord::Base
     lines.length > 1 ? "#{lines.first}..." : lines.first
   end
 
-  scope :order_by_original_date,
+  scope :order_by_original_date, -> {
      order('strftime("%Y/%m/%d", notes.original_date) DESC, strftime("%H:%M:%f", notes.original_date) ASC')
-
-  scope :order_by_version_date, order('notes.date DESC')
+  }
+  scope :order_by_version_date, -> {
+    order('notes.date DESC')
+  }
 end

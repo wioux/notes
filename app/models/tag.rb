@@ -23,4 +23,8 @@ class Tag < ActiveRecord::Base
     end
     tag_groups
   end
+
+  def short_label
+    label.split(/:/)[-1]
+  end
 end

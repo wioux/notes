@@ -1,0 +1,33 @@
+
+html, body {
+    height: 100%;
+}
+
+#filterer {
+    position: fixed;
+    top: 4px;
+    width: 23%;
+}
+
+#browser {
+    position: fixed;
+    top: 40px;
+    height: 100%;
+    width: 23%;
+}
+
+#viewer {
+    margin-top: 10px;
+    margin-left: 25%;
+    width: 70%;
+}
+
+.tag-links {
+    padding: 3px;
+    margin-right: 4px;
+    background-color: #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    border-radius: 4px;
+}

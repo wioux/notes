@@ -1,0 +1,25 @@
+#browser ul {
+    margin: 0px;
+    list-style-type: none;
+    height: 100%;
+    overflow: auto;
+}
+#browser li {
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+	border-top: 1px dashed #ddd;
+}
+#browser li:first-child {
+	border-top: none;
+}
+#browser li.selected {
+    background-color: #99ccff;
+}
+#browser .selector .preview {
+    display: block;
+    font-weight: bold;
+}
+#browser .selector .tag {
+    font-size: 0.9em;
+}

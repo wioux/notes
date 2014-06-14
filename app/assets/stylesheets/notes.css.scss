@@ -151,7 +151,7 @@ div.abc {
     margin-right: auto;
 }
 
-body {
+body.changeme {
     padding-top: 5.5em;
     padding-bottom: 5em;
 }
@@ -189,4 +189,8 @@ body {
 }
 .note_footer.collapsed .field.preview {
     display: block;
+}
+
+.note p, .note ul, .note ol, .note td, .note th, .note blockquote {
+    font-size: 14px;
 }
