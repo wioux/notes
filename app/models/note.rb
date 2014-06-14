@@ -29,6 +29,24 @@ class Note < ActiveRecord::Base
 
   scope :current_versions, -> { where(:successor_count => 0) }
 
+  default_scope { where(:is_history => false) }
+  belongs_to :present, :class_name => 'Note'
+  has_many :history, -> { where(:is_history => true) },
+           :class_name => 'Note', :foreign_key => 'present_id'
+
+  after_find :create_copy
+  before_update :save_copy
+
+  def create_copy
+    # TODO: note, this doesn't save tag_list
+    @copy = history.build(:title => title, :body => body, :date => date)
+    @copy.is_history = true
+  end
+
+  def save_copy
+    @copy.try(:save!)
+  end
+
   def original
     super || self
   end

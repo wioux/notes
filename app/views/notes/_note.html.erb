@@ -13,9 +13,8 @@
   </footer>
 </div>
 <div class="note-editor" style="display: none">
-  <%= form_for(@note.successors.build) do |f| %>
+  <%= form_for(@note) do |f| %>
   <%= f.hidden_field :date %>
-  <input type="hidden" name="previous_note_id" value="<%= @note.id %>" />
   
   <div style="position: absolute; top: 4px; width: 70%">
     <%= f.text_field :title, :style => 'width: 100%' %>

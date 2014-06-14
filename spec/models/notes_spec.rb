@@ -11,7 +11,6 @@ describe Note do
     end
   end
 
-
   describe '#tag_list=' do
     it 'should split the argument by comma and build a tag for each item' do
       expect( Note.new.tap{ |n| n.tag_list = '' }.tag_list ).
@@ -31,8 +30,23 @@ describe Note do
       note.tags.create!(:label => 'three')
       note.tag_list = 'uno, dos, tres'
       expect( note.tag_list ).to eq('uno, dos, tres')
-      note.save
+      note.save!
       expect( Note.find(note.id).tag_list ).to eq('uno, dos, tres')
+    end
+  end
+
+  describe '#save' do
+    it "should save a copy in history when updating a note" do
+      note = Note.create!(:title => 't', :body => 'b', :date => Time.at(1))
+
+      note = Note.find(note.id)
+      note.title = 'title'
+      note.save!
+
+      expect( note.history.count ).to eq(1)
+
+      copy = note.history.first
+      expect([copy.title, copy.body, copy.date]).to eq(['t', 'b', Time.at(1)])
     end
   end
 end
