@@ -22,14 +22,6 @@ class Note < ActiveRecord::Base
   validates_presence_of :body
 
   has_many :tags, :dependent => :destroy
-  
-  has_many :derivatives, :class_name => 'Note', :foreign_key => 'original_id'
-  belongs_to :original, :class_name => 'Note', :counter_cache => 'derivatives_count'
-
-  has_many :successors, :class_name => 'Note', :foreign_key => 'previous_id'
-  belongs_to :previous, :class_name => 'Note', :counter_cache => 'successor_count'
-
-  scope :current_versions, -> { where(:successor_count => 0) }
 
   default_scope { where(:is_history => false) }
   belongs_to :present, :class_name => 'Note'
@@ -56,19 +48,8 @@ class Note < ActiveRecord::Base
     self.original_date ||= date
   end
 
-
   def original
     super || self
-  end
-
-  after_initialize do
-    if new_record? && previous_id
-      self.original_id = previous.original_id
-      self.original_date = previous.original_date
-      self.title ||= previous.title
-      self.body ||= previous.body
-      self.tag_list = previous.tag_list if tag_list.blank?
-    end
   end
 
   def tag_list
@@ -89,8 +70,10 @@ class Note < ActiveRecord::Base
   end
 
   scope :order_by_original_date, -> {
-     order('strftime("%Y/%m/%d", notes.original_date) DESC, strftime("%H:%M:%f", notes.original_date) ASC')
+     order('strftime("%Y/%m/%d", notes.original_date) DESC, ' <<
+           'strftime("%H:%M:%f", notes.original_date) ASC')
   }
+
   scope :order_by_version_date, -> {
     order('notes.date DESC')
   }

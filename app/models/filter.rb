@@ -58,6 +58,6 @@ class Filter
   end
 
   def notes
-    scope.current_versions
+    scope
   end
 end

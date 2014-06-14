@@ -11,20 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140614094904) do
+ActiveRecord::Schema.define(version: 20140614104702) do
 
   create_table "notes", force: true do |t|
     t.string   "title"
     t.text     "body"
     t.datetime "date"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
-    t.integer  "original_id"
-    t.integer  "derivatives_count", default: 0
-    t.integer  "previous_id"
-    t.integer  "successor_count",   default: 0
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.datetime "original_date"
-    t.boolean  "is_history",        default: false, null: false
+    t.boolean  "is_history",    default: false, null: false
     t.integer  "present_id"
   end
 
