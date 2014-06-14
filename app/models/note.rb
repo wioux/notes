@@ -69,12 +69,7 @@ class Note < ActiveRecord::Base
     lines.length > 1 ? "#{lines.first}..." : lines.first
   end
 
-  scope :order_by_original_date, -> {
-     order('strftime("%Y/%m/%d", notes.original_date) DESC, ' <<
-           'strftime("%H:%M:%f", notes.original_date) ASC')
-  }
+  scope :order_by_original_date, -> { order('notes.original_date DESC') }
 
-  scope :order_by_version_date, -> {
-    order('notes.date DESC')
-  }
+  scope :order_by_version_date, -> { order('notes.date DESC') }
 end
