@@ -13,6 +13,8 @@
 #  previous_id       :integer
 #  successor_count   :integer          default(0)
 #  original_date     :datetime
+#  is_history        :boolean          default(FALSE), not null
+#  present_id        :integer
 #
 
 class Note < ActiveRecord::Base
