@@ -49,6 +49,14 @@ class Note < ActiveRecord::Base
     @copy.try(:save!)
   end
 
+
+  before_save :save_original_date
+
+  def save_original_date
+    self.original_date ||= date
+  end
+
+
   def original
     super || self
   end
@@ -61,9 +69,6 @@ class Note < ActiveRecord::Base
       self.body ||= previous.body
       self.tag_list = previous.tag_list if tag_list.blank?
     end
-  end
-  before_save do
-    self.original_date ||= self.date
   end
 
   def tag_list
