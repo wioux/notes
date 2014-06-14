@@ -8,9 +8,10 @@ $(document).ready(function() {
 	$('#viewer .note-editor form').each(function() {
 	    var form = $(this);
 	    e.preventDefault();
-	    submitNote(form, function() {
+	    submitNote(form, function(view) {
 		form.parents('.note-editor').hide();
 		form.parents('.note-editor').siblings('.note').show();
+		form.parents('.note-editor').siblings('.note').html(view).show();
 	    });
 	});
     });
