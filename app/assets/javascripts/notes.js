@@ -27,8 +27,9 @@ function renderNote() {
 }
 
 function renderAbc() {
-    $('div.abc').each(function() {
+    $('div.abc:not(.rendered)').each(function() {
 	var abc = $(this).text();
 	ABCJS.renderAbc(this, abc, {}, {staffwidth: 800, paddingbottom: -30});
+	$(this).addClass('rendered');
     });
 }
