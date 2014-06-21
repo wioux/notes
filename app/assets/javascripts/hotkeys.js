@@ -2,9 +2,9 @@ $(document).ready(function() {
     $(window).on('keydown.saveNote', function(e) {
 	if (!e.ctrlKey && !e.metaKey)
 	    return
-
+	
 	if (!event.metaKey) {
-	    switch(String.fromCharCode(event.which).toLowerCase()) {
+	    switch(String.fromCharCode(e.which).toLowerCase()) {
 	    case 'n':
 		e.preventDefault();
 		itemCreated();
@@ -13,7 +13,7 @@ $(document).ready(function() {
 	    return;
 	}
 	
-	switch(String.fromCharCode(event.which).toLowerCase()) {
+	switch(String.fromCharCode(e.which).toLowerCase()) {
 	case 'e':
 	    e.preventDefault();
 	    itemEdited();
