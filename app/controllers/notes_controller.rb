@@ -26,6 +26,11 @@ class NotesController < ApplicationController
     end
   end
 
+  def preview
+    @note = Note.new(params[:note])
+    render @note
+  end
+
   def create
     params[:note][:date] = Time.utc(*params[:note][:date].split('/').map(&:to_i))
     

@@ -9,6 +9,10 @@ $(document).ready(function() {
 		e.preventDefault();
 		itemCreated();
 		break;
+	    case 'i':
+		e.preventDefault();
+		itemInspected();
+		break;
 	    }
 	    return;
 	}

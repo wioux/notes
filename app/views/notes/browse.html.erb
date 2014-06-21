@@ -22,6 +22,29 @@
 		   'textarea[name=note\\[body\\]]').focus();
     }
 
+    function itemInspected() {
+	$('#viewer .note-editor form').each(function() {
+	    var form = $(this);
+	    $.ajax({
+		url: '/notes/preview',
+		method: 'post',
+		data: form.serialize(),
+		success: function(resp) {
+		    var modal = $('<div tabindex="-1"/>').addClass('modal');
+		    modal.append(
+			$('<div/>').addClass('modal-dialog modal-lg').append(
+			    $('<div/>').addClass('modal-content').append(
+				$('<div/>').addClass('modal-body').html(resp)
+			    )
+			)
+		    );
+		    modal.css({width: '1000px', 'margin-left': '-500px'}).modal();
+		    renderNote();
+		}
+	    });
+	});
+    }
+
     function itemSaved() {
 	$('#viewer .note-editor form:visible').each(function() {
 	    var form = $(this);
