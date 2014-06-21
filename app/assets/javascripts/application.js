@@ -17,9 +17,3 @@
 //= require abcjs-rails
 //= require_tree ../../../vendor/assets/javascripts
 
-var query_param = function(key) {
-    var pairs = location.search.replace(/^\?/, '').split('&');
-    for (var i=0; i < pairs.length; ++i)
-	if (pairs[i].substr(0, key.length+1) == key+'=')
-	    return decodeURIComponent(pairs[i].substr(key.length+1));
-};

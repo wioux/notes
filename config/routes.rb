@@ -1,15 +1,14 @@
 Notes::Application.routes.draw do
+
   post '/login', :to => 'application#login'
   get '/logout', :to => 'application#logout'
 
-  root :to => 'notes#index'
+  root :to => 'notes#browse'
 
-  resources :notes do
-    get 'editor'
+  resources :notes, :only => [:new, :create, :update, :show] do
     collection do
       get 'filter'
       get 'browse'
-      get 'scratch'
     end
   end
 

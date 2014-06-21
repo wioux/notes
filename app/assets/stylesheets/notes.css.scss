@@ -3,194 +3,83 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 
-.cascades {
-    margin: 0 auto;
-}
-
-.cascades header.date {
-    font-size: 1.1em;
-    background-color: #dee;
-    padding: 2px 0;
-}
-.cascades hr {
-    border-style: dashed;
-    border-color: #ddd;
-    margin: 5px 0;
-}
-
-.tag-group + div.collapse .btn {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    border-left: 2px solid #aaa;
-}
-.tag-group + div.collapse .btn {
-    text-align: left;
-}
-.tag-group.expanded .btn {
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-}
-.tag-group.expanded + div .btn {
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-}
-.tag-group .btn:not(.collapsed) .caret {
-    transform: rotate(180deg);
-}
-
-.new_note .actions input,
-.edit_note .actions input {
-    float: right;
-}
 .note {
     margin-bottom: 1em;
-}
-header.date + div > .note {
-    margin-top: 4px;
-}
-header.date.collapsed + div {
-    display: none;
-}
-.note .date {
-    float: right;
-}
-.note .actions {
-    float: right;
-    margin-left: 8px;
-}
-.note .title {
-    font-size: 2em;
-}
-.note .body {
-    clear: both;
-}
-.note .body p:first-child {
-    margin-top: 0px;
-}
-.note .body p:last-child {
-    margin-bottom: 0px;
-}
-.note .body table {
-    width: auto;
-}
-.note .body h1 {
-    font-size: 1.7em;
-    margin-bottom: 0px;
-    font-weight: normal;
-    text-decoration: underline;
-}
-.note .body h2 {
-    font-size: 1.5em;
-    margin-bottom: 0px;
-    font-weight: normal;
-    text-decoration: underline;
-}
-.note .body h3 {
-    font-size: 1.3em;
-    margin-bottom: 0px;
-    font-weight: normal;
-    text-decoration: underline;
-}
-.note .body h4 {
-    font-size: 1.2em;
-    margin-bottom: 0px;
-    font-weight: normal;
-    text-decoration: underline;
-}
-.note {
     padding-bottom: 3px;
-//    border-bottom: 1px solid #bbb;
-}
-.note:last-child {
-//    border-bottom: 0;
-}
-.note blockquote p {
-    margin-top: 15px;
-}
-.note blockquote p:nth-child(1) {
-    margin-top: 0px;
-}
+    
+    p, ul, ol, td, th, blockquote {
+	font-size: 14px;
+    }
 
-.note footer {
-    padding-top: 8px;    
-    margin-top: 4px;    
-}
-.note .tags .tag {
-    padding: 3px;
-    margin-right: 4px;
-    padding: 3px;
-    background-color: #ddd;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    -ms-border-radius: 4px;
-    border-radius: 4px;
-}
+    .title {
+	font-size: 2em;
+    }
 
+    .body {
+	clear: both;
 
-.note.collapsed {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-.note.collapsed .body,
-.note.collapsed .title,
-.note.collapsed footer {
-    display: none;
-}
-.note.collapsed .preview {
-    display: block;
-}
-.note:not(.collapsed) .preview {
-    display: none;
-}
+	h1 {
+	    font-size: 1.7em;
+	    margin-bottom: 0px;
+	    font-weight: normal;
+	    text-decoration: underline;
+	}
 
-div.abc {
-    margin-left: auto;
-    margin-right: auto;
-}
+	h2 {
+	    font-size: 1.5em;
+	    margin-bottom: 0px;
+	    font-weight: normal;
+	    text-decoration: underline;
+	}
+	
+	h3 {
+	    font-size: 1.3em;
+	    margin-bottom: 0px;
+	    font-weight: normal;
+	    text-decoration: underline;
+	}
+	
+	h4 {
+	    font-size: 1.2em;
+	    margin-bottom: 0px;
+	    font-weight: normal;
+	    text-decoration: underline;
+	}
+	
+	p:first-child {
+	    margin-top: 0px;
+	}
 
-body.changeme {
-    padding-top: 5.5em;
-    padding-bottom: 5em;
-}
-.filter_header {
-    position: fixed;
-    z-index: 5;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    height: 5.5em;
-    background-color: #fff;
-}
-.filter_header form {
-    margin: 0px;
-}
+	p:last-child {
+	    margin-bottom: 0px;
+	}
 
-.note_footer {
-    border-top: 1px dashed #888;
-}
-.note_footer.collapsed {
-    border-top: 0;
-}
-.note_footer form {
-    margin: 0px;
-}
-.note_footer textarea {
-    height: 25em;
-}
-.note_footer.collapsed textarea {
-    height: 1.4em;
-}
-.note_footer.collapsed .field,
-.note_footer.collapsed .actions {
-    display: none;
-}
-.note_footer.collapsed .field.preview {
-    display: block;
-}
+	table {
+	    width: auto;
+	}
 
-.note p, .note ul, .note ol, .note td, .note th, .note blockquote {
-    font-size: 14px;
+	blockquote p {
+	    margin-top: 15px;
+	}
+
+	div.abc {
+	    margin-left: auto;
+	    margin-right: auto;
+	}
+    }
+
+    footer {
+	padding-top: 8px;    
+	margin-top: 4px;    
+    }
+
+    .tag-links {
+	padding: 3px;
+	margin-right: 4px;
+	background-color: #ddd;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-ms-border-radius: 4px;
+	border-radius: 4px;
+    }
 }

@@ -37,22 +37,14 @@ class Filter
       end
       scope = Note.includes(:tags).where(cond, *args)
     end
-    if @order == :version
-      scope.where(@fields).order_by_version_date
-    else
-      scope.where(@fields).order_by_original_date
-    end
-  end
-  def order_by_version_date
-    @order = :version
-  end
-  def order_by_original_date
-    @order = :original
+    
+    scope.where(@fields).order('notes.original_date DESC')
   end
 
   def has_tag?(tag)
     tags.include? tag
   end
+
   def has_subtag?(sup)
     !tags.select{ |x| x =~ /\A#{sup}:/ }.empty?
   end

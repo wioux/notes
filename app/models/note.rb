@@ -2,19 +2,15 @@
 #
 # Table name: notes
 #
-#  id                :integer          not null, primary key
-#  title             :string(255)
-#  body              :text
-#  date              :datetime
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  original_id       :integer
-#  derivatives_count :integer          default(0)
-#  previous_id       :integer
-#  successor_count   :integer          default(0)
-#  original_date     :datetime
-#  is_history        :boolean          default(FALSE), not null
-#  present_id        :integer
+#  id            :integer          not null, primary key
+#  title         :string(255)
+#  body          :text
+#  date          :datetime
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  original_date :datetime
+#  is_history    :boolean          default(FALSE), not null
+#  present_id    :integer
 #
 
 class Note < ActiveRecord::Base
@@ -30,6 +26,7 @@ class Note < ActiveRecord::Base
 
   after_find :create_copy
   before_update :save_copy
+  before_save :save_original_date
 
   def create_copy
     # TODO: note, this doesn't save tag_list
@@ -41,15 +38,8 @@ class Note < ActiveRecord::Base
     @copy.try(:save!)
   end
 
-
-  before_save :save_original_date
-
   def save_original_date
     self.original_date ||= date
-  end
-
-  def original
-    super || self
   end
 
   def tag_list
@@ -69,7 +59,4 @@ class Note < ActiveRecord::Base
     lines.length > 1 ? "#{lines.first}..." : lines.first
   end
 
-  scope :order_by_original_date, -> { order('notes.original_date DESC') }
-
-  scope :order_by_version_date, -> { order('notes.date DESC') }
 end

@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   before_filter :logged_in?, :except => :login
+
   def logged_in?
     if session[:user_id].blank?
       render 'application/welcome', :layout => 'logged_out'

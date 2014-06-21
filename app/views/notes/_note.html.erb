@@ -2,7 +2,7 @@
   <span class="title"><%= @note.title %></span>
   <% unless @note.title.blank? %><br /><br /><% end %>
   <div class="body">
-    <%= raw ::MarkdownHTML.render(@note.body) %>
+    <%= raw ::MarkdownHTML.render(@note.body || '') %>
   </div>
   <footer>
     <div class="tags">
@@ -13,7 +13,7 @@
   </footer>
 </div>
 <div class="note-editor" style="display: none">
-  <%= form_for(@note) do |f| %>
+  <%= form_for(@note, :html => {'data-note-id' => @note.id}) do |f| %>
   <%= f.hidden_field :date %>
   
   <div style="position: absolute; top: 4px; width: 70%">
