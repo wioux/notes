@@ -1,3 +1,5 @@
+var current_filter_string;
+
 function setFilter(filter, callback) {
     $('#filterer input').val(filter);
     
@@ -6,7 +8,19 @@ function setFilter(filter, callback) {
 	url: '/notes/filter',
 	data: { filter: filter },
 	success: function(notes) {
+	    current_filter_string = filter;
 	    loadBrowser(notes, callback);
+	}
+    });
+}
+
+function refreshFilter() {
+    $.ajax({
+	method: 'get',
+	url: '/notes/filter',
+	data: { filter: current_filter_string },
+	success: function(notes) {
+	    updateBrowser(notes);
 	}
     });
 }

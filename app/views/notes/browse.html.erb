@@ -52,6 +52,7 @@
 	    var parent = container.parent();
 	    submitNote(form, function(response) {
 		browserActivate(response.id);
+		refreshFilter();
 	    });
 	});
     }
