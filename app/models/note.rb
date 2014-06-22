@@ -14,7 +14,7 @@
 #
 
 class Note < ActiveRecord::Base
-  attr_accessible :body, :date, :title, :tag_list
+  attr_accessible :body, :date, :title, :tag_list, :is_pinned
   validates_presence_of :body
 
   has_many :tags, :dependent => :destroy
@@ -70,4 +70,17 @@ class Note < ActiveRecord::Base
     lines.length > 1 ? "#{lines.first}..." : lines.first
   end
 
+  def as_json(opts=nil)
+    opts ||= {
+      :only => [:id, :original_date],
+      :include => {
+        :tags => {
+          :only => [], :methods => :short_label
+        },
+      },
+      :methods => :preview
+    }
+
+    super(opts)
+  end
 end

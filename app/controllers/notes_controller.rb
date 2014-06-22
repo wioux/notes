@@ -4,13 +4,22 @@ class NotesController < ApplicationController
   end
 
   def filter
-    @filter = Filter.new(params[:filter])
-    render :json => (Note.pinned + @filter.notes),
-           :only => [:id, :is_pinned],
-           :include => [:tags => {
-                          :only => [], :methods => :short_label
-                        }],
-           :methods => :preview
+    unpinned = Filter.new(params[:filter]).notes
+    pinned = Note.pinned.order('notes.original_date DESC')
+
+    [pinned, unpinned].each do |set|
+      set.map! do |note|
+        {
+          :id => note.id,
+          :original_date => note.original_date,
+          :preview => note.preview,
+          :is_pinned => note.is_pinned,
+          :tags => note.tags.map{ |tag| {:short_label => tag.short_label} }
+        }
+      end
+    end
+
+    render :json => {:pinned => pinned, :unpinned => unpinned}
   end
   
   def new
@@ -50,6 +59,18 @@ class NotesController < ApplicationController
       redirect_to note_path(@note, :format => 'json')
     else
       render :json => @note.errors,  :status => :unprocessable_entity      
+    end
+  end
+
+  def pin
+    if Note.find(params[:id]).pin!
+      render :json => @note
+    end
+  end
+
+  def unpin
+    if Note.find(params[:id]).unpin!
+      render :json => @note
     end
   end
 end

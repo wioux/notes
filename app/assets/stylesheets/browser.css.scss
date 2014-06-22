@@ -10,6 +10,28 @@
     ul#pinned li:last-child {
 	border-bottom: 1px solid #aaa;
     }
+
+    ul {
+	li {
+	    position: relative;
+	}
+	li .actions {
+	    position: absolute;
+	    top: 3px;
+	    right: 3px;
+	}
+	li:not(:hover) .actions {
+	    display: none;
+	}
+
+	&#pinned li .actions .pin-toggler:after {
+	    content: 'unpin'
+	}
+	&#unpinned li .actions .pin-toggler:after {
+	    content: 'pin'
+	}
+
+    }
 }
 #browser li {
     padding-left: 10px;
