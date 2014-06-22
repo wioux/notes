@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140614104702) do
+ActiveRecord::Schema.define(version: 20140622093849) do
 
   create_table "notes", force: true do |t|
     t.string   "title"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20140614104702) do
     t.datetime "original_date"
     t.boolean  "is_history",    default: false, null: false
     t.integer  "present_id"
+    t.boolean  "is_pinned",     default: false, null: false
   end
 
   create_table "tags", force: true do |t|

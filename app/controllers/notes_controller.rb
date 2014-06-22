@@ -5,8 +5,8 @@ class NotesController < ApplicationController
 
   def filter
     @filter = Filter.new(params[:filter])
-    render :json => @filter.notes, 
-           :only => :id, 
+    render :json => (Note.pinned + @filter.notes),
+           :only => [:id, :is_pinned],
            :include => [:tags => {
                           :only => [], :methods => :short_label
                         }],

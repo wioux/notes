@@ -38,7 +38,7 @@ class Filter
       scope = Note.includes(:tags).where(cond, *args)
     end
     
-    scope.where(@fields).order('notes.original_date DESC')
+    scope.unpinned.where(@fields).order('notes.original_date DESC')
   end
 
   def has_tag?(tag)

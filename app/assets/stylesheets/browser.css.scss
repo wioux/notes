@@ -1,14 +1,21 @@
-#browser ul {
-    margin: 0px;
-    list-style-type: none;
+#browser {
     height: 100%;
     overflow: auto;
+
+    ul {
+	margin: 0px;
+	list-style-type: none;
+    }
+
+    ul#pinned li:last-child {
+	border-bottom: 1px solid #aaa;
+    }
 }
 #browser li {
     padding-left: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
-	border-top: 1px dashed #ddd;
+    border-top: 1px dashed #ddd;
 }
 #browser li:first-child {
 	border-top: none;

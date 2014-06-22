@@ -2,12 +2,21 @@ var currently_activated_id;
 var browser_tag_colors = ['#a00', '#050', '#00f'];
 
 function loadBrowser(notes, callback) {
-    var colors, li, list;
-    colors = browser_tag_colors.slice(0);
-    list = $('#browser ul');
-    list.empty();
+    var i, li, list;
 
-    for (var i=0; i < notes.length; ++i) {
+    list = $('#browser ul#pinned');
+    list.empty();
+    for (i=0; i < notes.length; ++i) {
+	if (!notes[i].is_pinned)
+	    break;
+	li = constructBrowserItem(notes[i]);
+	list.append(li);	
+    }
+
+    
+    list = $('#browser ul#unpinned');
+    list.empty();
+    for (; i < notes.length; ++i) {
 	li = constructBrowserItem(notes[i]);
 	list.append(li);
     }
@@ -20,12 +29,12 @@ function loadBrowser(notes, callback) {
     list.append('<li style="border: 0">&nbsp;</li>');
     list.append('<li style="border: 0">&nbsp;</li>');
 
-    callback && callback(notes, list);
+    callback && callback(notes);
 }
 
 function updateBrowser(notes) {
     var ind = 0;
-    var list = $('#browser ul');
+    var list = $('#browser ul#unpinned');
     var first_result_id = list.find('li.selector').first().data('item-id');
 
     for (var i=0; i < notes.length; ++i)
@@ -34,6 +43,8 @@ function updateBrowser(notes) {
     ind = i;
 
     for (var li, i=0; i < ind; ++i) {
+	if (notes[i].is_pinned)
+	    continue;
 	li = constructBrowserItem(notes[i]);
 	list.prepend(li);
     }

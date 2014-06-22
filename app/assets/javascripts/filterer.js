@@ -39,8 +39,8 @@ $(document).ready(function() {
     });
     
     $('#filterer form').each(function() {
-	setFilter($(this).find('input').val(), function(notes, list) {
-	    list.children('li').first().click();
+	setFilter($(this).find('input').val(), function(notes) {
+	    $('#browser').find('li').first().click();
 	});
     });
 });
