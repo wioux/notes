@@ -3,16 +3,20 @@
     // window.addEventListener('beforeunload', exitWarning);
 
     function itemActivated(id) {
-	$('#viewer').load('/notes/'+id, renderNote);
+	$('#viewer').load('/notes/'+id, function() {
+	    renderNote();
+	});
     }
 
     function itemCreated() {
-	$('#viewer').load('/notes/new', function(resp, status) {
-	    if (status == 'error')
-		return $('#viewer').html(resp);
-	    renderNote();
-	    itemEdited();
-	});
+        if (!$('form.hasUnsavedChanges')[0] || confirm("Discard changes?")) {
+	    $('#viewer').load('/notes/new', function(resp, status) {
+		if (status == 'error')
+		    return $('#viewer').html(resp);
+		renderNote();
+		itemEdited();
+	    });
+	}
     }
 
     function itemEdited() {
@@ -52,6 +56,7 @@
 	    var container = form.parents('.note-editor');
 	    var parent = container.parent();
 	    submitNote(form, function(response) {
+		form.removeClass('hasUnsavedChanges');
 		browserActivate(response.id);
 		refreshFilter();
 	    });

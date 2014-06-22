@@ -37,3 +37,12 @@ function renderAbc() {
 	$(this).addClass('rendered');
     });
 }
+
+function discardUnsavedChanges() {
+    if ($('.note-editor form.hasUnsavedChanges')[0])
+	return 'There are unsaved changes.';
+}
+
+$(document).ready(function() {
+    $(window).bind('beforeunload', discardUnsavedChanges);
+});

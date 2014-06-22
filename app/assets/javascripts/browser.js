@@ -41,12 +41,13 @@ function updateBrowser(notes) {
 
 function browserActivate(item_id) {
     var browser = $('#browser');
-    browser.find('li.selected').removeClass('selected');
-    browser.find('li.selector[data-item-id='+item_id+']').addClass('selected');
-
-    currently_activated_id = item_id;
+    if (!$('form.hasUnsavedChanges')[0] || confirm("Discard changes?")) {
+	browser.find('li.selected').removeClass('selected');
+	browser.find('li.selector[data-item-id='+item_id+']').addClass('selected');
     
-    itemActivated(item_id);
+	currently_activated_id = item_id;
+	itemActivated(item_id);
+    }
 }
 
 function constructBrowserItem(item) {
