@@ -24,6 +24,10 @@ function renderNote() {
     renderAbc();
     $('.note .body table').tablesorter();
     $('.note .body table').addClass('table table-striped');
+
+    $('.note-editor form').on('input.trackUnsavedChanges', ':input', function() {
+	$(this).parents('form').addClass('hasUnsavedChanges');
+    });
 }
 
 function renderAbc() {

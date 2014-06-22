@@ -10,6 +10,7 @@
 	$('#viewer').load('/notes/new', function(resp, status) {
 	    if (status == 'error')
 		return $('#viewer').html(resp);
+	    renderNote();
 	    itemEdited();
 	});
     }

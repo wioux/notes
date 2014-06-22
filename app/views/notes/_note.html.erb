@@ -12,12 +12,14 @@
       </div>
   </footer>
 </div>
+
 <div class="note-editor" style="display: none">
   <%= form_for(@note, :html => {'data-note-id' => @note.id}) do |f| %>
   <%= f.hidden_field :date %>
   
   <div style="position: absolute; top: 4px; width: 70%">
     <%= f.text_field :title, :style => 'width: 100%' %>
+    <div class="unsaved-indicator">*</div>
   </div>
  
   <%= f.text_area :body, :style => 'position: absolute; top: 40px; bottom: 40px; width: 70%' %>
