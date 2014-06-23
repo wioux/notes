@@ -9,8 +9,17 @@
 
     function itemEdited() {
 	var note = Viewer.visibleBox();
-	note.find('.note-display').hide();
-	note.find('.note-edit').show().find('textarea[name=note\\[body\\]]').focus();
+	if (note.find('.note-edit:visible')[0]) {
+	    if (note.find('form.hasUnsavedChanges')[0])
+		if (!confirm("Discard changes?"))
+		    return;
+	    note.remove();
+	    browserActivate(note.attr('data-id'));
+	} else {
+	    note.find('.note-display').hide();
+	    note.find('.note-edit').show().
+		find('textarea[name=note\\[body\\]]').focus();
+	}
     }
 
     function itemInspected() {

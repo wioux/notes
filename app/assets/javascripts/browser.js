@@ -7,7 +7,7 @@ function loadBrowser(notes, callback) {
     list.empty();
     for (var i=0; i < notes.pinned.length; ++i) {
 	li = constructBrowserItem(notes.pinned[i]);
-	list.append(li);	
+	list.append(li);
     }
 
     list = $('#browser ul#unpinned');
@@ -16,7 +16,7 @@ function loadBrowser(notes, callback) {
 	li = constructBrowserItem(notes.unpinned[i]);
 	list.append(li);
     }
-    
+
     if (notes.unpinned.length == 0)
 	list.append('<li style="text-align: center">No results</li>');
     else
@@ -42,6 +42,13 @@ function updateBrowser(notes) {
 	li = constructBrowserItem(notes.unpinned[i]);
 	list.prepend(li);
     }
+
+    for (var i=0; i < notes.pinned.length; ++i)
+	$('#browser ul#pinned li[data-item-id='+notes.pinned[i].id+']').
+	    find('.preview').html(notes.pinned[i].preview);
+    for (i=ind; i < notes.unpinned.length; ++i)
+	$('#browser ul#unpinned li[data-item-id='+notes.unpinned[i].id+']').
+	    find('.preview').html(notes.unpinned[i].preview);
 }
 
 function browserActivate(item_id) {
@@ -85,7 +92,7 @@ function constructBrowserItem(item) {
     return li;
 }
 
-$(document).ready(function() {	
+$(document).ready(function() {
     $('#browser').on('click', 'li.selector', function() {
 	browserActivate($(this).data('item-id'));
     });
@@ -124,7 +131,7 @@ Browser = {
 
     pinnedItems: function() {
 	var items = [];
-	$('#browser ul#pinned li').each(function() { 
+	$('#browser ul#pinned li').each(function() {
 	    items.push($(this).data('item-id'));
 	});
 	return items;
