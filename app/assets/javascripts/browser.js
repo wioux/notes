@@ -1,4 +1,3 @@
-var currently_activated_id;
 var browser_tag_colors = ['#a00', '#050', '#00f'];
 
 function loadBrowser(notes, callback) {
@@ -46,14 +45,7 @@ function updateBrowser(notes) {
 }
 
 function browserActivate(item_id) {
-    var browser = $('#browser');
-    if (!$('form.hasUnsavedChanges')[0] || confirm("Discard changes?")) {
-	browser.find('li.selected').removeClass('selected');
-	browser.find('li.selector[data-item-id='+item_id+']').addClass('selected');
-    
-	currently_activated_id = item_id;
-	itemActivated(item_id);
-    }
+    itemActivated(item_id, pinned);
 }
 
 function browserInsert(list, item) {
@@ -79,9 +71,6 @@ function constructBrowserItem(item) {
     var toggle_pin = $('<button type="button"/>').
 	addClass('btn btn-mini pin-toggler');
     actions.append(toggle_pin);
-
-    if (item.id == currently_activated_id)
-	li.addClass('selected');
 
     li.append($('<span class="preview">').html(item.preview));
     li.append(actions);
@@ -126,4 +115,41 @@ $(document).ready(function() {
 	    }
 	});
     });
+});
+
+Browser = {
+    activateFirstItem: function() {
+	$('#browser').find('li').first().click();
+    },
+
+    pinnedItems: function() {
+	var items = [];
+	$('#browser ul#pinned li').each(function() { 
+	    items.push($(this).data('item-id'));
+	});
+	return items;
+    },
+
+    setEdittingState: function(item_id, state) {
+	var item = $('#browser ul#pinned li[data-item-id='+item_id+']');
+	state ? item.addClass('editting') : item.removeClass('editting');
+    },
+
+    updateItemStates: function() {
+	var unsaved = Viewer.unsavedItems();
+	var pinned = Browser.pinnedItems();
+	var selected = Viewer.visibleItem();
+
+	for (var i=0; i < pinned.length; ++i)
+	    Browser.setEdittingState(pinned[i], unsaved.indexOf(pinned[i]) != -1);
+
+	$('#browser ul li.selected').not('[data-item-id='+selected+']').
+	    removeClass('selected');
+	$('#browser ul li[data-item-id='+selected+']:not(.selected)').
+	    addClass('selected');
+    }
+};
+
+$(document).ready(function() {
+    setInterval(Browser.updateItemStates, 100);
 });

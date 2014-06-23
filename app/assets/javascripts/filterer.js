@@ -40,7 +40,7 @@ $(document).ready(function() {
     
     $('#filterer form').each(function() {
 	setFilter($(this).find('input').val(), function(notes) {
-	    $('#browser').find('li').first().click();
+	    Browser.activateFirstItem();
 	});
     });
 });

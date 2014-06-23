@@ -1,34 +1,20 @@
 <script type="text/javascript">
-    // TODO:
-    // window.addEventListener('beforeunload', exitWarning);
-
-    function itemActivated(id) {
-	$('#viewer').load('/notes/'+id, function() {
-	    renderNote();
-	});
+    function itemActivated(id, pinned) {
+	Viewer.loadBox(id, pinned);
     }
 
     function itemCreated() {
-        if (!$('form.hasUnsavedChanges')[0] || confirm("Discard changes?")) {
-	    $('#viewer').load('/notes/new', function(resp, status) {
-		if (status == 'error')
-		    return $('#viewer').html(resp);
-		renderNote();
-		itemEdited();
-	    });
-	}
+	Viewer.loadBox('new', true, itemEdited);
     }
 
     function itemEdited() {
-	var scope = $('#viewer');
-	scope.find('.note:visible').hide();
-	scope.find('.note-editor:not(:visible)').show();
-	scope.find('.note-editor:visible form '+
-		   'textarea[name=note\\[body\\]]').focus();
+	var note = Viewer.visibleBox();
+	note.find('.note-display').hide();
+	note.find('.note-edit').show().find('textarea[name=note\\[body\\]]').focus();
     }
 
     function itemInspected() {
-	$('#viewer .note-editor form').each(function() {
+	Viewer.visibleBox().find('form').each(function() {
 	    var form = $(this);
 	    $.ajax({
 		url: '/notes/preview',
@@ -51,10 +37,8 @@
     }
 
     function itemSaved() {
-	$('#viewer .note-editor form:visible').each(function() {
+	Viewer.visibleBox().find('form:visible').each(function() {
 	    var form = $(this);
-	    var container = form.parents('.note-editor');
-	    var parent = container.parent();
 	    submitNote(form, function(response) {
 		form.removeClass('hasUnsavedChanges');
 		browserActivate(response.id);

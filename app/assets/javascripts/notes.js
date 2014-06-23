@@ -25,7 +25,8 @@ function renderNote() {
     $('.note .body table').tablesorter();
     $('.note .body table').addClass('table table-striped');
 
-    $('.note-editor form').on('input.trackUnsavedChanges', ':input', function() {
+    $('.note-edit form').on('input.trackUnsavedChanges', ':input', function() {
+	var id = $(this).parents('.note').attr('data-id');
 	$(this).parents('form').addClass('hasUnsavedChanges');
     });
 }
@@ -37,12 +38,3 @@ function renderAbc() {
 	$(this).addClass('rendered');
     });
 }
-
-function discardUnsavedChanges() {
-    if ($('.note-editor form.hasUnsavedChanges')[0])
-	return 'There are unsaved changes.';
-}
-
-$(document).ready(function() {
-    $(window).bind('beforeunload', discardUnsavedChanges);
-});
