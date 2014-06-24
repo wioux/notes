@@ -36,5 +36,19 @@ function renderAbc() {
 	var abc = $(this).text();
 	ABCJS.renderAbc(this, abc, {}, {staffwidth: 800, paddingbottom: -30});
 	$(this).addClass('rendered');
+
+	var midi = $(this).after('<div class="midi" />').next()[0];
+	ABCJS.renderMidi(midi, abc);
     });
 }
+
+$(document).ready(function() {
+    (function() {
+	var orig = document.createElement;
+	document.createElement = function() {
+	    if (arguments[0] == 'embed')
+		return orig.call(this, 'span');
+	    return orig.apply(this, arguments);
+	};
+    })();
+});
