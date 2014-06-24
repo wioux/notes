@@ -6,7 +6,7 @@
 .note {
     margin-bottom: 1em;
     padding-bottom: 3px;
-    
+
     p, ul, ol, td, th, blockquote {
 	font-size: 14px;
     }
@@ -31,21 +31,21 @@
 	    font-weight: normal;
 	    text-decoration: underline;
 	}
-	
+
 	h3 {
 	    font-size: 1.3em;
 	    margin-bottom: 0px;
 	    font-weight: normal;
 	    text-decoration: underline;
 	}
-	
+
 	h4 {
 	    font-size: 1.2em;
 	    margin-bottom: 0px;
 	    font-weight: normal;
 	    text-decoration: underline;
 	}
-	
+
 	p:first-child {
 	    margin-top: 0px;
 	}
@@ -69,8 +69,8 @@
     }
 
     footer {
-	padding-top: 8px;    
-	margin-top: 4px;    
+	padding-top: 8px;
+	margin-top: 4px;
     }
 
     .tag-links {
@@ -99,4 +99,8 @@
 	    display: inline;
 	}
     }
+}
+
+.hide-me {
+    display: none !important;
 }
