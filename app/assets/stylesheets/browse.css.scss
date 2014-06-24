@@ -21,3 +21,14 @@ html, body {
     margin-left: 25%;
     width: 70%;
 }
+
+@media print {
+    #browser, #filterer {
+	display: none;
+    }
+
+    #viewer {
+	width: 100%;
+	margin-left: 10px;
+    }
+}
