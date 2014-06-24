@@ -5,7 +5,7 @@ Notes::Application.routes.draw do
 
   root :to => 'notes#browse'
 
-  resources :notes, :only => [:new, :create, :update, :show] do
+  resources :notes, :only => [:new, :create, :update, :show, :destroy] do
     member do
       patch 'pin'
       patch 'unpin'

@@ -73,11 +73,15 @@ function constructBrowserItem(item) {
     var li = $('<li class="selector" '+
 	       'data-item-id="'+item.id+'" '+
 	       'data-sort="'+item.original_date+'" >');
-    var actions = $('<span class="actions">');
+    var actions = $('<span class="actions btn-group">');
 
     var toggle_pin = $('<button type="button"/>').
 	addClass('btn btn-mini pin-toggler');
     actions.append(toggle_pin);
+
+    var destroy = $('<button type="button"/>').
+	addClass('btn btn-mini destroyer').text('destroy');
+    actions.append(destroy);
 
     li.append($('<span class="preview">').html(item.preview));
     li.append(actions);
@@ -119,6 +123,26 @@ $(document).ready(function() {
 	    data: { '_method': 'patch' },
 	    success: function() {
 		browserInsert($('#browser ul#pinned'), selector);
+	    }
+	});
+    });
+
+    $('#browser').on('click', 'ul .selector .destroyer', function(e) {
+	e.stopPropagation();
+	var selector = $(this).parents('.selector');
+	var preview = selector.find('.preview').text();
+
+	if (!confirm("Confirm to destroy:\n\n"+preview))
+	    return;
+
+	$.ajax({
+	    method: 'post',
+	    data: { '_method': 'delete' },
+	    url: '/notes/'+selector.data('item-id'),
+	    success: function() {
+		return selector.css('position', 'relative').
+		    animate({left: -selector.width()}, 'slow',
+			    $.proxy(selector, 'remove'));
 	    }
 	});
     });

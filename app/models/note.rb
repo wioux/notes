@@ -21,6 +21,8 @@ class Note < ActiveRecord::Base
   has_many :tags, :dependent => :destroy
 
   default_scope { where(:is_history => false) }
+  scope :history, -> { where(:is_history => true) }
+
   belongs_to :present, :class_name => 'Note'
   has_many :history, -> { where(:is_history => true) },
            :class_name => 'Note', :foreign_key => 'present_id'

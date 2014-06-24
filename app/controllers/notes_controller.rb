@@ -21,12 +21,12 @@ class NotesController < ApplicationController
 
     render :json => {:pinned => pinned, :unpinned => unpinned}
   end
-  
+
   def new
     @note = Note.new
     render @note
   end
-  
+
   def show
     @note = Note.find(params[:id])
     respond_to do |format|
@@ -42,7 +42,7 @@ class NotesController < ApplicationController
 
   def create
     params[:note][:date] = Time.utc(*params[:note][:date].split('/').map(&:to_i))
-    
+
     @note = Note.new(params[:note])
 
     if @note.save
@@ -58,7 +58,16 @@ class NotesController < ApplicationController
     if @note.update_attributes(params[:note])
       redirect_to note_path(@note, :format => 'json')
     else
-      render :json => @note.errors,  :status => :unprocessable_entity      
+      render :json => @note.errors,  :status => :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @note = Note.find(params[:id])
+    @note.is_history = true
+    @note.present_id = @note.id
+    if @note.save
+      render :json => {:success => true}
     end
   end
 
