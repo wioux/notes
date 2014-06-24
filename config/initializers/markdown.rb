@@ -9,9 +9,9 @@ extensions =
 class HtmlWithABCJS < Redcarpet::Render::HTML
   def block_code(code, language)
     if language == 'abc'
-      %(<div class="abc">#{code}</div>)
+      %(<div class="abc">#{CGI.escapeHTML(code)}</div>)
     else
-      %(<pre><code class="#{language}">#{code}</code></pre>)
+      %(<pre><code class="#{language}">#{CGI.escapeHTML(code)}</code></pre>)
     end
   end
 end
