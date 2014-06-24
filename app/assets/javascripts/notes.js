@@ -37,7 +37,7 @@ function renderAbc() {
 	ABCJS.renderAbc(this, abc, {}, {staffwidth: 800, paddingbottom: -30});
 	$(this).addClass('rendered');
 
-	var midi = $(this).after('<div class="midi" />').next()[0];
+	var midi = $(this).append('<div class="midi" />').find('.midi')[0];
 	ABCJS.renderMidi(midi, abc);
     });
 }

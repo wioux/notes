@@ -101,6 +101,16 @@
     }
 }
 
-.hide-me {
-    display: none !important;
+.abc {
+    position: relative;
+
+    .midi {
+	position: absolute;
+	bottom: 8px;
+	right: 50px;
+    }
+
+    .hide-me {
+	display: none !important;
+    }
 }
