@@ -70,7 +70,11 @@ class Note < ActiveRecord::Base
     preview = ::MarkdownHTML.render(preview).strip_tags.strip
     preview = preview.size > 45 ? "#{preview[0,45]}..." : "#{preview}"
     lines = preview.split(/\n+/, 2)
-    lines.length > 1 ? "#{lines.first}..." : lines.first
+    if lines.length > 1
+      "#{lines.first.sub(/\W+$/, '')}..."
+    else
+      lines.first
+    end
   end
 
   def as_json(opts=nil)
