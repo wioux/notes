@@ -2,6 +2,9 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.0.0'
 
+gem 'rack-mini-profiler'
+gem 'perf_check', :path => '../perf_check'
+
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
