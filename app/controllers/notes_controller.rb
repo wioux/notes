@@ -22,6 +22,10 @@ class NotesController < ApplicationController
     render :json => {:pinned => pinned, :unpinned => unpinned}
   end
 
+  def tune_widget
+    render :layout => 'basic'
+  end
+
   def new
     @note = Note.new
     render @note

@@ -17,6 +17,8 @@ Notes::Application.routes.draw do
       patch 'preview'
       get 'filter'
       get 'browse'
+
+      get 'tune_widget'
     end
   end
 

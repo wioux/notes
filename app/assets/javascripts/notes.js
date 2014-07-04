@@ -65,22 +65,3 @@ function renderAbc() {
 	$(midi_link).prepend(player, '<br />');
     });
 }
-
-$(document).ready(function() {
-    (function() {
-	var orig = document.createElement;
-	document.createElement = function() {
-	    if (arguments[0] == 'embed') {
-		var span = orig.call(this, 'span');
-		span.classList.add('hide-me');
-		return span;
-	    }
-	    return orig.apply(this, arguments);
-	};
-    })();
-
-    MIDI.loadPlugin({
-	instrument: 'acoustic_grand_piano',
-	callback: function() {}
-    });
-});
