@@ -14,7 +14,7 @@ $(document).ready(function() {
 	this.sheet = sheet;
 	this.midi = midi;
 
-	this.key = 'C';
+	this.key = 'Cmaj';
     }
 
     window.widget = widget;
@@ -70,6 +70,85 @@ $(document).ready(function() {
 
 
     widget.prototype = {
+	showOptions: function() {
+	    var widget = this;
+	    var modal = $('<div tabindex="-1"/>').addClass('modal');
+	    var pane = $('<div/>').addClass('modal-body');
+
+	    var keysigs = [
+		['Cmaj', 'Amin'],
+
+		['Gmaj', 'Emin'],
+		['Dmaj', 'Bmin'],
+		['Amaj', 'F#min'],
+		['Emaj', 'C#min'],
+		['Bmaj', 'G#min'],
+		['F#maj', 'D#min'],
+		['C#maj', 'A#min'],
+
+		['Cmaj', 'Amin'],
+
+		['Fmaj', 'Dmin'],
+		['Bbmaj', 'Cmin'],
+		['Ebmaj', 'Gmin'],
+		['Abmaj', 'Fmin'],
+		['Dbmaj', 'Bbmin'],
+		['Gbmaj', 'Ebmin'],
+		['Cbmaj', 'Abmin']
+	    ];
+
+	    var keysigend;
+	    var oldfn = ABCJS.write.Layout.prototype.printKeySignature;
+	    ABCJS.write.Layout.prototype.printKeySignature = function() {
+		var sup = oldfn.apply(this, arguments);
+		keysigend = sup.x + sup.w;
+		return sup;
+	    };
+
+	    var table = $('<table/>'),
+		tr = table.append($('<tr/>')).find('tr').first();
+	    table.css({'margin-left': 'auto', 'margin-right': 'auto'})
+	    pane.append('<h3>Key Signature</h3>', table);
+	    for (var sig, i=0; i < keysigs.length; ++i) {
+		if (i == 8) {
+		    tr = table.append($('<tr/>')).find('tr').last();
+		    tr.append('<td />');
+		    continue;
+		}
+
+		sig = $('<td/>')
+		ABCJS.renderAbc(sig[0], 'K: '+keysigs[i][0]+"\nz",
+				{}, {
+				    paddingtop: -45,
+				    paddingbottom: -75,
+				    paddingleft: 0,
+				    paddingright: 0,
+				    staffwidth: 1
+				});
+
+		sig.find('svg').css('width', (60 + keysigend)+'px');
+		sig.css('width', 'auto');
+		sig.append(
+		    $('<div class="btn-group btn-group-justified"/>').append(
+			$('<span class="btn btn-mini">').text(keysigs[i][0]),
+			$('<span class="btn btn-mini">').text(keysigs[i][1])
+		    )
+		);
+		sig.find('.btn').click(function() {
+		    widget.key = $(this).text();
+		    modal.modal('hide').remove();
+		}).filter(function() { return this.innerText == widget.key }).
+		    addClass('active');
+		tr.append(sig);
+	    };
+
+	    modal.append(
+		$('<div/>').addClass('modal-dialog modal-lg').append(
+		    $('<div/>').addClass('modal-content').html(pane)
+		)
+	    ).css({'width': '1000px', 'margin-left': '-500px'}).modal();
+	},
+
 	state: function(f, call_with_no_note) {
 	    var note = null, line = this.source.find('.tune_line.active input');
 	    if (line[0]) {
@@ -111,6 +190,8 @@ $(document).ready(function() {
 		if (next.length)
 		    source += "|\n" + next.val();
 	    });
+
+	    source = "K: "+this.key+"\n"+source;
 	    return source;
 	},
 
@@ -143,21 +224,22 @@ $(document).ready(function() {
 		var midinote, note = st.note;
 		var notekey = note.match(/[A-Ga-g]/)[0];
 		// This is an internal ABCJS API?
-		var keysig = ABCJS.parse.parseKeyVoice.standardKey(this.key);
+		var key = this.key.replace(/maj/i, '').replace(/min/i, 'm');
+		var keysig = ABCJS.parse.parseKeyVoice.standardKey(key);
 
 		var sharp, flat = false;
 		for (var i=0; i < keysig.length; ++i) {
 		    if (keysig[i].note.toLowerCase() == notekey.toLowerCase()
 			&& keysig[i].acc == 'sharp') {
 			sharp = true;
-			return;
+			break;
 		    }
 		}
 		for (var i=0; i < keysig.length; ++i) {
 		    if (keysig[i].note.toLowerCase() == notekey.toLowerCase()
 			&& keysig[i].acc == 'flat') {
 			flat = true;
-			return;
+			break;
 		    }
 		}
 
@@ -352,11 +434,8 @@ $(document).ready(function() {
 
 	    var key = String.fromCharCode(e.which).toLowerCase();
 	    switch(key) {
-	    case 'k':
-		widg.chooseKeySignature();
-		return e.preventDefault();
-	    case 't':
-		widg.chooseTimeSignature();
+	    case 'o':
+		widg.showOptions();
 		return e.preventDefault();
 	    case 'p':
 		widg.playAll();
