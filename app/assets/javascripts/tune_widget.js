@@ -345,6 +345,36 @@ $(document).ready(function() {
 	    });
 	},
 
+	dot: function() {
+	    this.state(function(st) {
+		var note = st.note.
+		    replace(/([A-Ga-g][,']*)(\d?)/, function(_, p, n) {
+			switch(n) {
+			case '2':
+			    return p+'3';
+			case '3':
+			    return p+'2';
+			case '4':
+			    return p+'6';
+			case '6':
+			    return p+'4';
+			case '8':
+			    return p+'12';
+			case '12':
+			    return p+'8';
+			case '':
+			case '1':
+			case '5':
+			case '7':
+			    console.log("i can't dot this!", st.note);
+			    return _;
+			}
+			return p+n;
+		    });
+		this.replaceNote(note);
+	    });
+	},
+
 	breakBeam: function() {
 	    this.state(function(st) {
 		if (st.note.match(/[^|]\s$/))
@@ -495,9 +525,11 @@ $(document).ready(function() {
 		    widg.naturalize();
 		return e.preventDefault();
 	    case 190:
-		// >
+		// > / .
 		if (e.shiftKey)
 		    widg.swing();
+		else
+		    widg.dot();
 		return e.preventDefault();
 	    case 38:
 	    case 40:
