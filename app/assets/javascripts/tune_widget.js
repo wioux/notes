@@ -14,6 +14,8 @@ $(document).ready(function() {
 	this.sheet = sheet;
 	this.midi = midi;
 
+	this.time = '4/4';
+	this.tempo = '120';
 	this.key = 'Cmaj';
     }
 
@@ -144,10 +146,22 @@ $(document).ready(function() {
 			    modal.find('.btn').removeClass('active');
 			    $(this).addClass('active');
 			}).filter(function() {
-			    return this.innerText == widget.key
+			    return this.innerText == widget.key;
 			}).addClass('active');
 			tr.append(sig);
 		    };
+
+		    table = $('<table/>');
+		    pane.append('<h3>Time / Tempo</h3>', table);
+		    table.append($('<tr><td>Tempo</td><td><input name="tempo"/>'));
+		    table.append($('<tr><td>Time</td><td><input name="time"/>'));
+		    table.find('td').css('padding-right', 15);
+		    table.find('input').css('width', 40).val(function() {
+			return widget[$(this).attr('name')];
+		    }).keyup(function() {
+			widget[$(this).attr('name')] = $(this).val();
+		    });
+
 
 		    modal.append(
 			$('<div/>').addClass('modal-dialog modal-lg').append(
@@ -203,7 +217,10 @@ $(document).ready(function() {
 		    source += "|\n" + next.val();
 	    });
 
-	    source = "K: "+this.key+"\n"+source;
+	    source = ["K: "+this.key,
+		      "M: "+this.time,
+		      "Q: "+this.tempo].
+		join("\n")+"\n"+source;
 	    return source;
 	},
 
