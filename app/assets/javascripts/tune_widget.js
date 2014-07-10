@@ -471,7 +471,10 @@ $(document).ready(function() {
 		widg.showOptions();
 		return e.preventDefault();
 	    case 'p':
-		widg.playAll();
+		if (e.shiftKey)
+		    widg.playNote();
+		else
+		    widg.playAll();
 		return e.preventDefault();
 	    case 'a':
 	    case 'b':
