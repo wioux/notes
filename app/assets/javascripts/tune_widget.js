@@ -195,10 +195,13 @@ $(document).ready(function() {
 	    return source;
 	},
 
-	drawSheet: function() {
+	drawSheet: function(force) {
 	    this.state(function(st) {
 		var source = this.abcSource();
 		var sheet = this.sheet.children('.tune_canvas');
+		if (!force && source == this._currently_rendered_source)
+		    return;
+		this._currently_rendered_source = source;
 		if (!sheet[0])
 		    this.sheet.append('<div class="tune_canvas" />');
 		sheet = this.sheet.children('.tune_canvas')[0];
