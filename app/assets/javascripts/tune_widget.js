@@ -175,13 +175,49 @@ $(document).ready(function() {
 	    }
 	},
 
+	nextNote: function() {
+	    this.state(function(st) {
+		if (!st.note.next)
+		    return st.line.value = st.line.value.replace('"^_"', '');
+		var b = st.line.value.substr(0, st.note.next.col);
+		var a = st.line.value.substr(st.note.next.col);
+		var v = b.replace('"^_"', '') + '"^_"' + a;
+
+		st.line.value = v;
+	    });
+	},
+
+	prevNote: function() {
+	    this.state(function(st) {
+		if (!st.note.prev)
+		    return console.log("No prev note: ", st.note);
+		var b = st.line.value.substr(0, st.note.prev.col);
+		var a = st.line.value.substr(st.note.prev.col);
+		var v = b + '"^_"' + a.replace('"^_"', '');
+
+		st.line.value = v;
+	    });
+	},
+
 	state: function(f, call_with_no_note) {
 	    var note = null, line = this.source.find('.tune_line.active input');
+
 	    if (line[0]) {
-		note = line[0].value.
-		    match(/((\(\d)?[=^_]?[A-Ga-g][,']*\d?\s*\|?\s*)$/);
+		var p = new ABCLineParser(line[0].value);
+		var stuff = p.parse('annotation', 'note');
+		var marker = stuff.filter(function(x) {
+		    return x.type == 'annotation' && x.source == '"^_"';
+		})[0];
+		if (marker && marker.next) {
+		    note = marker.next;
+		    note.prev = marker.prev;
+		} else {
+		    note = stuff[stuff.length-1];
+		}
+		note = note || null;
 	    }
-	    var state = { line: line[0], note: note && note[1]};
+
+	    var state = { line: line[0], note: note};
 
 	    if ((state.note || call_with_no_note) && typeof f == 'function')
 		f.call(this, state);
@@ -221,6 +257,7 @@ $(document).ready(function() {
 		      "M: "+this.time,
 		      "Q: "+this.tempo].
 		join("\n")+"\n"+source;
+
 	    return source;
 	},
 
@@ -247,14 +284,19 @@ $(document).ready(function() {
 	replaceNote: function(n) {
 	    this.state(function(st) {
 		var line = st.line, note = st.note;
-		line.value = line.value.substr(0, line.value.length-note.length)+n;
+		var b = line.value.substr(0, note.col);
+		var a = line.value.substr(note.col+note.source.length);
+		if (typeof n == 'string')
+		    line.value = b + n + a;
+		else
+		    line.value = b + n.computedSource() + a;
 	    });
 	},
 
 	playNote: function() {
 	    this.state(function(st) {
 		var midinote, note = st.note;
-		var notekey = note.match(/[A-Ga-g]/)[0];
+		var notekey = note.pitch;
 		// This is an internal ABCJS API?
 		var key = this.key.replace(/maj/i, '').replace(/min/i, 'm');
 		var keysig = ABCJS.parse.parseKeyVoice.standardKey(key);
@@ -275,14 +317,14 @@ $(document).ready(function() {
 		    }
 		}
 
-		if (note.match(/\^[A-Ga-g]/))
+		if (note.accidentals.match(/\^/))
 		    sharp = true;
-		else if (note.match(/_[A-Ga-g]/))
+		else if (note.accidentals.match(/_/))
 		    flat = true;
-		else if (note.match(/=[A-Ga-g]/))
+		else if (note.accidentals.match(/=/))
 		    sharp = flat = false;
 
-		midinote = widget.noteToMidiOrd(note);
+		midinote = widget.noteToMidiOrd(note.source);
 
 		if (sharp)
 		    midinote += 1;
@@ -334,7 +376,7 @@ $(document).ready(function() {
 	    // TODO: find closest letter to state().note and add it
 	    var curr_ord, new_ord, st = this.state();
 	    if (st.note) {
-		curr_ord = widget.noteToOrd(st.note);
+		curr_ord = widget.noteToOrd(st.note.source);
 		new_ord = widget.noteToOrd(letter);
 		if (Math.abs(new_ord - curr_ord) > 4) {
 		    if (new_ord - curr_ord > 0)
@@ -356,64 +398,62 @@ $(document).ready(function() {
 	makeTuplet: function(n) {
 	    this.state(function(st) {
 		var note = st.note;
-		if (note.match(/\(\d/))
-		    note = note.replace(/\(\d/, '');
+		if (note.source.match(/\(\d/))
+		    note = note.source.replace(/\(\d/, '');
 		else
-		    note = note.replace(/([_^=]?[A-Ga-g])/, '('+n+'$1');
+		    note = note.source.replace(/([_^=]?[A-Ga-g])/, '('+n+'$1');
 		this.replaceNote(note);
 	    });
 	},
 
 	changeValue: function(n) {
 	    this.state(function(st) {
-		if (n == 1) n = '';
-		var note = st.note.replace(/([A-Ga-g][,']*)\d?/, function(_, p) {
-		    return p+n;
-		});
-		this.replaceNote(note);
+		st.note.value = (n == 1 ? '' : n);
+		this.replaceNote(st.note);
 	    });
 	},
 
 	dot: function() {
 	    this.state(function(st) {
-		var note = st.note.
-		    replace(/([A-Ga-g][,']*)(\d?)/, function(_, p, n) {
-			switch(n) {
-			case '2':
-			    return p+'3';
-			case '3':
-			    return p+'2';
-			case '4':
-			    return p+'6';
-			case '6':
-			    return p+'4';
-			case '8':
-			    return p+'12';
-			case '12':
-			    return p+'8';
-			case '':
-			case '1':
-			case '5':
-			case '7':
-			    console.log("i can't dot this!", st.note);
-			    return _;
-			}
-			return p+n;
-		    });
-		this.replaceNote(note);
+		switch(st.note.value) {
+		case '2':
+		    st.note.value = '3';
+		    break;
+		case '3':
+		    st.note.value = '2';
+		    break;
+		case '4':
+		    st.note.value = '6';
+		    break;
+		case '6':
+		    st.note.value = '4';
+		    break;
+		case '8':
+		    st.note.value = '12';
+		    break;
+		case '12':
+		    st.note.value = '8';
+		    break;
+		case '':
+		case '1':
+		case '5':
+		case '7':
+		    console.log("i can't dot this!", note);
+		    break;
+		}
+		this.replaceNote(st.note);
 	    });
 	},
 
 	breakBeam: function() {
 	    this.state(function(st) {
-		if (st.note.match(/[^|]\s$/))
-		    this.replaceNote(st.note.replace('\s+', ''));
-		else if (st.note.match(/\S$/))
-		    this.replaceNote(st.note + ' ');
+		st.note.beam = !st.note.beam;
+		this.replaceNote(st.note);
 	    });
 	},
 
 	breakMeasure: function() {
+	    // TODO... how?
 	    this.state(function(st) {
 		if (st.note.match(/\|\s*$/))
 		    this.replaceNote(st.note.replace(/\|\s*$/, ''));
@@ -430,35 +470,39 @@ $(document).ready(function() {
 
 	flatten: function() {
 	    this.state(function(st) {
-		if (st.note.match(/_[A-Ga-g]/))
-		    this.replaceNote(st.note.replace(/_([A-Ga-g])/, '$1'));
+		if (st.note.accidentals.match(/_/))
+		    st.note.accidentals = '';
 		else
-		    this.replaceNote(st.note.replace(/[=^]*([A-Ga-g])/, '_$1'));
+		    st.note.accidentals = '_';
+		this.replaceNote(st.note);
 		this.playNote();
 	    });
 	},
 
 	sharpen: function() {
 	    this.state(function(st) {
-		if (st.note.match(/\^[A-Ga-g]/))
-		    this.replaceNote(st.note.replace(/\^([A-Ga-g])/, '$1'));
+		if (st.note.accidentals.match(/\^/))
+		    st.note.accidentals = '';
 		else
-		    this.replaceNote(st.note.replace(/[=_]*([A-Ga-g])/, '^$1'));
+		    st.note.accidentals = '^';
+		this.replaceNote(st.note);
 		this.playNote();
 	    });
 	},
 
 	naturalize: function() {
 	    this.state(function(st) {
-		if (st.note.match(/=[A-Ga-g]/))
-		    this.replaceNote(st.note.replace(/=([A-Ga-g])/, '$1'));
+		if (st.note.accidentals.match(/=/))
+		    st.note.accidentals = '';
 		else
-		    this.replaceNote(st.note.replace(/[_^]*([A-Ga-g])/, '=$1'));
+		    st.note.accidentals = '=';
+		this.replaceNote(st.note);
 		this.playNote();
 	    });
 	},
 
 	swing: function() {
+	    // TODO... how?
 	    this.state(function(st) {
 		if (st.note.match(/[A-Ga-g][,']*\s*>/))
 		    this.replaceNote(st.note.replace(/([A-Ga-g][,']*\s*)>/, '$1'));
@@ -469,14 +513,14 @@ $(document).ready(function() {
 
 	translate: function(interval) {
 	    this.state(function(st) {
-		var key = st.note.match(/([A-Ga-g][,']*)/)[1];
+		var key = st.note.source.match(/([A-Ga-g][,']*)/)[1];
 		var ord = widget.noteToOrd(key);
 		if (interval < 0)
 		    interval += 1;
 		else
 		    interval -= 1;
 		key = widget.ordToNote(ord + interval);
-		this.replaceNote(st.note.replace(/[A-Ga-g][,']*/, key));
+		this.replaceNote(st.note.source.replace(/[A-Ga-g][,']*/, key));
 		this.playNote();
 	    });
 	}
@@ -562,6 +606,10 @@ $(document).ready(function() {
 		    widg.swing();
 		else
 		    widg.dot();
+		return e.preventDefault();
+	    case 37:
+	    case 39:
+		widg[(e.which == 37 ? 'prev' : 'next')+'Note']();
 		return e.preventDefault();
 	    case 38:
 	    case 40:
