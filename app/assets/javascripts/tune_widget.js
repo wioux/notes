@@ -177,25 +177,29 @@ $(document).ready(function() {
 
 	nextNote: function() {
 	    this.state(function(st) {
-		if (!st.note.next)
-		    return st.line.value = st.line.value.replace('"^_"', '');
-		var b = st.line.value.substr(0, st.note.next.col);
-		var a = st.line.value.substr(st.note.next.col);
-		var v = b.replace('"^_"', '') + '"^_"' + a;
-
-		st.line.value = v;
+		if (st.note.next) {
+		    var b = st.line.value.substr(0, st.note.next.col);
+		    var a = st.line.value.substr(st.note.next.col);
+		    var v = b.replace('"^_"', '') + '"^_"' + a;
+		    st.line.value = v;
+                } else {
+                    st.line.value = st.line.value.replace('"^_"', '');
+                }
+                this.playNote();
 	    });
 	},
 
 	prevNote: function() {
 	    this.state(function(st) {
-		if (!st.note.prev)
-		    return console.log("No prev note: ", st.note);
-		var b = st.line.value.substr(0, st.note.prev.col);
-		var a = st.line.value.substr(st.note.prev.col);
-		var v = b + '"^_"' + a.replace('"^_"', '');
-
-		st.line.value = v;
+		if (st.note.prev) {
+		    var b = st.line.value.substr(0, st.note.prev.col);
+		    var a = st.line.value.substr(st.note.prev.col);
+		    var v = b + '"^_"' + a.replace('"^_"', '');
+		    st.line.value = v;
+                } else {
+		    console.log("No prev note: ", st.note);
+                }
+                this.playNote();
 	    });
 	},
 
