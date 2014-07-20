@@ -241,7 +241,7 @@ $(document).ready(function() {
 		this.source.append(line);
 	},
 
-	abcSource: function() {
+	abcSource: function(startAtCursor) {
 	    var source = null;
 	    this.state(function(st) {
 		var prev, curr, next;
@@ -253,6 +253,10 @@ $(document).ready(function() {
 		if (prev.length)
 		    source += prev.val() + "|\n";
 		source += curr.val();
+
+                if (startAtCursor)
+                    source = curr.val().substr(st.note.col);
+
 		if (next.length)
 		    source += "|\n" + next.val();
 	    });
@@ -344,37 +348,45 @@ $(document).ready(function() {
 	    });
 	},
 
-	playAll: function() {
+        playAbc: function(abc) {
             if (MIDI.Player.playing)
                 return MIDI.Player.stop();
 
-	    this.state(function() {
-		var abc = this.abcSource();
-		var midi_link = this.midi[0];
+	    var midi_link = this.midi[0];
+	    ABCJS.renderMidi(midi_link, abc);
 
-		ABCJS.renderMidi(midi_link, abc);
+	    var midi = $(midi_link).find('a').attr('href');
+	    var midi_data = midi.replace(/^data:audio\/midi,/, '');
 
-		var midi = $(midi_link).find('a').attr('href');
-		var midi_data = midi.replace(/^data:audio\/midi,/, '');
-
-		var hex, midi_binary = '';
-		while (midi_data.length) {
-		    if (midi_data[0] == '%') {
-			hex = parseInt(midi_data.substr(1, 2), 16);
-			midi_binary += String.fromCharCode(hex);
-			midi_data = midi_data.substr(3);
-		    }  else {
-			midi_binary += midi_data[0];
-			midi_data = midi_data.substr(1);
-		    }
+	    var hex, midi_binary = '';
+	    while (midi_data.length) {
+		if (midi_data[0] == '%') {
+		    hex = parseInt(midi_data.substr(1, 2), 16);
+		    midi_binary += String.fromCharCode(hex);
+		    midi_data = midi_data.substr(3);
+		}  else {
+		    midi_binary += midi_data[0];
+		    midi_data = midi_data.substr(1);
 		}
-		midi_data = 'data:audio/midi;base64,'+btoa(midi_binary);
-		MIDI.Player.loadFile(midi_data);
-                MIDI.Player.addListener(function(data) {
-                    if (data.now >= data.end)
-                        MIDI.Player.stop();
-                });
-		MIDI.Player.start();
+	    }
+	    midi_data = 'data:audio/midi;base64,'+btoa(midi_binary);
+	    MIDI.Player.loadFile(midi_data);
+            MIDI.Player.addListener(function(data) {
+                if (data.now >= data.end)
+                    MIDI.Player.stop();
+            });
+	    MIDI.Player.start();
+        },
+
+        playFromCursor: function() {
+            this.state(function() {
+		this.playAbc(this.abcSource(true));
+	    });
+        },
+
+	playAll: function() {
+	    this.state(function() {
+		this.playAbc(this.abcSource());
 	    });
 	},
 
@@ -565,8 +577,10 @@ $(document).ready(function() {
 		widg.toggleOptions();
 		return e.preventDefault();
 	    case 'p':
-		if (e.shiftKey)
+		if (e.ctrlKey)
 		    widg.playNote();
+                else if (e.shiftKey)
+                    widg.playFromCursor();
 		else
 		    widg.playAll();
 		return e.preventDefault();
@@ -587,10 +601,9 @@ $(document).ready(function() {
 	    case '8':
 		if (e.shiftKey)
 		    widg.makeTuplet(parseInt(key));
-		else
 		    widg.changeValue(parseInt(key));
 		return e.preventDefault();
-	    }
+            }
 
 	    switch(e.which){
 	    case 8:
