@@ -373,7 +373,6 @@ $(document).ready(function() {
 	},
 
 	insertNote: function(letter) {
-	    // TODO: find closest letter to state().note and add it
 	    var curr_ord, new_ord, st = this.state();
 	    if (st.note) {
 		curr_ord = widget.noteToOrd(st.note.source);
@@ -453,12 +452,20 @@ $(document).ready(function() {
 	},
 
 	breakMeasure: function() {
-	    // TODO... how?
 	    this.state(function(st) {
-		if (st.note.match(/\|\s*$/))
-		    this.replaceNote(st.note.replace(/\|\s*$/, ''));
-		else
-		    this.replaceNote(st.note.replace(/\s+$/, '')+' | ');
+		var line = st.line;
+		var note = st.note;
+		var b, a;
+		if (note.next && note.next.bar) {
+		    b = line.value.substr(0, note.next.col);
+		    a = line.value.substr(note.next.col+note.next.source.length);
+		} else {
+		    b = line.value.substr(0, note.col+note.source.length);
+		    a = line.value.substr(note.col+note.source.length);
+		    b = b.replace(/\s+$/, '') + ' | ';
+		    a = a.replace(/^\s+/, '');
+		}
+		line.value = b + a;
 	    });
 	},
 
