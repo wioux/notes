@@ -298,6 +298,9 @@ $(document).ready(function() {
 	},
 
 	playNote: function() {
+            if (MIDI.Player.playing)
+                return;
+
 	    this.state(function(st) {
 		var midinote, note = st.note;
 		var notekey = note.pitch;
@@ -342,6 +345,9 @@ $(document).ready(function() {
 	},
 
 	playAll: function() {
+            if (MIDI.Player.playing)
+                return MIDI.Player.stop();
+
 	    this.state(function() {
 		var abc = this.abcSource();
 		var midi_link = this.midi[0];
@@ -364,6 +370,10 @@ $(document).ready(function() {
 		}
 		midi_data = 'data:audio/midi;base64,'+btoa(midi_binary);
 		MIDI.Player.loadFile(midi_data);
+                MIDI.Player.addListener(function(data) {
+                    if (data.now >= data.end)
+                        MIDI.Player.stop();
+                });
 		MIDI.Player.start();
 	    });
 	},
