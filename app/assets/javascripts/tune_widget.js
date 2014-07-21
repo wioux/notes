@@ -204,7 +204,9 @@ $(document).ready(function() {
         },
 
         state: function(f, call_with_no_note) {
-            var note = null, line = this.source.find('.tune_line.active input');
+            var state = {},
+                note = null,
+                line = this.source.find('.tune_line.active input');
 
             if (line[0]) {
                 var p = new ABCLineParser(line[0].value);
@@ -219,9 +221,11 @@ $(document).ready(function() {
                     note = stuff[stuff.length-1];
                 }
                 note = note || null;
+                state.marker = marker;
             }
 
-            var state = { line: line[0], note: note};
+            state.line = line[0];
+            state.note = note;
 
             if ((state.note || call_with_no_note) && typeof f == 'function')
                 f.call(this, state);
@@ -285,7 +289,16 @@ $(document).ready(function() {
 
         addNote: function(n) {
             this.state(function(st) {
-                st.line.value += n;
+                if (st.note && st.note.next) {
+                    var line = st.line.value;
+                    var b = line.substr(0, st.note.next.col);
+                    var a = line.substr(st.note.next.col);
+                    st.line.value = b + n + a;
+                } else {
+                    st.line.value += n;
+                }
+                if (st.marker)
+                    this.nextNote();
             }, true);
         },
 
