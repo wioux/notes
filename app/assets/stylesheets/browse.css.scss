@@ -24,11 +24,11 @@ html, body {
 
 @media print {
     #browser, #filterer {
-	display: none;
+        display: none;
     }
 
     #viewer {
-	width: 100%;
-	margin-left: 10px;
+        width: 100%;
+        margin-left: 10px;
     }
 }

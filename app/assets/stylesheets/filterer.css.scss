@@ -12,23 +12,23 @@
 
     // Spinner
     img {
-	position: absolute;
-	top: 3px;
-	left: 0px;
-	z-index: 100;
-	visibility: hidden;
+        position: absolute;
+        top: 3px;
+        left: 0px;
+        z-index: 100;
+        visibility: hidden;
     }
 }
 
 #filterer span#filter-clearer {
-    position: absolute; 
-    right: 8px; 
+    position: absolute;
+    right: 8px;
     margin-top: 5px;
-    -webkit-touch-callout: none; 
+    -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none; 
+    -khtml-user-select: none;
     -moz-user-select: none;
-    -ms-user-select: none; 
+    -ms-user-select: none;
     user-select: none;
     cursor: pointer; opacity: 0.3
 }
@@ -38,6 +38,6 @@
     width: 100%;
     padding-left: 28px;
     -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box; 
+    -webkit-box-sizing: border-box;
     box-sizing: border-box
 }

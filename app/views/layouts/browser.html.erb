@@ -10,18 +10,18 @@
 <body>
   <div id="filterer">
     <form action="<%= request.fullpath %>" style="position: relative">
-      
+
       <span id="filter-focuser">
-	<img src="/spinner.gif" />
-	<span><i class="icon-filter"></i></span>
+        <img src="/spinner.gif" />
+        <span><i class="icon-filter"></i></span>
       </span>
-      
+
       <span id="filter-clearer">
-	<span><i class="icon-ban-circle"></i></span>
+        <span><i class="icon-ban-circle"></i></span>
       </span>
-      
+
       <input type="search" value="<%= params[:f] %>" />
-      
+
     </form>
   </div>
 

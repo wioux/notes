@@ -1,58 +1,58 @@
 <script type="text/javascript">
     function itemActivated(id, pinned) {
-	Viewer.loadBox(id, pinned);
+        Viewer.loadBox(id, pinned);
     }
 
     function itemCreated() {
-	Viewer.loadBox('new', true, itemEdited);
+        Viewer.loadBox('new', true, itemEdited);
     }
 
     function itemEdited() {
-	var note = Viewer.visibleBox();
-	if (note.find('.note-edit:visible')[0]) {
-	    if (note.find('form.hasUnsavedChanges')[0])
-		if (!confirm("Discard changes?"))
-		    return;
-	    note.remove();
-	    browserActivate(note.attr('data-id'));
-	} else {
-	    note.find('.note-display').hide();
-	    note.find('.note-edit').show().
-		find('textarea[name=note\\[body\\]]').focus();
-	}
+        var note = Viewer.visibleBox();
+        if (note.find('.note-edit:visible')[0]) {
+            if (note.find('form.hasUnsavedChanges')[0])
+                if (!confirm("Discard changes?"))
+                    return;
+            note.remove();
+            browserActivate(note.attr('data-id'));
+        } else {
+            note.find('.note-display').hide();
+            note.find('.note-edit').show().
+                find('textarea[name=note\\[body\\]]').focus();
+        }
     }
 
     function itemInspected() {
-	Viewer.visibleBox().find('form').each(function() {
-	    var form = $(this);
-	    $.ajax({
-		url: '/notes/preview',
-		method: 'post',
-		data: form.serialize(),
-		success: function(resp) {
-		    var modal = $('<div tabindex="-1"/>').addClass('modal');
-		    modal.append(
-			$('<div/>').addClass('modal-dialog modal-lg').append(
-			    $('<div/>').addClass('modal-content').append(
-				$('<div/>').addClass('modal-body').html(resp)
-			    )
-			)
-		    );
-		    modal.css({width: '1000px', 'margin-left': '-500px'}).modal();
-		    renderNote();
-		}
-	    });
-	});
+        Viewer.visibleBox().find('form').each(function() {
+            var form = $(this);
+            $.ajax({
+                url: '/notes/preview',
+                method: 'post',
+                data: form.serialize(),
+                success: function(resp) {
+                    var modal = $('<div tabindex="-1"/>').addClass('modal');
+                    modal.append(
+                        $('<div/>').addClass('modal-dialog modal-lg').append(
+                            $('<div/>').addClass('modal-content').append(
+                                $('<div/>').addClass('modal-body').html(resp)
+                            )
+                        )
+                    );
+                    modal.css({width: '1000px', 'margin-left': '-500px'}).modal();
+                    renderNote();
+                }
+            });
+        });
     }
 
     function itemSaved() {
-	Viewer.visibleBox().find('form:visible').each(function() {
-	    var form = $(this);
-	    submitNote(form, function(response) {
-		form.removeClass('hasUnsavedChanges');
-		browserActivate(response.id);
-		refreshFilter();
-	    });
-	});
+        Viewer.visibleBox().find('form:visible').each(function() {
+            var form = $(this);
+            submitNote(form, function(response) {
+                form.removeClass('hasUnsavedChanges');
+                browserActivate(response.id);
+                refreshFilter();
+            });
+        });
     }
 </script>

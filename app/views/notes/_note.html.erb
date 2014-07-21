@@ -7,9 +7,9 @@
     </div>
     <footer>
       <div class="tags">
-	<% @note.tags.map(&:label).each do |tag| %>
-	<%= tag_link("/notes/scratchpad?f=.", tag) %>
-	<% end %>
+        <% @note.tags.map(&:label).each do |tag| %>
+        <%= tag_link("/notes/scratchpad?f=.", tag) %>
+        <% end %>
       </div>
     </footer>
   </div>

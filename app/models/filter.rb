@@ -37,7 +37,7 @@ class Filter
       end
       scope = Note.includes(:tags).where(cond, *args)
     end
-    
+
     scope.unpinned.where(@fields).order('notes.original_date DESC')
   end
 

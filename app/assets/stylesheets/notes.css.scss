@@ -8,96 +8,96 @@
     padding-bottom: 3px;
 
     p, ul, ol, td, th, blockquote {
-	font-size: 14px;
+        font-size: 14px;
     }
 
     .title {
-	font-size: 2em;
+        font-size: 2em;
     }
 
     .body {
-	clear: both;
+        clear: both;
 
-	h1 {
-	    font-size: 1.7em;
-	    margin-bottom: 0px;
-	    font-weight: normal;
-	    text-decoration: underline;
-	}
+        h1 {
+            font-size: 1.7em;
+            margin-bottom: 0px;
+            font-weight: normal;
+            text-decoration: underline;
+        }
 
-	h2 {
-	    font-size: 1.5em;
-	    margin-bottom: 0px;
-	    font-weight: normal;
-	    text-decoration: underline;
-	}
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 0px;
+            font-weight: normal;
+            text-decoration: underline;
+        }
 
-	h3 {
-	    font-size: 1.3em;
-	    margin-bottom: 0px;
-	    font-weight: normal;
-	    text-decoration: underline;
-	}
+        h3 {
+            font-size: 1.3em;
+            margin-bottom: 0px;
+            font-weight: normal;
+            text-decoration: underline;
+        }
 
-	h4 {
-	    font-size: 1.2em;
-	    margin-bottom: 0px;
-	    font-weight: normal;
-	    text-decoration: underline;
-	}
+        h4 {
+            font-size: 1.2em;
+            margin-bottom: 0px;
+            font-weight: normal;
+            text-decoration: underline;
+        }
 
-	p:first-child {
-	    margin-top: 0px;
-	}
+        p:first-child {
+            margin-top: 0px;
+        }
 
-	p:last-child {
-	    margin-bottom: 0px;
-	}
+        p:last-child {
+            margin-bottom: 0px;
+        }
 
-	table {
-	    width: auto;
-	}
+        table {
+            width: auto;
+        }
 
-	blockquote p {
-	    margin-top: 15px;
-	}
+        blockquote p {
+            margin-top: 15px;
+        }
 
-	div.abc {
-	    margin-left: auto;
-	    margin-right: auto;
-	}
+        div.abc {
+            margin-left: auto;
+            margin-right: auto;
+        }
     }
 
     footer {
-	padding-top: 8px;
-	margin-top: 4px;
+        padding-top: 8px;
+        margin-top: 4px;
     }
 
     .tag-links {
-	padding: 3px;
-	margin-right: 4px;
-	background-color: #ddd;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	-ms-border-radius: 4px;
-	border-radius: 4px;
+        padding: 3px;
+        margin-right: 4px;
+        background-color: #ddd;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        -ms-border-radius: 4px;
+        border-radius: 4px;
     }
 }
 
 .note-edit {
     form {
-	.unsaved-indicator {
-	    position: absolute;
-	    top: 8px;
-	    right: -35px;
-	    font-weight: bold;
-	}
-	&:not(.hasUnsavedChanges) .unsaved-indicator {
-	    display: none;
-	}
-	&.hasUnsavedChanges .unsaved-indicator {
-	    display: inline;
-	}
+        .unsaved-indicator {
+            position: absolute;
+            top: 8px;
+            right: -35px;
+            font-weight: bold;
+        }
+        &:not(.hasUnsavedChanges) .unsaved-indicator {
+            display: none;
+        }
+        &.hasUnsavedChanges .unsaved-indicator {
+            display: inline;
+        }
     }
 }
 
@@ -108,22 +108,22 @@
     margin-bottom: 20px;
 
     .midi {
-	position: absolute;
-	top: 8px;
-	right: 50px;
+        position: absolute;
+        top: 8px;
+        right: 50px;
     }
 
     .hide-me {
-	display: none !important;
+        display: none !important;
     }
 }
 
 @media print {
     .midi {
-	display: none;
+        display: none;
     }
 
     .note footer {
-	display: none;
+        display: none;
     }
 }

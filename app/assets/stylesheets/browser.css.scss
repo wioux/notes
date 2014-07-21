@@ -3,37 +3,37 @@
     overflow: auto;
 
     ul {
-	margin: 0px;
-	list-style-type: none;
+        margin: 0px;
+        list-style-type: none;
     }
 
     ul#pinned li:last-child {
-	border-bottom: 1px solid #aaa;
+        border-bottom: 1px solid #aaa;
     }
 
     ul {
-	li {
-	    position: relative;
-	}
-	li .actions {
-	    position: absolute;
-	    top: 3px;
-	    right: 3px;
-	}
-	li:not(:hover) .actions {
-	    display: none;
-	}
+        li {
+            position: relative;
+        }
+        li .actions {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+        }
+        li:not(:hover) .actions {
+            display: none;
+        }
 
-	&#pinned li .actions .pin-toggler:after {
-	    content: 'unpin'
-	}
-	&#unpinned li .actions .pin-toggler:after {
-	    content: 'pin'
-	}
+        &#pinned li .actions .pin-toggler:after {
+            content: 'unpin'
+        }
+        &#unpinned li .actions .pin-toggler:after {
+            content: 'pin'
+        }
 
-	&#pinned li.editting {
-	    background-color: #ffcc00;
-	}
+        &#pinned li.editting {
+            background-color: #ffcc00;
+        }
     }
 }
 #browser li {
@@ -43,7 +43,7 @@
     border-top: 1px dashed #ddd;
 }
 #browser li:first-child {
-	border-top: none;
+        border-top: none;
 }
 #browser li.selected {
     background-color: #99ccff;
