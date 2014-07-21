@@ -175,6 +175,15 @@ $(document).ready(function() {
             }
         },
 
+        showAbcSource: function() {
+            var abc = this.abcSource();
+            var modal = $('<div tabindex="-1"/>').addClass('modal');
+            var pane = $('<div/>').addClass('modal-body');
+            pane.css('white-space', 'pre');
+            pane.text(abc);
+            modal.append(pane).modal();
+        },
+
         nextNote: function() {
             this.state(function(st) {
                 if (st.note.next) {
@@ -581,13 +590,16 @@ $(document).ready(function() {
         setInterval(function(){ widg.drawSheet() }, 100);
 
         $(window).on('keydown.tune_widget', function(e) {
-            if (e.target != $('body')[0] && !$(e.target).is('.options'))
+            if (e.target != $('body')[0])
                 return;
 
             var key = String.fromCharCode(e.which).toLowerCase();
             switch(key) {
             case 'o':
                 widg.toggleOptions();
+                return e.preventDefault();
+            case 's':
+                widg.showAbcSource();
                 return e.preventDefault();
             case 'p':
                 if (e.ctrlKey)
