@@ -98,7 +98,7 @@ ABCLineParser.prototype = {
     },
 
     parseUnit: function() {
-        var token, shift, beam, value, tie, accidental, decorations;
+        var token, shift, swing, beam, value, tie, accidental, decorations;
         token = this.lookAhead();
 
         switch(token.toLowerCase()) {
@@ -124,6 +124,10 @@ ABCLineParser.prototype = {
             beam = !this.source.match(/^\s/);
             this.source = this.source.replace(/^\s+/, '');
 
+            swing = this.source.match(/^[><]/);
+            swing = swing && swing[0];
+            this.source = this.source.replace(/^[><]/, '');
+
             tie = !!this.source.match(/^-/);
             this.source = this.source.replace(/^-/, '');
 
@@ -134,6 +138,7 @@ ABCLineParser.prototype = {
                 value: value,
                 accidentals: accidental || '',
                 decorations: decorations,
+                swing: swing,
                 tie: tie,
                 beam: beam,
 
@@ -156,6 +161,8 @@ ABCLineParser.prototype = {
 
                     src += (this.value == '1' ? '' : this.value);
 
+                    if (this.swing)
+                        src += this.swing;
                     if (!this.beam)
                         src += ' ';
                     if (this.tie)

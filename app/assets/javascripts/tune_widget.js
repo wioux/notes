@@ -565,13 +565,13 @@ $(document).ready(function() {
             });
         },
 
-        swing: function() {
-            // TODO... how?
+        swing: function(direction) {
             this.state(function(st) {
-                if (st.note.match(/[A-Ga-g][,']*\s*>/))
-                    this.replaceNote(st.note.replace(/([A-Ga-g][,']*\s*)>/, '$1'));
+                if (st.note.swing == direction)
+                    st.note.swing = null;
                 else
-                    this.replaceNote(st.note.replace(/([A-Ga-g][,']*\s*)/, '$1>'));
+                    st.note.swing = direction;
+                this.replaceNote(st.note);
             });
         },
 
@@ -668,11 +668,12 @@ $(document).ready(function() {
                 else
                     widg.naturalize();
                 return e.preventDefault();
+            case 188:
             case 190:
-                // > / .
+                // < / > / .
                 if (e.shiftKey)
-                    widg.swing();
-                else
+                    widg.swing(e.which == 188 ? '<' : '>');
+                else if (e.which == 190)
                     widg.dot();
                 return e.preventDefault();
             case 37:
