@@ -298,16 +298,15 @@ $(document).ready(function() {
 
         addNote: function(n) {
             this.state(function(st) {
-                if (st.note && st.note.next) {
+                if (st.marker) {
                     var line = st.line.value;
                     var b = line.substr(0, st.note.next.col);
                     var a = line.substr(st.note.next.col);
                     st.line.value = b + n + a;
+                    this.nextNote();
                 } else {
                     st.line.value += n;
                 }
-                if (st.marker)
-                    this.nextNote();
             }, true);
         },
 
