@@ -4,10 +4,16 @@
 
 $(document).ready(function() {
     function widget(container) {
+        var widg = this;
         var source = $('<div class="tune_source"></div>');
         var sheet = $('<div class="tune_sheet"></div>');
         var midi = $('<div class="midi"></div>');
         $(container).addClass('tune_widget').append(source, sheet, midi);
+
+        source.on('click', '.tune_line', function() {
+            widg.source.find('.tune_line.active').removeClass('active');
+            $(this).addClass('active');
+        });
 
         this.container = $(container);
         this.source = source;
@@ -252,6 +258,8 @@ $(document).ready(function() {
                 $(current_line).after(line);
             else
                 this.source.append(line);
+
+            this.source[0].scrollTop = this.source[0].scrollHeight;
         },
 
         abcSource: function(startAtCursor) {
@@ -328,6 +336,8 @@ $(document).ready(function() {
 
             this.state(function(st) {
                 var midinote, note = st.note;
+                if (note.type != 'note')
+                    return;
                 var notekey = note.pitch;
                 // This is an internal ABCJS API?
                 var key = this.key.replace(/maj/i, '').replace(/min/i, 'm');

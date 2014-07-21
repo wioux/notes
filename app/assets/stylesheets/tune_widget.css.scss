@@ -1,0 +1,21 @@
+
+.tune_widget {
+    width: 800px;
+
+    .tune_source {
+        max-height: 150px;
+        overflow-y: scroll;
+
+        .tune_line {
+            padding: 15px;
+
+            &.active {
+                background-color: #aba;
+            }
+
+            input {
+                width: 400px;
+            }
+        }
+    }
+}
