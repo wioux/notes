@@ -451,12 +451,17 @@ $(document).ready(function() {
 
         makeTuplet: function(n) {
             this.state(function(st) {
-                var note = st.note;
-                if (note.source.match(/\(\d/))
-                    note = note.source.replace(/\(\d/, '');
-                else
-                    note = note.source.replace(/([_^=]?[A-Ga-g])/, '('+n+'$1');
-                this.replaceNote(note);
+                var note = st.note, line = st.line;
+                if (note.type != 'note' && note.type != 'rest')
+                    return;
+                if (note.prev && note.prev.type == 'tuplet_begin') {
+                    line.value = line.value.substr(0, note.prev.col) +
+                        line.value.substr(note.col);
+                } else {
+                    line.value = line.value.substr(0, note.col) +
+                        ('('+n) + line.value.substr(note.col);
+                    this.nextNote(); // otherwise the tuplet_begin gets marked
+                }
             });
         },
 
@@ -633,6 +638,7 @@ $(document).ready(function() {
             case '8':
                 if (e.shiftKey)
                     widg.makeTuplet(parseInt(key));
+                else
                     widg.changeValue(parseInt(key));
                 return e.preventDefault();
             }

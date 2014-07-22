@@ -39,7 +39,7 @@ ABCLineParser.prototype = {
     endSlur: function() {
         this.slur = (this.slur || 0) - 1;
         if (this.slur < 0)
-            throw 'Slur start / end mismatch';
+            throw 'Slur begin / end mismatch';
     },
 
     beginGrace: function() {
@@ -224,10 +224,10 @@ ABCLineParser.prototype = {
 
             if (this.source[0] == ':') {
                 this.source = this.source.replace(/^./, '');
-                return { type: 'repeat_start', bar: true };
+                return { type: 'repeat_begin', bar: true };
             } else if (this.source.match(/^(\d)|(\s*\[\d)/)) {
                 this.source = this.source.replace(/^(\d)|(\s*\[\d)/, '');
-                return { type: 'nth_ending_start', bar: true };
+                return { type: 'nth_ending_begin', bar: true };
             } else {
                 return { type: 'bar', bar: true };
             }
@@ -243,7 +243,7 @@ ABCLineParser.prototype = {
                 this.source = this.source.replace(/^./, '');
                 if (this.source.match(/^(\d)|(\s*\[\d)/)) {
                     this.source = this.source.replace(/^(\d)|(\s*\[\d)/, '');
-                    return { type: 'nth_ending_start', bar: true };
+                    return { type: 'nth_ending_begin', bar: true };
                 } else {
                     return { type: 'repeat_end', bar: true };
                 }
@@ -255,14 +255,22 @@ ABCLineParser.prototype = {
             accidental = this.consumeAccidentals();
             this.source = this.source.replace(/^./, '');
 
-            if (this.source.match(/^\d/))
-                throw 'Tuplets are not yet supported';
-            if (accidental)
-                throw 'Slur starts cannot be preceded by an accidental';
+            if (this.source.match(/^\d/)) {
+                value = parseInt(this.source.match(/^\d/)[0]);
+                this.source = this.source.replace(/^\d/, '');
 
-            this.beginSlur();
+                if (accidental)
+                    throw 'Tuplet cannot be preceded by an accidental';
 
-            return { type: 'slur_start' };
+                return { type: 'tuplet_begin', value: value };
+            } else {
+                if (accidental)
+                    throw 'Slur cannot be preceded by an accidental';
+
+                this.beginSlur();
+
+                return { type: 'slur_begin' };
+            }
 
         case ')':
             accidental = this.consumeAccidentals();
