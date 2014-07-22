@@ -11,8 +11,7 @@ $(document).ready(function() {
         $(container).addClass('tune_widget').append(source, sheet, midi);
 
         source.on('click', '.tune_line', function() {
-            widg.source.find('.tune_line.active').removeClass('active');
-            $(this).addClass('active');
+            widg.selectStaffLine(this);
         });
 
         this.container = $(container);
@@ -252,12 +251,20 @@ $(document).ready(function() {
             var current_line = this.source.find('.tune_line.active')[0];
             var line = $('<div class="tune_line active"></div>').html('<input/>');
 
-            this.source.find('.active').removeClass('active');
-
             if (current_line)
                 $(current_line).after(line);
             else
                 this.source.append(line);
+
+            this.selectStaffLine(line);
+        },
+
+        selectStaffLine: function(line) {
+            this.source.find('.tune_line.active').removeClass('active');
+            this.source.find('.tune_line.visible').removeClass('visible');
+
+            $(line).addClass('active');
+            $(line).prev().addClass('visible');
 
             this.source[0].scrollTop = this.source[0].scrollHeight;
         },
@@ -265,21 +272,12 @@ $(document).ready(function() {
         abcSource: function(startAtCursor) {
             var source = null;
             this.state(function(st) {
-                var prev, curr, next;
-                curr = $(st.line);
-                prev = curr.parents('.tune_line').prev().find('input');
-                next = curr.parents('.tune_line').next().find('input');
-
-                source = '';
-                if (prev.length)
-                    source += prev.val() + "|\n";
-                source += curr.val();
-
-                if (startAtCursor)
-                    source = curr.val().substr(st.note.col);
-
-                if (next.length)
-                    source += "|\n" + next.val();
+                var ind;
+                var lines = this.source.find('.visible input, .active input');
+                source = lines.map(function() { return this.value });
+                source = source.get().join("|\n");
+                if (startAtCursor && (ind = source.indexOf('"^_"')))
+                    source = source.substr(ind);
             });
 
             source = ["K: "+this.key,
