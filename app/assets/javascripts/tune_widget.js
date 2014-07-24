@@ -8,7 +8,8 @@ $(document).ready(function() {
         var source = $('<div class="tune_source"></div>');
         var sheet = $('<div class="tune_sheet"></div>');
         var midi = $('<div class="midi"></div>');
-        $(container).addClass('tune_widget').append(source, sheet, midi);
+        var metronome = $('<div class="metronome"></div>');
+        $(container).addClass('tune_widget').append(source, sheet, midi, metronome);
 
         source.on('click', '.tune_line', function() {
             widg.selectStaffLine(this);
@@ -18,6 +19,7 @@ $(document).ready(function() {
         this.source = source;
         this.sheet = sheet;
         this.midi = midi;
+        this.metronome = metronome;
 
         this.time = '4/4';
         this.tempo = '120';
@@ -189,6 +191,61 @@ $(document).ready(function() {
             modal.append(pane).modal();
         },
 
+        enterRhythmMode: function() {
+            var bpm = this.bpm() / 2;
+            var metronome = this.metronome;
+
+            this.metronome_beep = setInterval(function() {
+                MIDI.setVolume(0, 127);
+                MIDI.noteOn(0, 70, 127, 0);
+                MIDI.noteOff(0, 70, 0.1);
+
+                metronome.addClass('blip');
+                setTimeout(function() {
+                    metronome.removeClass('blip');
+                }, 100);
+            }, 60*1000 / bpm);
+
+            var m, tlast = null, tnow = null;
+            $(window).on('keydown.rhythm_mode', function(e) {
+                // TODO: this assumes unit value = 1/8
+                tnow = new Date().getTime();
+                if (e.widget && tlast) {
+                    e.widget.state(function(st) {
+                        var note = st.note, line = st.line;
+                        var prev = note.prev || {};
+
+                        if (prev.type != 'note')
+                            return;
+
+                        m = 2 * (tnow - tlast) / (1000 * 60 / bpm);
+                        var om = m;
+                        m = Math.max(Math.round(2 * m) / 2, 0.5);
+                        if (m == Math.floor(m))
+                            prev.value = ''+m;
+                        else if (m == 0.5)
+                            prev.value = '/2';
+                        else
+                            prev.value = Math.floor(2*m)+'/2';
+
+                        line.value = line.value.substr(0, prev.col) +
+                            prev.computedSource() +
+                            line.value.substr(note.col);
+                    });
+                }
+                tlast = tnow;
+            });
+
+            this.rhythmMode = true;
+        },
+
+        exitRhythmMode: function() {
+            clearInterval(this.metronome_beep);
+            $(window).off('keydown.rhythm_mode');
+
+            this.rhythmMode = false;
+        },
+
         nextNote: function() {
             this.state(function(st) {
                 if (st.note.next) {
@@ -292,6 +349,10 @@ $(document).ready(function() {
                 join("\n")+"\n"+source;
 
             return source;
+        },
+
+        bpm: function() {
+            return parseInt(this.tempo);
         },
 
         drawSheet: function(force) {
@@ -449,6 +510,8 @@ $(document).ready(function() {
                 this.addNote(letter);
             }
             this.playNote();
+
+            return this.state().note;
         },
 
         removeNote: function() {
@@ -611,6 +674,8 @@ $(document).ready(function() {
             if (e.target != $('body')[0])
                 return;
 
+            e.widget = widg;
+
             var key = String.fromCharCode(e.which).toLowerCase();
             switch(key) {
             case 'o':
@@ -618,6 +683,14 @@ $(document).ready(function() {
                 return e.preventDefault();
             case 's':
                 widg.showAbcSource();
+                return e.preventDefault();
+            case 'r':
+                if (e.shiftKey || e.ctrlKey || e.metaKey)
+                    return;
+                if (widg.rhythmMode)
+                    widg.exitRhythmMode();
+                else
+                    widg.enterRhythmMode();
                 return e.preventDefault();
             case 'p':
                 if (e.ctrlKey)
@@ -634,7 +707,7 @@ $(document).ready(function() {
             case 'e':
             case 'f':
             case 'g':
-                widg.insertNote(e.shiftKey ? key : key.toUpperCase());
+                e.note = widg.insertNote(e.shiftKey ? key : key.toUpperCase());
                 return e.preventDefault();
             case '1':
             case '2':

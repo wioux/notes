@@ -1,5 +1,6 @@
 
 .tune_widget {
+    position: relative;
     width: 800px;
 
     .tune_source {
@@ -20,6 +21,18 @@
             input {
                 width: 400px;
             }
+        }
+    }
+
+    .metronome {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 15px;
+        height: 15px;
+
+        &.blip {
+            background-color: #000;
         }
     }
 }
