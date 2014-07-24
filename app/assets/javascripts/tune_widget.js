@@ -227,6 +227,7 @@ $(document).ready(function() {
                             prev.value = '/2';
                         else
                             prev.value = Math.floor(2*m)+'/2';
+                        prev.beam = false;
 
                         line.value = line.value.substr(0, prev.col) +
                             prev.computedSource() +
