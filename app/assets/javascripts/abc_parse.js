@@ -26,7 +26,7 @@ ABCLineParser.prototype = {
         // TODO broken rhythm
         // TODO tuplets
         // TODO error checking on the value (e.g. what would /9 mean?)
-        var m = this.source.match(/^\/?[1-9]/);
+        var m = this.source.match(/^[1-9]?\/?[1-9]/);
         if (m)
             this.source = this.source.substr(m[0].length);
         return m ? m[0] : '1';
