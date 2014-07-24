@@ -274,8 +274,14 @@ $(document).ready(function() {
             this.state(function(st) {
                 var ind;
                 var lines = this.source.find('.visible input, .active input');
-                source = lines.map(function() { return this.value });
+                source = lines.map(function() {
+                    if ($(this).parents('.active')[0])
+                        return this.value;
+                    else
+                        return this.value.replace('"^_"', '');
+                });
                 source = source.get().join("|\n");
+
                 if (startAtCursor && (ind = source.indexOf('"^_"')))
                     source = source.substr(ind);
             });
