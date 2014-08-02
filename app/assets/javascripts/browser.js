@@ -52,6 +52,7 @@ function updateBrowser(notes) {
 }
 
 function browserActivate(item_id) {
+    replaceQueryParam('item_id', item_id);
     itemActivated(item_id, pinned);
 }
 

@@ -1,5 +1,6 @@
 class NotesController < ApplicationController
   def browse
+    @item_id = params[:item_id].presence
     render :layout => 'browser'
   end
 

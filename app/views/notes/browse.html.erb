@@ -38,7 +38,7 @@
                             )
                         )
                     );
-                    modal.css({width: '1000px', 'margin-left': '-500px'}).modal();
+                    modal.css({width:'1000px', 'margin-left':'-500px'}).modal();
                     renderNote();
                 }
             });
@@ -55,4 +55,22 @@
             });
         });
     }
+
+    $(document).ready(function() {
+        $('#filterer form').each(function() {
+            setFilter($(this).find('input').val(), function(items) {
+                var initial_item = <%= @item_id || -1 %>;
+
+                items = items.pinned.concat(items.unpinned);
+                initial_item = $.grep(items, function(item) {
+                    return item.id == initial_item;
+                })[0];
+
+                if (initial_item)
+                    browserActivate(initial_item.id);
+                else
+                    Browser.activateFirstItem();
+            });
+        });
+    });
 </script>

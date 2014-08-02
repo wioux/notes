@@ -8,6 +8,8 @@ function setFilter(filter, callback) {
         url: '/notes/filter',
         data: { filter: filter },
         success: function(notes) {
+            replaceQueryParam('f', filter);
+
             current_filter_string = filter;
             loadBrowser(notes, callback);
         }
@@ -36,11 +38,6 @@ $(document).ready(function() {
     });
     $('#filterer #filter-clearer').click(function() {
         setFilter('');
-    });
-
-    $('#filterer form').each(function() {
-        setFilter($(this).find('input').val(), function(notes) {
-            Browser.activateFirstItem();
-        });
+        replaceQueryParam('item_id', '');
     });
 });
