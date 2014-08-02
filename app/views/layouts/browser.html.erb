@@ -8,31 +8,38 @@
   <%= yield %>
 </head>
 <body>
-  <div id="filterer">
-    <form action="<%= request.fullpath %>" style="position: relative">
+  <div class="row-fluid">
+    <div id="filterer" class="span3">
+      <form action="<%= request.fullpath %>" style="position: relative">
 
-      <span id="filter-focuser">
-        <img src="/spinner.gif" />
-        <span><i class="icon-filter"></i></span>
-      </span>
+        <span id="filter-focuser">
+          <img src="/spinner.gif" />
+          <span><i class="icon-filter"></i></span>
+        </span>
 
-      <span id="filter-clearer">
-        <span><i class="icon-ban-circle"></i></span>
-      </span>
+        <span id="filter-clearer">
+          <span><i class="icon-ban-circle"></i></span>
+        </span>
 
-      <input type="search" value="<%= params[:f] %>" />
+        <input type="search" value="<%= params[:f] %>" />
 
-    </form>
+      </form>
+    </div>
   </div>
 
-  <div id="browser">
-    <ul id="pinned">
-    </ul>
-    <ul id="unpinned">
-    </ul>
+  <div class="row-fluid">
+    <div id="browser" class="span3">
+      <ul id="pinned">
+      </ul>
+      <ul id="unpinned">
+      </ul>
+    </div>
   </div>
 
-  <div id="viewer">
+  <div class="row-fluid" style="height: 100%">
+    <div class="span3"></div>
+    <div id="viewer" class="span9">
+    </div>
   </div>
 </body>
 </html>
