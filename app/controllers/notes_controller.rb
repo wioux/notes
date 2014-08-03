@@ -7,8 +7,9 @@ class NotesController < ApplicationController
   def filter
     mix_pinned = (params[:mix_pinned] == 'true')
 
+    pinned = mix_pinned && []
+    pinned ||= Note.pinned.preload(:tags).order('notes.original_date DESC')
     unpinned = Filter.new(params[:filter], :is_pinned => mix_pinned).notes
-    pinned = mix_pinned ? [] : Note.pinned.order('notes.original_date DESC')
     tags = Tag.labels
 
     [pinned, unpinned].each do |set|
