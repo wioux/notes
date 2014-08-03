@@ -16,7 +16,6 @@
 
 class Note < ActiveRecord::Base
   attr_accessible :body, :date, :title, :tag_list, :is_pinned
-  validates_presence_of :body
 
   has_many :tags, :dependent => :destroy
 
