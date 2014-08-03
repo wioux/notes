@@ -46,6 +46,8 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+
+    box-shadow: none;
 }
 
 #filter-controls {
@@ -55,4 +57,9 @@
         border-top-left-radius: 0px;
         border-top-right-radius: 0px;
     }
+}
+
+#filter-tags-dropdown {
+    max-height: 500px;
+    overflow-y: auto;
 }
