@@ -1,5 +1,6 @@
 
 Viewer = {
+    considerAllItemsUnpinned: false,
     unsavedItems: function() {
         var items = [];
         $('#viewer *[data-pinned=true] form.hasUnsavedChanges').each(function() {
@@ -35,13 +36,17 @@ Viewer = {
     },
 
     loadBox: function(item_id, pinned, callback) {
-        var unpinned_and_unsaved = Viewer.visibleBox().filter('[data-pinned=false]').
-            find('form.hasUnsavedChanges')[0];
-        if (unpinned_and_unsaved && !confirm("Discard changes?"))
+        var unsaved, unpinned = Viewer.visibleBox();
+        if (!this.considerAllItemsUnpinned)
+            unpinned = unpinned.filter('[data-pinned=false]');
+
+        unsaved = unpinned.find('form.hasUnsavedChanges')[0];
+
+        if (unsaved && !confirm("Discard changes?"))
             return;
 
         var box = this.boxFor(item_id).filter('[data-pinned=true]');
-        if (pinned && box[0]) {
+        if (!this.considerAllItemsUnpinned && pinned && box[0]) {
             this.hideAll();
             box.show();
             this.cleanUp();

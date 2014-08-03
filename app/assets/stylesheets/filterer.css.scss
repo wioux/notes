@@ -1,3 +1,7 @@
+#filterer {
+    z-index: 1000;
+}
+
 #filterer span#filter-focuser {
     position: absolute;
     margin-top: 5px;
@@ -37,7 +41,17 @@
     height: 30px;
     width: 100%;
     padding-left: 28px;
+    margin-bottom: 0px;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-    box-sizing: border-box
+    box-sizing: border-box;
+}
+
+#filter-controls {
+    margin-top: -1px;
+
+    .btn {
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+    }
 }

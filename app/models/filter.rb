@@ -1,9 +1,9 @@
 class Filter
-  attr_reader :tags, :strings
+  attr_reader :tags, :strings, :options
 
-  def initialize(string, fields={})
+  def initialize(string, options={})
     @string = string
-    @fields = fields
+    @options = options
 
     @tags = []
     @strings = []
@@ -38,7 +38,9 @@ class Filter
       scope = Note.includes(:tags).where(cond, *args)
     end
 
-    scope.unpinned.where(@fields).order('notes.original_date DESC')
+    scope = scope.unpinned unless options[:is_pinned]
+
+    scope.order('notes.original_date DESC')
   end
 
   def has_tag?(tag)

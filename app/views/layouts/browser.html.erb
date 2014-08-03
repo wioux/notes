@@ -21,7 +21,21 @@
           <span><i class="icon-ban-circle"></i></span>
         </span>
 
-        <input type="search" value="<%= params[:f] %>" />
+        <div>
+          <input type="search" value="<%= params[:f] %>" />
+        </div>
+
+        <div id="filter-controls" class="btn-group">
+          <span id="filter-tags" class="btn btn-small" data-toggle="dropdown">
+            Tags <span class="caret"></span>
+          </span>
+
+          <button id="filter-mix-pinned" class="btn btn-small" data-toggle="button">
+            Mix Pinned
+          </button>
+
+          <ul id="filter-tags-dropdown" class="dropdown-menu" role="menu"></ul>
+        </div>
 
       </form>
     </div>

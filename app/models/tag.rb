@@ -28,6 +28,17 @@ class Tag < ActiveRecord::Base
     tag_groups
   end
 
+  def self.labels
+    tags = uniq.pluck(:label).sort
+    tags.each do |tag|
+      parts = tag.split(':')
+      (parts.size - 1).times do |i|
+        tags << parts[0..i].join(':')
+      end
+    end
+    tags.uniq.sort
+  end
+
   def short_label
     label.split(/:/)[-1]
   end

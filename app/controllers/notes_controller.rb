@@ -5,8 +5,11 @@ class NotesController < ApplicationController
   end
 
   def filter
-    unpinned = Filter.new(params[:filter]).notes
-    pinned = Note.pinned.order('notes.original_date DESC')
+    mix_pinned = (params[:mix_pinned] == 'true')
+
+    unpinned = Filter.new(params[:filter], :is_pinned => mix_pinned).notes
+    pinned = mix_pinned ? [] : Note.pinned.order('notes.original_date DESC')
+    tags = Tag.labels
 
     [pinned, unpinned].each do |set|
       set.map! do |note|
@@ -14,13 +17,13 @@ class NotesController < ApplicationController
           :id => note.id,
           :original_date => note.original_date,
           :preview => note.preview,
-          :is_pinned => note.is_pinned,
+          :is_pinned => note.is_pinned && !mix_pinned,
           :tags => note.tags.map{ |tag| {:short_label => tag.short_label} }
         }
       end
     end
 
-    render :json => {:pinned => pinned, :unpinned => unpinned}
+    render :json => {:pinned => pinned, :unpinned => unpinned, :tags => tags}
   end
 
   def tune_widget
