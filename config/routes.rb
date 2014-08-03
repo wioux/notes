@@ -4,6 +4,7 @@ Notes::Application.routes.draw do
   get '/logout', :to => 'application#logout'
 
   root :to => 'notes#browse'
+  get '/autocomplete', :to => 'notes#autocomplete'
 
   resources :notes, :only => [:new, :create, :update, :show, :destroy] do
     member do

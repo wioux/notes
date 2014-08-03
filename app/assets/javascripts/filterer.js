@@ -75,4 +75,10 @@ $(document).ready(function() {
 
     if (getQueryParam('mix_pinned') == 'true')
         $('#filterer #filter-mix-pinned').trigger('click');
+
+    $('#filterer input[type=search]').autocomplete({
+        source: location.pathname.replace(/\/$/, '') + '/autocomplete',
+        appendTo: $('#filterer'),
+        delay: 0
+    });
 });
