@@ -31,17 +31,17 @@
       <div class="unsaved-indicator">*</div>
     </div>
 
-    <%= f.text_area :body, :class => 'form-control', :style => 'position: absolute; top: 37px; bottom: 35px; width: 90%; border-radius: 0px; resize: none; z-index: 10' %>
+    <%= f.text_area :body, :class => 'form-control', :style => 'position: absolute; top: 37px; bottom: 36px; width: 90%; border-radius: 0px; resize: none' %>
 
     <div style="position: absolute; bottom: 2px; width: 90%">
       <div class="input-group">
         <div class="input-group-btn">
-          <div class="btn btn-default" data-toggle="modal" data-target="form:visible .tag-selector" style="border-top-left-radius: 0px; border-top-right-radius: 0px">Tags</div>
+          <div class="btn btn-default" data-toggle="modal" data-target="form:visible .tag-selector" style="border-top: 0px; border-top-left-radius: 0px; border-top-right-radius: 0px; padding-top: 7px;">Tags</div>
         </div>
 
-        <%= f.text_field :tag_list, :class => 'form-control', :style => 'width: 100%' %>
+        <%= f.text_field :tag_list, :class => 'form-control', :style => 'border-top: 0px; border-top-left-radius: 0px; border-top-right-radius: 0px; width: 100%' %>
         <div class="input-group-btn">
-          <div class="btn btn-default" data-toggle="modal" data-target="form:visible .attachment-selector" style="border-top-left-radius: 0px; border-top-right-radius: 0px">Attachments</div>
+          <div class="btn btn-default" data-toggle="modal" data-target="form:visible .attachment-selector" style="border-top: 0px; border-top-left-radius: 0px; border-top-right-radius: 0px; padding-top: 7px;">Attachments</div>
         </div>
       </div>
     </div>

@@ -24,6 +24,7 @@ function loadBrowser(notes, callback) {
 
     list.append('<li style="border: 0">&nbsp;</li>');
     list.append('<li style="border: 0">&nbsp;</li>');
+    list.append('<li style="border: 0">&nbsp;</li>');
 
     callback && callback(notes);
 }

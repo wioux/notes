@@ -4,7 +4,7 @@
 
 #filterer span#filter-focuser {
     position: absolute;
-    margin-top: 5px;
+    margin-top: 7px;
     margin-left: 8px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -27,7 +27,7 @@
 #filterer span#filter-clearer {
     position: absolute;
     right: 8px;
-    margin-top: 5px;
+    margin-top: 7px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -54,6 +54,7 @@
     margin-top: -1px;
 
     .btn {
+        border-top: 0px;
         border-top-left-radius: 0px;
         border-top-right-radius: 0px;
     }

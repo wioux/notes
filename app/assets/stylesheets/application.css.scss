@@ -14,4 +14,13 @@
  *= require_tree ../../../vendor/assets/stylesheets
  */
 
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../assets/bootstrap/glyphicons-halflings-regular-3054307a371077ce57aabdf16e272a40.eot') format('embedded-opentype'),
+       url('../assets/bootstrap/glyphicons-halflings-regular-4a5115f683cbc44b31241ce9f4bf9bc0.woff') format('woff'),
+       url('../assets/bootstrap/glyphicons-halflings-regular-370498439f583aabf7e5fa44b046cb1b.ttf') format('truetype'),
+       url('../assets/bootstrap/glyphicons-halflings-regular-9afe64e24f53e84bdca7f4a0a6acc6d4.svg') format('svg');
+}
+
 @import "bootstrap";
+@import "bootstrap/glyphicons";
