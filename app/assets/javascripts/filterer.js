@@ -71,6 +71,9 @@ $(document).ready(function() {
             Viewer.considerAllItemsUnpinned = true;
             replaceQueryParam('mix_pinned', true);
         }
+        setTimeout(function() {
+            setFilter(current_filter_string);
+        }, 10);
     });
 
     if (getQueryParam('mix_pinned') == 'true')
