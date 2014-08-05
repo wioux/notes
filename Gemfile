@@ -55,6 +55,6 @@ gem 'jquery-ui-rails'
 # Markdown Parser
 gem 'redcarpet', '~> 2.3.0'
 
-gem 'bootstrap-sass', '~> 2.3.2.1'
+gem 'bootstrap-sass', '~> 3.2.0'
 
 gem 'bcrypt-ruby', :require => 'bcrypt'
