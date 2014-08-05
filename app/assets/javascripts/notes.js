@@ -9,12 +9,16 @@ function submitNote(form, callback) {
     date += now.getMinutes() + '/';
     date += now.getSeconds();
     form.find('input[name=note\\[date\\]]').val(date);
+
+    var formData = new FormData(form[0]);
     form.each(function() {
         $.ajax({
             url: form.attr('action'),
             method: form.attr('method'),
-            data: form.serialize(),
-            dataType: 'json',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
             success: callback
         });
     });
@@ -25,10 +29,13 @@ function renderNote() {
     $('.note .body table').tablesorter();
     $('.note .body table').addClass('table table-striped');
 
-    $('.note-edit form').on('input.trackUnsavedChanges', ':input', function() {
+    var makeDirty = function() {
         var id = $(this).parents('.note').attr('data-id');
         $(this).parents('form').addClass('hasUnsavedChanges');
-    });
+    };
+
+    $('.note-edit form').on('input', ':input', makeDirty);
+    $('.note-edit form').on('change', 'input[type=file]', makeDirty);
 }
 
 function renderAbc() {

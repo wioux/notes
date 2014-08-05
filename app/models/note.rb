@@ -19,6 +19,10 @@ class Note < ActiveRecord::Base
 
   has_many :tags, :dependent => :destroy
 
+  has_many :attachments, :dependent => :destroy
+  accepts_nested_attributes_for :attachments
+  attr_accessible :attachments_attributes
+
   default_scope { where(:is_history => false) }
   scope :history, -> { where(:is_history => true) }
 

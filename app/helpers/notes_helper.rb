@@ -9,4 +9,18 @@ module NotesHelper
     end
     (links << '</span>').html_safe
   end
+
+  def attachment_link(attachment)
+    content_tag(:span, :class => 'attachment-link') do
+      content_tag(:a, :href => url_for(attachment)){ attachment.file_name }
+    end
+  end
+
+  def attachment_edit(form)
+    if form.object.new_record?
+      content_tag(:div){ form.file_field :file }
+    else
+      content_tag(:div){ content_tag :strong, form.object.file_name }
+    end
+  end
 end
