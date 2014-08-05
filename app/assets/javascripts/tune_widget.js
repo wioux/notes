@@ -142,9 +142,9 @@ $(document).ready(function() {
 
                         btns = $('<div/>')
                         btns.addClass('btn-group btn-group-justified');
-                        btns.append($('<span class="btn btn-mini">').
+                        btns.append($('<span class="btn btn-default btn-xs">').
                                     text(keysigs[i][0]));
-                        btns.append($('<span class="btn btn-mini">').
+                        btns.append($('<span class="btn btn-default btn-xs">').
                                     text(keysigs[i][1]));
                         sig.append(btns);
 

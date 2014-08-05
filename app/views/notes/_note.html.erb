@@ -26,18 +26,18 @@
     <%= form_for(@note, :html => {'data-note-id' => @note.id}) do |f| %>
     <%= f.hidden_field :date %>
 
-    <div style="position: absolute; top: 4px; width: 70%">
+    <div style="position: absolute; top: 4px; width: 90%">
       <%= f.text_field :title, :style => 'width: 100%' %>
       <div class="unsaved-indicator">*</div>
     </div>
 
-    <%= f.text_area :body, :style => 'position: absolute; top: 40px; bottom: 40px; width: 70%' %>
+    <%= f.text_area :body, :style => 'position: absolute; top: 40px; bottom: 40px; width: 90%' %>
 
-    <div style="position: absolute; bottom: 0px; width: 70%">
-      <div class="input-group">
+    <div style="position: absolute; bottom: 0px; width: 90%">
+      <!-- <div class="input-group"> -->
         <!-- <div class="input-group-btn">Attachments</div> -->
         <%= f.text_field :tag_list, :style => 'width: 100%' %>
-      </div>
+        <!-- </div> -->
     </div>
 
     <div class="modal" tabindex="-1" style="display:none">

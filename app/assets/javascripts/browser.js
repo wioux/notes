@@ -77,11 +77,11 @@ function constructBrowserItem(item) {
     var actions = $('<span class="actions btn-group">');
 
     var toggle_pin = $('<button type="button"/>').
-        addClass('btn btn-mini pin-toggler');
+        addClass('btn btn-default btn-xs pin-toggler');
     actions.append(toggle_pin);
 
     var destroy = $('<button type="button"/>').
-        addClass('btn btn-mini destroyer').text('destroy');
+        addClass('btn btn-default btn-xs destroyer').text('destroy');
     actions.append(destroy);
 
     li.append($('<span class="preview">').html(item.preview));

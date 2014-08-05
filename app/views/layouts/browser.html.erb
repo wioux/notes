@@ -8,41 +8,39 @@
   <%= yield %>
 </head>
 <body>
-  <div class="row-fluid">
-    <div id="filterer" class="span3">
+  <div class="row">
+    <div id="filterer" class="col-md-3">
       <form action="<%= request.fullpath %>" style="position: relative">
 
         <span id="filter-focuser">
           <img src="/spinner.gif" />
-          <span><i class="icon-filter"></i></span>
+          <span><i class="glyphicon glyphicon-filter"></i></span>
         </span>
 
         <span id="filter-clearer">
-          <span><i class="icon-ban-circle"></i></span>
+          <span><i class="glyphicon glyphicon-ban-circle"></i></span>
         </span>
 
         <div>
-          <input type="search" value="<%= params[:f] %>" />
+          <input type="search" value="<%= params[:f] %>" class="form-control"/>
         </div>
 
         <div id="filter-controls" class="btn-group">
-          <span id="filter-tags" class="btn btn-small" data-toggle="dropdown">
+          <span id="filter-tags" class="btn btn-default btn-xs" data-toggle="dropdown">
             Tags <span class="caret"></span>
           </span>
+          <ul id="filter-tags-dropdown" class="dropdown-menu" role="menu"></ul>
 
-          <span id="filter-mix-pinned" class="btn btn-small" data-toggle="button">
+          <span id="filter-mix-pinned" class="btn btn-default btn-xs" data-toggle="button">
             Mix Pinned
           </span>
-
-          <ul id="filter-tags-dropdown" class="dropdown-menu" role="menu"></ul>
         </div>
-
       </form>
     </div>
   </div>
 
-  <div class="row-fluid">
-    <div id="browser" class="span3">
+  <div class="row">
+    <div id="browser" class="col-md-3">
       <ul id="pinned">
       </ul>
       <ul id="unpinned">
@@ -50,9 +48,9 @@
     </div>
   </div>
 
-  <div class="row-fluid" style="height: 100%">
-    <div class="span3"></div>
-    <div id="viewer" class="span9">
+  <div class="row" style="height: 100%">
+    <div class="col-md-3"></div>
+    <div id="viewer" class="col-md-9">
     </div>
   </div>
 </body>
