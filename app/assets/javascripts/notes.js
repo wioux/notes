@@ -77,10 +77,20 @@ $(document).ready(function() {
     $('body').on('click', '.tag-selector .btn', function() {
         var form = $('.note-edit form:visible');
         var input = form.find('input[name=note\\[tag_list\\]]')[0];
-        if (!input) return;
+        if (!input) return console.log('no visible form to edit tags on!');
 
-        var text = input.value.match(/\S/) ? ', '+$(this).text() : $(this).text();
-        input.value = input.value.replace(/,?\s*$/, '') + text;
+        if ($(this).is('.active')) {
+            var tags = input.value.split(/\s*,\s*/);
+            for (var i=0; i < tags.length; i++)
+                if (tags[i] == $(this).text())
+                    tags.splice(i, 1);
+            input.value = tags.join(', ');
+        } else {
+            var text = input.value.match(/\S/) ?
+                ', '+$(this).text() :
+                $(this).text();
+            input.value = input.value.replace(/,?\s*$/, '') + text;
+        }
         $(input).trigger('input');
     });
 });

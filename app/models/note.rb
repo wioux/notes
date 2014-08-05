@@ -68,6 +68,10 @@ class Note < ActiveRecord::Base
     self.tags = list.map{ |label| tags.build(:label => label) }
   end
 
+  def tagged?(label)
+    tags.map(&:label).include?(label)
+  end
+
   def preview(maxlen=40)
     preview = title.blank? ? body : title
     preview = ::MarkdownHTML.render(preview).strip_tags.strip
