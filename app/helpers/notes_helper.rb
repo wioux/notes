@@ -23,4 +23,8 @@ module NotesHelper
       content_tag(:div){ content_tag :strong, form.object.file_name }
     end
   end
+
+  def tag_selector_button(tag)
+    content_tag(:span, :class => 'btn btn-default btn-sm'){ tag }
+  end
 end

@@ -72,3 +72,15 @@ function renderAbc() {
         $(midi_link).prepend(player, '<br />');
     });
 }
+
+$(document).ready(function() {
+    $('body').on('click', '.tag-selector .btn', function() {
+        var form = $('.note-edit form:visible');
+        var input = form.find('input[name=note\\[tag_list\\]]')[0];
+        if (!input) return;
+
+        var text = input.value.match(/\S/) ? ', '+$(this).text() : $(this).text();
+        input.value = input.value.replace(/,?\s*$/, '') + text;
+        $(input).trigger('input');
+    });
+});

@@ -27,23 +27,29 @@
     <%= f.hidden_field :date %>
 
     <div style="position: absolute; top: 4px; width: 90%">
-      <%= f.text_field :title, :style => 'width: 100%' %>
+      <%= f.text_field :title, :class => 'form-control', :style => 'width: 100%; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px' %>
       <div class="unsaved-indicator">*</div>
     </div>
 
-    <%= f.text_area :body, :style => 'position: absolute; top: 40px; bottom: 40px; width: 90%' %>
+    <%= f.text_area :body, :class => 'form-control', :style => 'position: absolute; top: 37px; bottom: 35px; width: 90%; border-radius: 0px; resize: none; z-index: 10' %>
 
-    <div style="position: absolute; bottom: 0px; width: 90%">
-      <!-- <div class="input-group"> -->
-        <!-- <div class="input-group-btn">Attachments</div> -->
-        <%= f.text_field :tag_list, :style => 'width: 100%' %>
-        <!-- </div> -->
+    <div style="position: absolute; bottom: 2px; width: 90%">
+      <div class="input-group">
+        <div class="input-group-btn">
+          <div class="btn btn-default" data-toggle="modal" data-target="form:visible .tag-selector" style="border-top-left-radius: 0px; border-top-right-radius: 0px">Tags</div>
+        </div>
+
+        <%= f.text_field :tag_list, :class => 'form-control', :style => 'width: 100%' %>
+        <div class="input-group-btn">
+          <div class="btn btn-default" data-toggle="modal" data-target="form:visible .attachment-selector" style="border-top-left-radius: 0px; border-top-right-radius: 0px">Attachments</div>
+        </div>
+      </div>
     </div>
 
-    <div class="modal" tabindex="-1" style="display:none">
+    <div class="modal attachment-selector" tabindex="-1">
       <div class="modal-dialog">
-        <div class="modal-header"><h3>Attachments</h3></div>
         <div class="modal-content">
+          <div class="modal-header"><h3 style="margin: 0px">Attachments</h3></div>
           <div class="modal-body">
             <% @note.attachments.build %>
             <%= f.fields_for(:attachments) do |sf| %>
@@ -51,8 +57,21 @@
             <% end %>
           </div>
         </div>
-      <% end %>
       </div>
     </div>
+
+    <div class="modal tag-selector" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header"><h3 style="margin: 0px">Tags</h3></div>
+          <div class="modal-body">
+            <% Tag.labels.each do |tag| %>
+            <%= tag_selector_button(tag) %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% end %>
   </div>
 </div>
