@@ -18,7 +18,9 @@ module NotesHelper
 
   def attachment_edit(form)
     if form.object.new_record?
-      content_tag(:div){ form.file_field :file, :style => 'margin-top: 8px' }
+      content_tag(:div) do
+        form.file_field :uploaded_file, :style => 'margin-top: 8px'
+      end
     else
       content_tag(:div){ content_tag :strong, form.object.file_name }
     end

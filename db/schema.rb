@@ -11,14 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140803100627) do
+ActiveRecord::Schema.define(version: 20140806081152) do
 
   create_table "attachments", force: true do |t|
-    t.integer  "note_id",    null: false
-    t.string   "location",   null: false
-    t.string   "file_name",  null: false
+    t.integer  "note_id",      null: false
+    t.string   "location",     null: false
+    t.string   "file_name",    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "content_type"
   end
 
   create_table "notes", force: true do |t|

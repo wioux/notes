@@ -1,14 +1,15 @@
 class Attachment < ActiveRecord::Base
-  attr_accessible :file
+  attr_accessible :uploaded_file
   belongs_to :note
 
   after_destroy :delete_file
 
-  def file=(file)
+  def uploaded_file=(file)
     data = file.read
     self.file_name = file.original_filename
     digest = Digest::SHA256.new.tap{ |sha| sha << data }.hexdigest
     self.location = "attachments/#{digest}-#{file_name}"
+    self.content_type = file.content_type
 
     FileUtils.mkdir_p("#{Rails.root}/files/#{File.dirname(location)}")
     File.open("#{Rails.root}/files/#{location}", 'wb') do |f|
