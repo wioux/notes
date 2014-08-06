@@ -102,6 +102,10 @@
         &.hasUnsavedChanges .unsaved-indicator {
             display: inline;
         }
+
+        .tag-selector span {
+            margin: 2px;
+        }
     }
 }
 
