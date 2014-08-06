@@ -12,7 +12,7 @@ class Attachment < ActiveRecord::Base
     data = file.read
     self.file_name = file.original_filename
     digest = Digest::SHA256.new.tap{ |sha| sha << data }.hexdigest
-    self.location = "attachments/#{digest}-#{file_name}"
+    self.location = "#{Rails.env}/attachments/#{digest}-#{file_name}"
     self.content_type = file.content_type
 
     FileUtils.mkdir_p("#{Rails.root}/files/#{File.dirname(location)}")
