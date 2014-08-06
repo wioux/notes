@@ -17,6 +17,7 @@
 /log/*.log
 /tmp
 
-files/attachments
+files/development
+files/production
 
 **/.DS_Store
