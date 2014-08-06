@@ -2,6 +2,8 @@ class Attachment < ActiveRecord::Base
   attr_accessible :file
   belongs_to :note
 
+  after_destroy :delete_file
+
   def file=(file)
     data = file.read
     self.file_name = file.original_filename
@@ -12,5 +14,9 @@ class Attachment < ActiveRecord::Base
     File.open("#{Rails.root}/files/#{location}", 'wb') do |f|
       f.write(data)
     end
+  end
+
+  def delete_file
+    FileUtils.rm_f("#{Rails.root}/files/#{location}")
   end
 end
