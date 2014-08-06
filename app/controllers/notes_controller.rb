@@ -29,15 +29,16 @@ class NotesController < ApplicationController
 
   def autocomplete
     term = params[:term]
-    matches = Tag.autocomplete(term).map do |tag|
-      {:label => '.'+tag, :value => '.'+tag}
+    if term[0] == '.'
+      matches = Tag.autocomplete(term[1..-1]).map do |tag|
+        {:label => '.'+tag, :value => '.'+tag}
+      end
+    else
+      notes = Note.where('notes.title like ?', "%#{params[:term]}%")
+      matches = notes.pluck(:title).uniq.sort.map do |title|
+        {:label => title, :value => title.inspect}
+      end
     end
-
-    notes = Note.where('notes.title like ?', "%#{params[:term]}%")
-    matches << notes.pluck(:title).uniq.sort.map do |title|
-      {:label => title, :value => title.inspect}
-    end
-
     render :json => matches.flatten
   end
 
