@@ -31,11 +31,15 @@ class Filter
       end
       args = [@tags.map{ |t| [t, "#{t}:%"] }].flatten
       @strings.each do |search|
-        cond << ' OR' unless cond.empty?
-        cond << '(notes.title LIKE ? OR notes.body LIKE ?)'
-        args << "%#{search}%" << "%#{search}%"
+        cond << ' OR ' unless cond.empty?
+        cond << '('
+        cond << ['notes.title', 'notes.body', 'attachments.file_name'].map do |attr|
+          "#{attr} LIKE ?"
+        end.join(' OR ')
+        cond << ')'
+        args << "%#{search}%" << "%#{search}%" << "%#{search}%"
       end
-      scope = Note.includes(:tags).where(cond, *args)
+      scope = Note.includes(:tags, :attachments).where(cond, *args)
     end
 
     scope = scope.unpinned unless options[:is_pinned]
