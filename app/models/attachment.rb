@@ -4,6 +4,10 @@ class Attachment < ActiveRecord::Base
 
   after_destroy :delete_file
 
+  def local_path
+    "#{Rails.root}/files/#{location}"
+  end
+
   def uploaded_file=(file)
     data = file.read
     self.file_name = file.original_filename
@@ -18,6 +22,6 @@ class Attachment < ActiveRecord::Base
   end
 
   def delete_file
-    FileUtils.rm_f("#{Rails.root}/files/#{location}")
+    FileUtils.rm_f(local_path)
   end
 end
