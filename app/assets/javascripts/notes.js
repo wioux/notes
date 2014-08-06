@@ -100,7 +100,7 @@ $(document).ready(function() {
                                      function(e, p1, p2) {
                                          return p1+(parseInt(p2)+1);
                                      });
-        var new_name = this.name.replace(/(note\[attachments_attributes\])\[(\d)+/,
+        var new_name = this.name.replace(/(note\[attachments_attributes\]\[)(\d)+/,
                                      function(e, p1, p2) {
                                          return p1+(parseInt(p2)+1);
                                      });
