@@ -93,4 +93,20 @@ $(document).ready(function() {
         }
         $(input).trigger('input');
     });
+
+    $('body').on('change', '.note-edit form input[type=file]', function() {
+        var new_field = $(this).clone();
+        var new_id = this.id.replace(/(note_attachments_attributes_)(\d+)/,
+                                     function(e, p1, p2) {
+                                         return p1+(parseInt(p2)+1);
+                                     });
+        var new_name = this.name.replace(/(note\[attachments_attributes\])\[(\d)+/,
+                                     function(e, p1, p2) {
+                                         return p1+(parseInt(p2)+1);
+                                     });
+        new_field.attr('id', new_id);
+        new_field.attr('name', new_name);
+        new_field.val('');
+        $(this).parent().append(new_field);
+    });
 });

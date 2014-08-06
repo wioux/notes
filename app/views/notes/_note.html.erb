@@ -51,10 +51,13 @@
         <div class="modal-content">
           <div class="modal-header"><h3 style="margin: 0px">Attachments</h3></div>
           <div class="modal-body">
-            <% @note.attachments.build %>
-            <%= f.fields_for(:attachments) do |sf| %>
-            <%= attachment_edit(sf) %>
-            <% end %>
+            <strong>Add Attachments:</strong>
+            <div style="padding-left: 10px">
+              <% @note.attachments.build %>
+              <%= f.fields_for(:attachments) do |sf| %>
+              <%= attachment_edit(sf) %>
+              <% end %>
+            </div>
           </div>
         </div>
       </div>
