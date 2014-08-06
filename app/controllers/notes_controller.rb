@@ -29,11 +29,16 @@ class NotesController < ApplicationController
 
   def autocomplete
     term = params[:term]
-    matches = Note.where('notes.title like ?', "%#{params[:term]}%")
-    matches = matches.pluck(:title).uniq.sort.map do |title|
+    matches = Tag.autocomplete(term).map do |tag|
+      {:label => '.'+tag, :value => '.'+tag}
+    end
+
+    notes = Note.where('notes.title like ?', "%#{params[:term]}%")
+    matches << notes.pluck(:title).uniq.sort.map do |title|
       {:label => title, :value => title.inspect}
     end
-    render :json => matches
+
+    render :json => matches.flatten
   end
 
   def tune_widget

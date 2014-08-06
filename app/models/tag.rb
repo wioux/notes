@@ -39,6 +39,11 @@ class Tag < ActiveRecord::Base
     tags.uniq.sort
   end
 
+  def self.autocomplete(term)
+    Tag.uniq.where('tags.label like ?', "%#{term}%").
+      where('tags.label != ?', term).pluck(:label)
+  end
+
   def short_label
     label.split(/:/)[-1]
   end
