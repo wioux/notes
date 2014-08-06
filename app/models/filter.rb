@@ -39,7 +39,9 @@ class Filter
         cond << ')'
         args << "%#{search}%" << "%#{search}%" << "%#{search}%"
       end
-      scope = Note.includes(:tags, :attachments).where(cond, *args)
+      scope = Note.includes(:tags, :attachments).
+                references(:tags, :attachments).
+                where(cond, *args)
     end
 
     scope = scope.unpinned unless options[:is_pinned]
