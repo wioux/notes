@@ -44,6 +44,8 @@ function loadTags(tags) {
 }
 
 $(document).ready(function() {
+    current_filter_string = $('#filterer input[type=search]').val();
+
     $('#filterer form').submit(function(e) {
         e.preventDefault();
         setFilter($(this).find('input').val());
