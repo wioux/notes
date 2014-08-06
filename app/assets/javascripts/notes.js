@@ -36,6 +36,12 @@ function renderNote() {
 
     $('.note-edit form').on('input', ':input', makeDirty);
     $('.note-edit form').on('change', 'input[type=file]', makeDirty);
+
+    $('.note-edit input[name*=tag_list]').autocomplete({
+        source: '/tags/autocomplete',
+        position: { my: 'left bottom', at: 'left top' },
+        delay: 0
+    });
 }
 
 function renderAbc() {
@@ -74,6 +80,21 @@ function renderAbc() {
 }
 
 $(document).ready(function() {
+    $('body').on('show.bs.modal', '.tag-selector', function() {
+        var form = $('.note-edit form:visible');
+        var input = form.find('input[name=note\\[tag_list\\]]')[0];
+        var tags = input.value.split(/\s*,\s*/);
+        $(this).find('.btn').each(function() {
+            if (tags.indexOf($(this).text()) == -1) {
+                $(this).removeClass('active');
+            } else {
+                $(this).addClass('active');
+            }
+        });
+    });
+
+
+
     $('body').on('click', '.tag-selector .btn', function() {
         var form = $('.note-edit form:visible');
         var input = form.find('input[name=note\\[tag_list\\]]')[0];
