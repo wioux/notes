@@ -24,24 +24,18 @@ class Filter
     if @string.blank?
       scope = Note.includes(:tags)
     else
-      cond = ''
+      ids = []
       @tags.each do |tag|
-        cond << ' OR' unless cond.empty?
-        cond << '(tags.label = ? OR tags.label LIKE ?)'
+        ids.concat Note.joins(:tags).where('tags.label = ? OR tags.label LIKE ?',
+                                           tag, "#{tag}:%").pluck(:id)
       end
-      args = [@tags.map{ |t| [t, "#{t}:%"] }].flatten
-      @strings.each do |search|
-        cond << ' OR ' unless cond.empty?
-        cond << '('
-        cond << ['notes.title', 'notes.body', 'attachments.file_name'].map do |attr|
-          "#{attr} LIKE ?"
-        end.join(' OR ')
-        cond << ')'
-        args << "%#{search}%" << "%#{search}%" << "%#{search}%"
+      @strings.each do |string|
+        ids.concat Note.where('title LIKE ? or body LIKE ?',
+                              "%#{string}%", "%#{string}%").pluck(:id)
+        ids.concat Note.joins(:attachments).where('attachments.file_name LIKE ?',
+                                                  "%#{string}%").pluck(:id)
       end
-      scope = Note.includes(:tags, :attachments).
-                references(:tags, :attachments).
-                where(cond, *args)
+      scope = Note.preload(:tags).where(:id => ids)
     end
 
     scope = scope.unpinned unless options[:is_pinned]
