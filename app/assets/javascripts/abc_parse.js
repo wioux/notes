@@ -5,6 +5,20 @@ function ABCLineParser(source) {
 }
 
 ABCLineParser.prototype = {
+    throw_if: function(value, message) {
+        var col = 0;
+        if (this.results[this.results.length-1])
+            col = this.results[this.results.length-1].col + 1;
+        if (value) {
+            message = '('+col+'): '+message+"\n"+this.original_source;
+            message += "\n";
+            for (var i=0; i < col; ++i)
+                message += ' ';
+            message += '^';
+            throw message;
+        }
+    },
+
     lookAhead: function() {
         this.source = this.source.replace(/^\s+/, '');
         return this.source[0];
@@ -38,31 +52,26 @@ ABCLineParser.prototype = {
 
     endSlur: function() {
         this.slur = (this.slur || 0) - 1;
-        if (this.slur < 0)
-            throw 'Slur begin / end mismatch';
+        this.throw_if(this.slur < 0, 'Slur begin / end mismatch');
     },
 
     beginGrace: function() {
-        if (this.grace)
-            throw 'Grace note brackets cannot be nested';
+        this.throw_if(this.grace, 'Grace note brackets cannot be nested');
         this.grace = true;
     },
 
     endGrace: function() {
-        if (!this.grace)
-            throw 'Grace note begin / end mismatch';
+        this.throw_if(!this.grace, 'Grace note begin / end mismatch');
         this.grace = false;
     },
 
     beginChord: function() {
-        if (this.chord)
-            throw 'Chord brackets cannot be nested';
+        this.throw_if(this.chord, 'Chord brackets cannot be nested');
         this.chord = true;
     },
 
     endChord: function() {
-        if (!this.chord)
-            throw 'Chord begin / end mismatch';
+        this.throw_if(!this.chord, 'Chord begin / end mismatch');
         this.chord = false;
     },
 
@@ -72,6 +81,7 @@ ABCLineParser.prototype = {
 
         var begin = 0;
         var src = this.source;
+        this.original_source = src;
         this.results = [];
         while (this.source.match(/\S/)) {
             begin += this.source.match(/^\s*/)[0].length;
@@ -204,8 +214,7 @@ ABCLineParser.prototype = {
             // TODO support multi-measure rests
             // TODO accidental check should also check decorations
             accidental = this.consumeAccidentals();
-            if (accidental)
-                throw "Rests cannot be preceded by an accidental";
+            this.throw_if(accidental, 'Rests cannot be preceded by an accidental');
 
             this.source = this.source.replace(/^./, '');
             value = this.parseNoteValue();
@@ -217,8 +226,7 @@ ABCLineParser.prototype = {
 
         case '|':
             accidental = this.consumeAccidentals();
-            if (accidental)
-                throw "Bar lines cannot be preceded by an accidental";
+            this.throw_if(accidental, 'Bar lines cannot be preceded by an accidental');
 
             this.source = this.source.replace(/^./, '');
 
@@ -229,13 +237,14 @@ ABCLineParser.prototype = {
                 this.source = this.source.replace(/^(\d)|(\s*\[\d)/, '');
                 return { type: 'nth_ending_begin', bar: true };
             } else {
+                if (this.source[0] == ']')
+                    this.source = this.source.substr(1);
                 return { type: 'bar', bar: true };
             }
 
         case ':':
             accidental = this.consumeAccidentals();
-            if (accidental)
-                throw "Bar lines cannot be preceded by an accidental";
+            this.throw_if(accidental, 'Bar lines cannot be preceded by an accidental');
 
             this.source = this.source.replace(/^./, '');
 
@@ -248,7 +257,7 @@ ABCLineParser.prototype = {
                     return { type: 'repeat_end', bar: true };
                 }
             } else {
-                throw 'Expectedd pipe (|) after colon';
+                this.throw_if(true, 'Expectedd pipe (|) after colon');
             }
 
         case '(':
@@ -259,13 +268,11 @@ ABCLineParser.prototype = {
                 value = parseInt(this.source.match(/^\d/)[0]);
                 this.source = this.source.replace(/^\d/, '');
 
-                if (accidental)
-                    throw 'Tuplet cannot be preceded by an accidental';
+                this.throw_if(accidental, 'Tuplet cannot be preceded by an accidental');
 
                 return { type: 'tuplet_begin', value: value };
             } else {
-                if (accidental)
-                    throw 'Slur cannot be preceded by an accidental';
+                this.throw_if(accidental, 'Slur cannot be preceded by an accidental');
 
                 this.beginSlur();
 
@@ -276,8 +283,7 @@ ABCLineParser.prototype = {
             accidental = this.consumeAccidentals();
             this.source = this.source.replace(/^./, '');
 
-            if (accidental)
-                throw 'Slur ends cannot be preceded by an accidental';
+            this.throw_if(accidental, 'Slur ends cannot be preceded by an accidental');
 
             this.endSlur();
 
@@ -287,8 +293,7 @@ ABCLineParser.prototype = {
             accidental = this.consumeAccidentals();
             this.source = this.source.replace(/^./, '');
 
-            if (accidental)
-                throw 'Grace note bracket preceded by accidental';
+            this.throw_if(accidental, 'Grace note bracket preceded by accidental');
 
             this.beginGrace();
 
@@ -298,8 +303,7 @@ ABCLineParser.prototype = {
             accidental = this.consumeAccidentals();
             this.source = this.source.replace(/^./, '');
 
-            if (accidental)
-                throw 'Grace note bracket preceded by accidental';
+            this.throw_if(accidental, 'Grace note bracket preceded by accidental');
 
             this.endGrace();
 
@@ -311,8 +315,7 @@ ABCLineParser.prototype = {
             accidental = this.consumeAccidentals();
             this.source = this.source.replace(/^./, '');
 
-            if (accidental)
-                throw 'Chord bracket preceded by accidental';
+            this.throw_if(accidental, 'Chord bracket preceded by accidental');
 
             this.beginChord();
 
@@ -322,8 +325,7 @@ ABCLineParser.prototype = {
             accidental = this.consumeAccidentals();
             this.source = this.source.replace(/^./, '');
 
-            if (accidental)
-                throw 'Chord bracket preceded by accidental';
+            this.throw_if(accidental, 'Chord bracket preceded by accidental');
 
             this.endChord();
 
@@ -331,18 +333,17 @@ ABCLineParser.prototype = {
 
         case '"':
             this.source = this.source.substr(1);
-            if (!(this.source[0] || '').match(/[_<>^]/))
-                throw "Expected one of _<>^ after annotation quote";
+            this.throw_if(!(this.source[0] || '').match(/[_<>^]/),
+                          "Expected one of _<>^ after annotation quote");
 
             value = this.source.match(/[_<>^][^"]+"/)
-            if (!value)
-                throw "Invalid annotation string";
+            this.throw_if(!value, "Invalid annotation string");
             this.source = this.source.substr(value[0].length);
 
             return { type: 'annotation', value: value[0] };
 
         default:
-            throw 'Unexpected token: '+token;
+            this.throw_if(true, 'Unexpected token: '+token);
         }
     }
 };
