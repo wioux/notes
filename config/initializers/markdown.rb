@@ -3,7 +3,7 @@ extensions =
   [
    :no_intra_emphasis, :tables, :fenced_code_blocks,
    :autolink, :strikethrough, :space_after_headers,
-   :superscript, :highlight, :footnotes
+   :superscript, :highlight, :footnotes, :hard_wrap
   ].map{ |x| [x, true] }
 
 class HtmlWithABCJS < Redcarpet::Render::HTML
