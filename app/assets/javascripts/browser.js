@@ -202,6 +202,10 @@ $(document).ready(function() {
   $('#filterer input[type=search]').autocomplete({
     source: location.pathname.replace(/\/$/, '') + '/autocomplete',
     appendTo: $('#filterer'),
-    delay: 0
+    delay: 0,
+    select: function() {
+      var form = $(this).parents('form');
+      setTimeout(function() { form.submit() }, 1);
+    }
   });
 });
