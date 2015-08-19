@@ -9,11 +9,6 @@ Notes::Application.routes.draw do
   get '/tags/autocomplete', :to => 'tags#autocomplete'
 
   resources :notes, :only => [:new, :create, :update, :show, :destroy] do
-    member do
-      patch 'pin'
-      patch 'unpin'
-    end
-
     collection do
       post 'preview'
       put 'preview'
