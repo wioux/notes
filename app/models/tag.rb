@@ -29,7 +29,7 @@ class Tag < ActiveRecord::Base
   end
 
   def self.labels
-    tags = uniq.pluck(:label).sort
+    tags = uniq.order(:label).pluck(:label)
     tags.each do |tag|
       parts = tag.split(':')
       (parts.size - 1).times do |i|
