@@ -30,15 +30,8 @@
         method: 'post',
         data: form.serialize(),
         success: function(resp) {
-          var modal = $('<div tabindex="-1"/>').addClass('modal');
-          modal.append(
-            $('<div/>').addClass('modal-dialog modal-lg').append(
-              $('<div/>').addClass('modal-content').append(
-                $('<div/>').addClass('modal-body').html(resp)
-              )
-            )
-          );
-          modal.modal();
+          $('#inspector .modal-body').html(resp);
+          $('#inspector').modal();
           renderNote();
         }
       });
