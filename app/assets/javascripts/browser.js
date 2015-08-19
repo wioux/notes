@@ -75,7 +75,9 @@ Browser = {
         addClass('btn btn-default btn-xs destroyer').text('destroy');
     actions.append(destroy);
 
-    li.append($('<span class="preview">').html(item.preview));
+    var preview = $('<span class="preview">');
+    preview.append($('<a>').attr('href', '/?item_id='+item.id).html(item.preview));
+    li.append(preview);
     li.append(actions);
 
     for (var j=0; j < item.tags.length; ++j) {
@@ -147,8 +149,11 @@ Browser = {
 };
 
 $(document).ready(function() {
-  $('#browser').on('click', 'li.selector', function() {
-    Browser.activate($(this).data('item-id'));
+  $('#browser').on('click', 'li.selector', function(e) {
+    if (!e.metaKey) {
+      e.preventDefault();
+      Browser.activate($(this).data('item-id'));
+    }
   });
 
   $('#browser').on('click', 'ul .selector .destroyer', function(e) {
