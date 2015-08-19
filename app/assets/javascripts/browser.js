@@ -6,21 +6,14 @@ Browser = {
   load: function(notes, callback) {
     var li, list;
 
-    list = $('#browser ul#pinned');
+    list = $('#browser ul');
     list.empty();
-    for (var i=0; i < notes.pinned.length; ++i) {
-      li = Browser.constructItem(notes.pinned[i]);
+    for (var i=0; i < notes.notes.length; ++i) {
+      li = Browser.constructItem(notes.notes[i]);
       list.append(li);
     }
 
-    list = $('#browser ul#unpinned');
-    list.empty();
-    for (var i=0; i < notes.unpinned.length; ++i) {
-      li = Browser.constructItem(notes.unpinned[i]);
-      list.append(li);
-    }
-
-    if (notes.unpinned.length == 0)
+    if (notes.notes.length == 0)
       list.append('<li style="text-align: center">No results</li>');
     else
       list.append('<li style="text-align: center">No more results</li>');
@@ -34,32 +27,28 @@ Browser = {
 
   update: function(notes) {
     var ind = 0;
-    var list = $('#browser ul#unpinned');
+    var list = $('#browser ul');
     var first_result_id = list.find('li.selector').first().data('item-id');
 
-    for (var i=0; i < notes.unpinned.length; ++i)
-      if (notes.unpinned[i].id == first_result_id)
+    for (var i=0; i < notes.notes.length; ++i)
+      if (notes.notes[i].id == first_result_id)
         break;
     ind = i;
 
     for (var li, i=0; i < ind; ++i) {
-      li = Browser.constructItem(notes.unpinned[i]);
+      li = Browser.constructItem(notes.notes[i]);
       list.prepend(li);
     }
 
-    for (var i=0; i < notes.pinned.length; ++i) {
-      $('#browser ul#pinned li[data-item-id='+notes.pinned[i].id+']').
-        find('.preview').html(notes.pinned[i].preview);
-    }
-    for (i=ind; i < notes.unpinned.length; ++i) {
-      $('#browser ul#unpinned li[data-item-id='+notes.unpinned[i].id+']').
-        find('.preview').html(notes.unpinned[i].preview);
+    for (i=ind; i < notes.notes.length; ++i) {
+      $('#browser ul li[data-item-id='+notes.notes[i].id+']').
+        find('.preview').html(notes.notes[i].preview);
     }
   },
 
   activate: function(item_id) {
     replaceQueryParam('item_id', item_id);
-    itemActivated(item_id, pinned);
+    itemActivated(item_id);
   },
 
   insert: function(list, item) {
@@ -80,11 +69,8 @@ Browser = {
     var li = $('<li class="selector" '+
                'data-item-id="'+item.id+'" '+
                'data-sort="'+item.original_date+'" >');
-    var actions = $('<span class="actions btn-group">');
-    var toggle_pin = $('<button type="button"/>').
-        addClass('btn btn-default btn-xs pin-toggler');
-    actions.append(toggle_pin);
 
+    var actions = $('<span class="actions btn-group">');
     var destroy = $('<button type="button"/>').
         addClass('btn btn-default btn-xs destroyer').text('destroy');
     actions.append(destroy);
@@ -106,27 +92,13 @@ Browser = {
     $('#browser').find('li').first().click();
   },
 
-  pinnedItems: function() {
-    var items = [];
-    $('#browser ul#pinned li').each(function() {
-      items.push($(this).data('item-id'));
-    });
-    return items;
-  },
-
   setEdittingState: function(item_id, state) {
-    var item = $('#browser ul#pinned li[data-item-id='+item_id+']');
+    var item = $('#browser ul li[data-item-id='+item_id+']');
     state ? item.addClass('editting') : item.removeClass('editting');
   },
 
   updateItemStates: function() {
-    var unsaved = Viewer.unsavedItems();
-    var pinned = Browser.pinnedItems();
     var selected = Viewer.visibleItem();
-
-    for (var i=0; i < pinned.length; ++i)
-      Browser.setEdittingState(pinned[i], unsaved.indexOf(pinned[i]) != -1);
-
     $('#browser ul li.selected').not('[data-item-id='+selected+']').
       removeClass('selected');
     $('#browser ul li[data-item-id='+selected+']:not(.selected)').
@@ -134,13 +106,12 @@ Browser = {
   },
 
   filter: function(filter, callback) {
-    var mix_pinned = $('#filterer #filter-mix-pinned').is('.active');
     $('#filterer input').val(filter);
 
     $.ajax({
       method: 'get',
       url: '/notes/filter',
-      data: { filter: filter, mix_pinned: mix_pinned },
+      data: { filter: filter },
       success: function(notes) {
         replaceQueryParam('f', filter);
         Browser.current_filter_string = filter;
@@ -152,12 +123,10 @@ Browser = {
   },
 
   refresh: function() {
-    var mix_pinned = $('#filterer #filter-mix-pinned').is('.active');
-
     $.ajax({
       method: 'get',
       url: '/notes/filter',
-      data: { filter: Browser.current_filter_string, mix_pinned: mix_pinned },
+      data: { filter: Browser.current_filter_string },
       success: function(notes) {
         Browser.setTags(notes.tags);
         Browser.update(notes);
@@ -180,32 +149,6 @@ Browser = {
 $(document).ready(function() {
   $('#browser').on('click', 'li.selector', function() {
     Browser.activate($(this).data('item-id'));
-  });
-
-  $('#browser').on('click', 'ul#pinned .selector .pin-toggler', function(e) {
-    var selector = $(this).parents('li.selector');
-    e.stopPropagation();
-    $.ajax({
-      method: 'post',
-      url: '/notes/'+selector.data('item-id')+'/unpin',
-      data: { '_method': 'patch' },
-      success: function() {
-        Browser.insert($('#browser ul#unpinned'), selector);
-      }
-    });
-  });
-
-  $('#browser').on('click', 'ul#unpinned .selector .pin-toggler', function(e) {
-    var selector = $(this).parents('li.selector');
-    e.stopPropagation();
-    $.ajax({
-      method: 'post',
-      url: '/notes/'+selector.data('item-id')+'/pin',
-      data: { '_method': 'patch' },
-      success: function() {
-        Browser.insert($('#browser ul#pinned'), selector);
-      }
-    });
   });
 
   $('#browser').on('click', 'ul .selector .destroyer', function(e) {
@@ -250,22 +193,6 @@ $(document).ready(function() {
     e.preventDefault();
     Browser.filter('.'+$(this).text());
   });
-
-  $('#filterer #filter-mix-pinned').on('click', function(e) {
-    if ($(this).is('.active')) {
-      Viewer.considerAllItemsUnpinned = false;
-      replaceQueryParam('mix_pinned', '');
-    } else {
-      Viewer.considerAllItemsUnpinned = true;
-      replaceQueryParam('mix_pinned', true);
-    }
-    setTimeout(function() {
-      Browser.filter(Browser.current_filter_string);
-    }, 10);
-  });
-
-  if (getQueryParam('mix_pinned') == 'true')
-    $('#filterer #filter-mix-pinned').trigger('click');
 
   $('#filterer input[type=search]').autocomplete({
     source: location.pathname.replace(/\/$/, '') + '/autocomplete',

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140806081152) do
+ActiveRecord::Schema.define(version: 20150819070341) do
 
   create_table "attachments", force: true do |t|
     t.integer  "note_id",      null: false
@@ -31,7 +31,6 @@ ActiveRecord::Schema.define(version: 20140806081152) do
     t.datetime "original_date"
     t.boolean  "is_history",    default: false, null: false
     t.integer  "present_id"
-    t.boolean  "is_pinned",     default: false, null: false
   end
 
   create_table "tags", force: true do |t|

@@ -5,26 +5,18 @@ class NotesController < ApplicationController
   end
 
   def filter
-    mix_pinned = (params[:mix_pinned] == 'true')
-
-    pinned = mix_pinned && []
-    pinned ||= Note.pinned.preload(:tags).order('notes.original_date DESC')
-    unpinned = Filter.new(params[:filter], :is_pinned => mix_pinned).notes
     tags = Tag.labels
-
-    [pinned, unpinned].each do |set|
-      set.map! do |note|
-        {
-          :id => note.id,
-          :original_date => note.original_date,
-          :preview => note.preview,
-          :is_pinned => note.is_pinned && !mix_pinned,
-          :tags => note.tags.map{ |tag| {:short_label => tag.short_label} }
-        }
-      end
+    notes = Filter.new(params[:filter]).notes
+    notes.map! do |note|
+      {
+        :id => note.id,
+        :original_date => note.original_date,
+        :preview => note.preview,
+        :tags => note.tags.map{ |tag| {:short_label => tag.short_label} }
+      }
     end
 
-    render :json => {:pinned => pinned, :unpinned => unpinned, :tags => tags}
+    render :json => {:notes => notes, :tags => tags}
   end
 
   def autocomplete
@@ -92,18 +84,6 @@ class NotesController < ApplicationController
     @note.present_id = @note.id
     if @note.save
       render :json => {:success => true}
-    end
-  end
-
-  def pin
-    if Note.find(params[:id]).pin!
-      render :json => @note
-    end
-  end
-
-  def unpin
-    if Note.find(params[:id]).unpin!
-      render :json => @note
     end
   end
 end

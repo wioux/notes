@@ -15,7 +15,7 @@
 #
 
 class Note < ActiveRecord::Base
-  attr_accessible :body, :date, :title, :tag_list, :is_pinned
+  attr_accessible :body, :date, :title, :tag_list
 
   has_many :tags, :dependent => :destroy
 
@@ -34,9 +34,6 @@ class Note < ActiveRecord::Base
   before_update :save_copy
   before_save :save_original_date
 
-  scope :pinned, -> { where(:is_pinned => true) }
-  scope :unpinned, -> { where(:is_pinned => false) }
-
   def create_copy
     # TODO: note, this doesn't save tag_list
     @copy = history.build(:title => title, :body => body, :date => date)
@@ -49,14 +46,6 @@ class Note < ActiveRecord::Base
 
   def save_original_date
     self.original_date ||= date
-  end
-
-  def pin!
-    update_column(:is_pinned, true)
-  end
-
-  def unpin!
-    update_column(:is_pinned, false)
   end
 
   def tag_list

@@ -38,8 +38,6 @@ class Filter
       scope = Note.preload(:tags).where(:id => ids)
     end
 
-    scope = scope.unpinned unless options[:is_pinned]
-
     scope.order('notes.original_date DESC')
   end
 

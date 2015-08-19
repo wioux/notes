@@ -4,15 +4,8 @@
 
     ul {
         margin: 0px;
-        list-style-type: none;
-    }
-
-    ul#pinned li:last-child {
-        border-bottom: 1px solid #aaa;
-    }
-
-    ul {
         padding: 0px;
+        list-style-type: none;
 
         li {
             padding-left: 10px;
@@ -26,17 +19,6 @@
         }
         li:not(:hover) .actions {
             display: none;
-        }
-
-        &#pinned li .actions .pin-toggler:after {
-            content: 'unpin'
-        }
-        &#unpinned li .actions .pin-toggler:after {
-            content: 'pin'
-        }
-
-        &#pinned li.editting {
-            background-color: #ffcc00;
         }
     }
 }

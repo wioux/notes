@@ -1,6 +1,6 @@
 <script type="text/javascript">
-  function itemActivated(id, pinned) {
-    Viewer.loadBox(id, pinned);
+  function itemActivated(id) {
+    Viewer.loadBox(id);
   }
 
   function itemCreated() {
@@ -60,8 +60,6 @@
     $('#filterer form').each(function() {
       Browser.filter($(this).find('input').val(), function(items) {
         var initial_item = <%= @item_id || -1 %>;
-  
-        items = items.pinned.concat(items.unpinned);
         initial_item = $.grep(items, function(item) {
           return item.id == initial_item;
         })[0];
