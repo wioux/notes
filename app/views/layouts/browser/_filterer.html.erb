@@ -1,0 +1,25 @@
+<div id="filterer" class="col-md-3">
+  <form action="<%= request.fullpath %>" style="position: relative">
+    <span id="filter-focuser">
+      <img src="/spinner.gif" />
+      <span><i class="glyphicon glyphicon-filter"></i></span>
+    </span>
+
+    <span id="filter-clearer">
+      <span><i class="glyphicon glyphicon-ban-circle"></i></span>
+    </span>
+
+    <div><input type="search" value="<%= params[:f] %>" class="form-control"/></div>
+
+    <div id="filter-controls" class="btn-group">
+      <span id="filter-tags" class="btn btn-default btn-xs" data-toggle="dropdown">
+        Tags <span class="caret"></span>
+      </span>
+      <ul id="filter-tags-dropdown" class="dropdown-menu" role="menu"></ul>
+
+      <span id="filter-mix-pinned" class="btn btn-default btn-xs" data-toggle="button">
+        Mix Pinned
+      </span>
+    </div>
+  </form>
+</div>

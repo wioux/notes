@@ -1,76 +1,76 @@
 <script type="text/javascript">
-    function itemActivated(id, pinned) {
-        Viewer.loadBox(id, pinned);
-    }
+  function itemActivated(id, pinned) {
+    Viewer.loadBox(id, pinned);
+  }
 
-    function itemCreated() {
-        Viewer.loadBox('new', true, itemEdited);
+  function itemCreated() {
+    Viewer.loadBox('new', true, itemEdited);
+  }
+  
+  function itemEdited() {
+    var note = Viewer.visibleBox();
+    if (note.find('.note-edit:visible')[0]) {
+      if (note.find('form.hasUnsavedChanges')[0])
+        if (!confirm("Discard changes?"))
+          return;
+      note.remove();
+      Browser.activate(note.attr('data-id'));
+    } else {
+      note.find('.note-display').hide();
+      note.find('.note-edit').show().
+        find('textarea[name=note\\[body\\]]').focus();
     }
-
-    function itemEdited() {
-        var note = Viewer.visibleBox();
-        if (note.find('.note-edit:visible')[0]) {
-            if (note.find('form.hasUnsavedChanges')[0])
-                if (!confirm("Discard changes?"))
-                    return;
-            note.remove();
-            browserActivate(note.attr('data-id'));
-        } else {
-            note.find('.note-display').hide();
-            note.find('.note-edit').show().
-                find('textarea[name=note\\[body\\]]').focus();
+  }
+  
+  function itemInspected() {
+    Viewer.visibleBox().find('form').each(function() {
+      var form = $(this);
+      $.ajax({
+        url: '/notes/preview',
+        method: 'post',
+        data: form.serialize(),
+        success: function(resp) {
+          var modal = $('<div tabindex="-1"/>').addClass('modal');
+          modal.append(
+            $('<div/>').addClass('modal-dialog modal-lg').append(
+              $('<div/>').addClass('modal-content').append(
+                $('<div/>').addClass('modal-body').html(resp)
+              )
+            )
+          );
+          modal.modal();
+          renderNote();
         }
-    }
-
-    function itemInspected() {
-        Viewer.visibleBox().find('form').each(function() {
-            var form = $(this);
-            $.ajax({
-                url: '/notes/preview',
-                method: 'post',
-                data: form.serialize(),
-                success: function(resp) {
-                    var modal = $('<div tabindex="-1"/>').addClass('modal');
-                    modal.append(
-                        $('<div/>').addClass('modal-dialog modal-lg').append(
-                            $('<div/>').addClass('modal-content').append(
-                                $('<div/>').addClass('modal-body').html(resp)
-                            )
-                        )
-                    );
-                    modal.modal();
-                    renderNote();
-                }
-            });
-        });
-    }
-
-    function itemSaved() {
-        Viewer.visibleBox().find('form:visible').each(function() {
-            var form = $(this);
-            submitNote(form, function(response) {
-                form.removeClass('hasUnsavedChanges');
-                browserActivate(response.id);
-                refreshFilter();
-            });
-        });
-    }
-
-    $(document).ready(function() {
-        $('#filterer form').each(function() {
-            setFilter($(this).find('input').val(), function(items) {
-                var initial_item = <%= @item_id || -1 %>;
-
-                items = items.pinned.concat(items.unpinned);
-                initial_item = $.grep(items, function(item) {
-                    return item.id == initial_item;
-                })[0];
-
-                if (initial_item)
-                    browserActivate(initial_item.id);
-                else
-                    Browser.activateFirstItem();
-            });
-        });
+      });
     });
+  }
+  
+  function itemSaved() {
+    Viewer.visibleBox().find('form:visible').each(function() {
+      var form = $(this);
+      submitNote(form, function(response) {
+        form.removeClass('hasUnsavedChanges');
+        Browser.activate(response.id);
+        Browser.refresh();
+      });
+    });
+  }
+  
+  $(document).ready(function() {
+    $('#filterer form').each(function() {
+      Browser.filter($(this).find('input').val(), function(items) {
+        var initial_item = <%= @item_id || -1 %>;
+  
+        items = items.pinned.concat(items.unpinned);
+        initial_item = $.grep(items, function(item) {
+          return item.id == initial_item;
+        })[0];
+  
+        if (initial_item)
+          Browser.activate(initial_item.id);
+        else
+          Browser.activateFirstItem();
+      });
+    });
+  });
 </script>

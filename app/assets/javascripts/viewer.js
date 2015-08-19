@@ -3,7 +3,7 @@ Viewer = {
     considerAllItemsUnpinned: false,
     unsavedItems: function() {
         var items = [];
-        $('#viewer *[data-pinned=true] form.hasUnsavedChanges').each(function() {
+        $('#viewport #content *[data-pinned=true] form.hasUnsavedChanges').each(function() {
             var id = $(this).parents('*[data-pinned=true]').attr('data-id');
             items.push(parseInt(id));
         });
@@ -16,23 +16,23 @@ Viewer = {
     },
 
     visibleBox: function() {
-        return $('#viewer > *:visible');
+        return $('#viewport #content > *:visible');
     },
 
     boxFor: function(id) {
-        return $('#viewer > *[data-id='+id+']');
+        return $('#viewport #content > *[data-id='+id+']');
     },
 
     unpinnedBoxes: function() {
-        return $('#viewer > *[data-pinned=false]');
+        return $('#viewport #content > *[data-pinned=false]');
     },
 
     pinnedBoxes: function() {
-        return $('#viewer > *[data-pinned=true]');
+        return $('#viewport #content > *[data-pinned=true]');
     },
 
     hideAll: function() {
-        $('#viewer > *').hide();
+        $('#viewport #content > *').hide();
     },
 
     loadBox: function(item_id, pinned, callback) {
@@ -67,8 +67,8 @@ Viewer = {
     },
 
     addBox: function(contents) {
-        $('#viewer').append(contents);
-        return $('#viewer').children().last();
+        $('#viewport #content').append(contents);
+        return $('#viewport #content').children().last();
     },
 
     cleanUp: function() {
