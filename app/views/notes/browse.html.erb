@@ -60,7 +60,7 @@
     $('#filterer form').each(function() {
       Browser.filter($(this).find('input').val(), function(items) {
         var initial_item = <%= @item_id || -1 %>;
-        initial_item = $.grep(items, function(item) {
+        initial_item = $.grep(items.notes, function(item) {
           return item.id == initial_item;
         })[0];
   
