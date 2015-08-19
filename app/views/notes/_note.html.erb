@@ -1,21 +1,21 @@
-<div class="note" data-id="<%= @note.id %>">
+<div class="note" data-id="<%= note.id %>">
   <div class="note-display">
-    <span class="title"><%= @note.title %></span>
+    <span class="title"><%= note.title %></span>
     <div class="body">
-      <%= raw ::MarkdownHTML.render(@note.body || '') %>
+      <%= raw ::MarkdownHTML.render(note.body || '') %>
     </div>
     <footer>
       <div class="attachments" style="float: right">
-        <% if @note.attachments.present? %>
+        <% if note.attachments.present? %>
           <strong>Attachments:</strong>
         <% end %>
-        <% @note.attachments.each do |attachment| %>
+        <% note.attachments.each do |attachment| %>
           <%= attachment_link(attachment) %>
         <% end %>
       </div>
 
       <div class="tags">
-        <% @note.tags.map(&:label).each do |tag| %>
+        <% note.tags.map(&:label).each do |tag| %>
           <%= tag_link("/notes?f=.", tag) %>
         <% end %>
       </div>
@@ -23,7 +23,7 @@
   </div>
 
   <div class="note-edit" style="display: none">
-    <%= form_for(@note, :html => {'data-note-id' => @note.id}) do |f| %>
+    <%= form_for(note, :html => {'data-note-id' => note.id}) do |f| %>
     <%= f.hidden_field :date %>
 
     <div style="position: absolute; top: 4px; width: 90%">
@@ -53,7 +53,7 @@
           <div class="modal-body">
             <strong>Add Attachments:</strong>
             <div style="padding-left: 10px">
-              <% @note.attachments.build %>
+              <% note.attachments.build %>
               <%= f.fields_for(:attachments) do |sf| %>
               <%= attachment_edit(sf) %>
               <% end %>

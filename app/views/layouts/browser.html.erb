@@ -5,21 +5,47 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
-  <%= yield %>
 </head>
 <body>
   <div id="sidebar">
     <div class="row">
-      <%= render 'layouts/browser/filterer' %>
+      <div id="filterer" class="col-md-3">
+        <form action="<%= request.fullpath %>" style="position: relative">
+          <span id="filter-focuser">
+            <img src="/spinner.gif" />
+            <span><i class="glyphicon glyphicon-filter"></i></span>
+          </span>
+
+          <span id="filter-clearer">
+            <span><i class="glyphicon glyphicon-ban-circle"></i></span>
+          </span>
+
+          <div>
+            <input type="search" value="<%= params[:f] %>" class="form-control"/>
+          </div>
+
+          <div id="filter-controls" class="btn-group">
+            <span id="filter-tags" class="btn btn-default btn-xs" data-toggle="dropdown">
+              Tags <span class="caret"></span>
+            </span>
+            <ul id="filter-tags-dropdown" class="dropdown-menu" role="menu"></ul>
+          </div>
+        </form>
+      </div>
     </div>
 
     <div class="row">
-      <%= render 'layouts/browser/browser' %>
+      <div id="browser" class="col-md-3">
+        <ul></ul>
+      </div>
     </div>
   </div>
 
   <div id="viewport" class="row" style="height: 100%">
-    <%= render 'layouts/browser/viewport' %>
+    <div id="spacer" class="col-md-3"></div>
+    <div id="content" class="col-md-8">
+      <%= yield %>
+    </div>
 
     <div id="inspector" tabindex="-1" class="modal">
       <div class="modal-dialog modal-lg">
