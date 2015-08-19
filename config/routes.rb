@@ -10,8 +10,6 @@ Notes::Application.routes.draw do
 
   resources :notes, :only => [:new, :create, :update, :show, :destroy] do
     collection do
-      post 'preview'
-      put 'preview'
       patch 'preview'
       get 'filter'
       get 'browse'
