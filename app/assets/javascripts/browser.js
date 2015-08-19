@@ -124,6 +124,10 @@ Browser = {
     });
   },
 
+  focus: function() {
+    $('#filterer input').focus().select();
+  },
+
   refresh: function() {
     $.ajax({
       method: 'get',
@@ -182,6 +186,7 @@ $(document).ready(function() {
 
   $('#filterer form').submit(function(e) {
     e.preventDefault();
+    $('#filterer input[type=search]').autocomplete('close');
     Browser.filter($(this).find('input').val());
   });
 

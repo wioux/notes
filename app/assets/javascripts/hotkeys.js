@@ -1,31 +1,34 @@
 $(document).ready(function() {
-  $(window).on('keydown.saveNote', function(e) {
-    if (!e.ctrlKey && !e.metaKey)
-      return
-
-    if (!event.metaKey) {
-      switch(String.fromCharCode(e.which).toLowerCase()) {
-      case 'n':
+  $(window).on('keydown', function(e) {
+    switch(String.fromCharCode(e.which).toLowerCase()) {
+    case 'n':
+      if (e.ctrlKey && !e.altKey && !e.metaKey) {
         e.preventDefault();
-        itemCreated();
-        break;
-      case 'i':
+        itemCreated()
+      }
+      break;
+    case 'i':
+      if (!e.ctrlKey && !e.altKey && e.metaKey) {
         e.preventDefault();
         itemInspected();
-        break;
       }
-      return;
-    }
-
-    switch(String.fromCharCode(e.which).toLowerCase()) {
+      break;
     case 'e':
-      e.preventDefault();
-      itemEdited();
+      if (!e.ctrlKey && !e.altKey && e.metaKey) {
+        e.preventDefault();
+        itemEdited();
+      }
       break;
     case 's':
-      e.preventDefault();
-      itemSaved();
+      if (!e.ctrlKey && !e.altKey && e.metaKey) {
+        e.preventDefault();
+        itemSaved();
+      } else if (e.ctrlKey && !e.altKey && !e.metaKey) {
+        e.preventDefault();
+        Browser.focus();
+      }
       break;
     }
   });
 });
+
