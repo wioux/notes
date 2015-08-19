@@ -4,25 +4,25 @@ $(document).ready(function() {
     case 'n':
       if (e.ctrlKey && !e.altKey && !e.metaKey) {
         e.preventDefault();
-        itemCreated()
+        Viewer.loadBox('new', Viewer.editMode);
       }
       break;
     case 'i':
       if (!e.ctrlKey && !e.altKey && e.metaKey) {
         e.preventDefault();
-        itemInspected();
+        Viewer.inspect();
       }
       break;
     case 'e':
       if (!e.ctrlKey && !e.altKey && e.metaKey) {
         e.preventDefault();
-        itemEdited();
+        Viewer.editMode();
       }
       break;
     case 's':
       if (!e.ctrlKey && !e.altKey && e.metaKey) {
         e.preventDefault();
-        itemSaved();
+        Viewer.save();
       } else if (e.ctrlKey && !e.altKey && !e.metaKey) {
         e.preventDefault();
         Browser.focus();

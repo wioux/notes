@@ -48,7 +48,7 @@ Browser = {
 
   activate: function(item_id) {
     replaceQueryParam('item_id', item_id);
-    itemActivated(item_id);
+    Viewer.loadBox(item_id);
   },
 
   insert: function(list, item) {

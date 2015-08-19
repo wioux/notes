@@ -36,6 +36,48 @@ Viewer = {
         });
     },
 
+    editMode: function() {
+      var note = Viewer.visibleBox();
+      if (note.find('.note-edit:visible')[0]) {
+        if (note.find('form.hasUnsavedChanges')[0])
+          if (!confirm("Discard changes?"))
+            return;
+        note.remove();
+        Browser.activate(note.attr('data-id'));
+      } else {
+        note.find('.note-display').hide();
+        note.find('.note-edit').show().
+          find('textarea[name=note\\[body\\]]').focus();
+      }
+    },
+
+    save: function() {
+      Viewer.visibleBox().find('form:visible').each(function() {
+        var form = $(this);
+        submitNote(form, function(response) {
+          form.removeClass('hasUnsavedChanges');
+          Browser.activate(response.id);
+          Browser.refresh();
+        });
+      });
+    },
+
+    inspect: function() {
+      Viewer.visibleBox().find('form').each(function() {
+        var form = $(this);
+        $.ajax({
+          url: '/notes/preview',
+          method: 'post',
+          data: form.serialize(),
+          success: function(resp) {
+            $('#inspector .modal-body').html(resp);
+            $('#inspector').modal();
+            renderNote();
+          }
+        });
+      });
+    },
+
     addBox: function(contents) {
         $('#viewport #content').append(contents);
         return $('#viewport #content').children().last();
