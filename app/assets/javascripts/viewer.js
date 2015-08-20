@@ -56,11 +56,6 @@ Viewer = {
           }
         });
       });
-    },
-
-    addBox: function(contents) {
-        $('#viewport #content').append(contents);
-        return $('#viewport #content').children().last();
     }
 };
 
