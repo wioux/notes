@@ -41,8 +41,6 @@ $(document).on('page:change', function() {
       setTimeout(function() { form.submit() }, 1);
     }
   });
-
-  renderNote();
 });
 
 $(document).ready(function() {

@@ -36,7 +36,7 @@ Viewer = {
     save: function() {
       var note = Viewer.visibleBox();
       note.find('form:visible').each(function() {
-        submitNote($(this), function(response) {
+        Note.submit($(this), function(response) {
           Turbolinks.visit(note.attr('data-url'));
         });
       });
@@ -52,7 +52,7 @@ Viewer = {
           success: function(resp) {
             $('#inspector .modal-body').html(resp);
             $('#inspector').modal();
-            renderNote();
+            Note.render();
           }
         });
       });

@@ -1,5 +1,6 @@
 
-function submitNote(form, callback) {
+Note = {
+  submit: function(form, callback) {
     var date = '';
     var now = new Date();
     date += 1900 + now.getYear() + '/';
@@ -22,29 +23,21 @@ function submitNote(form, callback) {
             success: callback
         });
     });
-}
+  },
 
-function renderNote() {
-    renderAbc();
+  render: function() {
+    Note.renderAbc();
     $('.note .body table').tablesorter();
     $('.note .body table').addClass('table table-striped');
 
-    var makeDirty = function() {
-        var id = $(this).parents('.note').attr('data-id');
-        $(this).parents('form').addClass('hasUnsavedChanges');
-    };
-
-    $('.note-edit form').on('input', ':input', makeDirty);
-    $('.note-edit form').on('change', 'input[type=file]', makeDirty);
-
     $('.note-edit input[name*=tag_list]').autocomplete({
-        source: '/tags/autocomplete',
-        position: { my: 'left bottom', at: 'left top' },
-        delay: 0
+      source: '/tags/autocomplete',
+      position: { my: 'left bottom', at: 'left top' },
+      delay: 0
     });
-}
+  },
 
-function renderAbc() {
+  renderAbc: function() {
     $('div.abc:not(.rendered)').each(function() {
         var abc = $(this).text();
         ABCJS.renderAbc(this, abc, {}, {staffwidth: 800, paddingbottom: -30});
@@ -77,57 +70,67 @@ function renderAbc() {
         });
         $(midi_link).prepend(player, '<br />');
     });
-}
+  }
+};
+
+$(document).on('page:change', function() {
+  Note.render();
+});
 
 $(document).ready(function() {
-    $('body').on('show.bs.modal', '.tag-selector', function() {
-        var form = $('.note-edit form:visible');
-        var input = form.find('input[name=note\\[tag_list\\]]')[0];
-        var tags = input.value.split(/\s*,\s*/);
-        $(this).find('.btn').each(function() {
-            if (tags.indexOf($(this).text()) == -1) {
-                $(this).removeClass('active');
-            } else {
-                $(this).addClass('active');
-            }
-        });
+  $(document).on('show.bs.modal', '.tag-selector', function() {
+    var form = $('.note-edit form:visible');
+    var input = form.find('input[name=note\\[tag_list\\]]')[0];
+    var tags = input.value.split(/\s*,\s*/);
+    $(this).find('.btn').each(function() {
+      if (tags.indexOf($(this).text()) == -1) {
+        $(this).removeClass('active');
+      } else {
+        $(this).addClass('active');
+      }
     });
+  });
 
+  $(document).on('click', '.tag-selector .btn', function() {
+    var form = $('.note-edit form:visible');
+    var input = form.find('input[name=note\\[tag_list\\]]')[0];
+    if (!input) return console.log('no visible form to edit tags on!');
 
+    if ($(this).is('.active')) {
+      var text = input.value.match(/\S/) ? ', '+$(this).text() : $(this).text();
+      input.value = input.value.replace(/,?\s*$/, '') + text;
+    } else {
+      var tags = input.value.split(/\s*,\s*/);
+      for (var i=0; i < tags.length; i++)
+        if (tags[i] == $(this).text())
+          tags.splice(i, 1);
+      input.value = tags.join(', ');
+    }
+    $(input).trigger('input');
+  });
 
-    $('body').on('click', '.tag-selector .btn', function() {
-        var form = $('.note-edit form:visible');
-        var input = form.find('input[name=note\\[tag_list\\]]')[0];
-        if (!input) return console.log('no visible form to edit tags on!');
-
-        if ($(this).is('.active')) {
-            var tags = input.value.split(/\s*,\s*/);
-            for (var i=0; i < tags.length; i++)
-                if (tags[i] == $(this).text())
-                    tags.splice(i, 1);
-            input.value = tags.join(', ');
-        } else {
-            var text = input.value.match(/\S/) ?
-                ', '+$(this).text() :
-                $(this).text();
-            input.value = input.value.replace(/,?\s*$/, '') + text;
-        }
-        $(input).trigger('input');
-    });
-
-    $('body').on('change', '.note-edit form input[type=file]', function() {
-        var new_field = $(this).clone();
-        var new_id = this.id.replace(/(note_attachments_attributes_)(\d+)/,
+  $(document).on('change', '.note-edit form input[type=file]', function() {
+    var new_field = $(this).clone();
+    var new_id = this.id.replace(/(note_attachments_attributes_)(\d+)/,
+                                 function(e, p1, p2) {
+                                   return p1+(parseInt(p2)+1);
+                                 });
+    var new_name = this.name.replace(/(note\[attachments_attributes\]\[)(\d)+/,
                                      function(e, p1, p2) {
-                                         return p1+(parseInt(p2)+1);
+                                       return p1+(parseInt(p2)+1);
                                      });
-        var new_name = this.name.replace(/(note\[attachments_attributes\]\[)(\d)+/,
-                                     function(e, p1, p2) {
-                                         return p1+(parseInt(p2)+1);
-                                     });
-        new_field.attr('id', new_id);
-        new_field.attr('name', new_name);
-        new_field.val('');
-        $(this).parent().append(new_field);
-    });
+    new_field.attr('id', new_id);
+    new_field.attr('name', new_name);
+    new_field.val('');
+    $(this).parent().append(new_field);
+  });
+
+
+  var makeDirty = function() {
+    var id = $(this).parents('.note').attr('data-id');
+    $(this).parents('form').addClass('hasUnsavedChanges');
+  };
+
+  $(document).on('input', '.note-edit form :input', makeDirty);
+  $(document).on('change', '.note-edit form input[type=file]', makeDirty);
 });
