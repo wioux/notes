@@ -25,6 +25,7 @@ class Note < ActiveRecord::Base
 
   default_scope { where(:is_history => false) }
   scope :history, -> { where(:is_history => true) }
+  scope :with_history, -> { where(:is_history => [true, false]) }
 
   belongs_to :present, :class_name => 'Note'
   has_many :history, -> { where(:is_history => true) },

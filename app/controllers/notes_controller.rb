@@ -6,7 +6,7 @@ class NotesController < ApplicationController
   end
 
   def show
-    @note = Note.find(params[:id])
+    @note = Note.with_history.find(params[:id])
     respond_to do |format|
       format.html do
         if request.xhr?
