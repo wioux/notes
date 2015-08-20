@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/rails/turbolinks.git
+  revision: 747919cadc64bca640927f4cffcc08f53543bfc1
+  specs:
+    turbolinks (3.0.0)
+      coffee-rails
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -146,4 +153,5 @@ DEPENDENCIES
   sass-rails (~> 4.0.0)
   sprockets (<= 2.11.0)
   sqlite3
+  turbolinks!
   uglifier (>= 1.0.3)

@@ -42,12 +42,10 @@ Viewer = {
         if (note.find('form.hasUnsavedChanges')[0])
           if (!confirm("Discard changes?"))
             return;
-        note.remove();
-        Browser.activate(note.attr('data-id'));
+        Turbolinks.visit('/?item_id='+note.attr('data-id'));
       } else {
         note.find('.note-display').hide();
-        note.find('.note-edit').show().
-          find('textarea[name=note\\[body\\]]').focus();
+        note.find('.note-edit').show().find('textarea[name=note\\[body\\]]').focus();
       }
     },
 
@@ -55,8 +53,7 @@ Viewer = {
       Viewer.visibleBox().find('form:visible').each(function() {
         var form = $(this);
         submitNote(form, function(response) {
-          form.removeClass('hasUnsavedChanges');
-          Browser.activate(response.id);
+          Turbolinks.visit('/?item_id='+response.id);
           Browser.refresh();
         });
       });

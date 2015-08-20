@@ -18,7 +18,7 @@ class NotesController < ApplicationController
     @note = Note.new(params[:note])
 
     if @note.save
-      redirect_to note_path(@note, :format => 'json')
+      render :json => @note
     else
       render :json => @note.errors,  :status => :unprocessable_entity
     end
@@ -28,7 +28,7 @@ class NotesController < ApplicationController
     @note = Note.find(params[:id])
 
     if @note.update_attributes(params[:note])
-      redirect_to note_path(@note, :format => 'json')
+      render :json => @note
     else
       render :json => @note.errors,  :status => :unprocessable_entity
     end

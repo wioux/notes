@@ -1,17 +1,3 @@
-<script type="text/javascript">
-  $(document).ready(function() {
-    $('#filterer form').each(function() {
-      Browser.filter($(this).find('input').val(), function(items) {
-        var initial_item = <%= @item_id || 'null' %>;
-        if (!initial_item)
-          Browser.activateFirstItem();
-        else
-          renderNote();
-      });
-    });
-  });
-</script>
-
 <% if @item_id %>
   <%= render Note.find(@item_id) %>
 <% end %>
