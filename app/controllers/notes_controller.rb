@@ -1,5 +1,5 @@
 class NotesController < ApplicationController
-  before_filter :execute_search, only: [:index, :show, :edit, :new]
+  before_filter :execute_search, only: [:index, :show, :edit, :new, :sidebar]
 
   def index
     render :layout => 'browser'
@@ -8,7 +8,13 @@ class NotesController < ApplicationController
   def show
     @note = Note.find(params[:id])
     respond_to do |format|
-      format.html{ render layout: 'browser' }
+      format.html do
+        if request.xhr?
+          render layout: '_viewport'
+        else
+          render layout: 'browser'
+        end
+      end
       format.json{ render :json => @note }
     end
   end
@@ -69,14 +75,20 @@ class NotesController < ApplicationController
     render :json => matches.flatten
   end
 
-  def tune_widget
-    render :layout => 'basic'
-  end
-
   def preview
     @note = Note.new(params[:note])
     render @note
   end
+
+  def sidebar
+    render partial: 'layouts/sidebar'
+  end
+
+  def tune_widget
+    render :layout => 'basic'
+  end
+
+  private
 
   def execute_search
     @filtered_notes = Filter.new(params[:f]).notes

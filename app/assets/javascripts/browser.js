@@ -5,7 +5,16 @@ Browser = {
   },
 
   load: function(url) {
-    Turbolinks.visit(url, { change: 'sidebar' });
+    var query = url.split('?', 2)[1] || '';
+    $.ajax({
+      url: '/sidebar',
+      method: 'get',
+      data: query,
+      success: function(response) {
+        Turbolinks.replace(response, { change: 'sidebar' });
+        window.history.pushState({ turbolinks: true, url: url }, '', url);
+      }
+    });
   },
 
   updateItemStates: function() {

@@ -12,9 +12,17 @@ Viewer = {
     load: function(url) {
       var unsaved = Viewer.visibleBox().find('form.hasUnsavedChanges')[0];
       if (unsaved && !confirm("Discard changes?"))
-            return;
+        return;
 
-      Turbolinks.visit(url, { change: 'viewport' });
+      $.ajax({
+        url: url,
+        method: 'get',
+        success: function(response) {
+          Turbolinks.replace(response, { change: 'viewport' });
+          window.history.pushState({ turbolinks: true, url: url }, '', url);
+          $('#viewport *[autofocus]').focus();
+        }
+      });
     },
 
     editMode: function() {

@@ -8,6 +8,8 @@ Notes::Application.routes.draw do
   get '/autocomplete', :to => 'notes#autocomplete'
   get '/tags/autocomplete', :to => 'tags#autocomplete'
 
+  get 'sidebar', to: 'notes#sidebar'
+
   resources :notes do
     collection do
       patch 'preview'
