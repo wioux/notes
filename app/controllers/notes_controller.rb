@@ -7,26 +7,38 @@ class NotesController < ApplicationController
 
   def show
     @note = Note.with_history.find(params[:id])
-    respond_to do |format|
-      format.html do
-        if request.xhr?
-          render layout: '_viewport'
-        else
-          render layout: 'browser'
-        end
-      end
-      format.json{ render :json => @note }
+    if request.xhr?
+      render layout: '_viewport'
+    else
+      render layout: 'browser'
     end
   end
 
   def edit
     @note = Note.find(params[:id])
-    render layout: 'browser'
+    if request.xhr?
+      render layout: '_viewport'
+    else
+      render layout: 'browser'
+    end
+  end
+
+  def update
+    @note = Note.find(params[:id])
+    if @note.update_attributes(params[:note])
+      render :json => @note
+    else
+      render :json => @note.errors,  :status => :unprocessable_entity
+    end
   end
 
   def new
     @note = Note.new
-    render 'edit', layout: 'browser'
+    if request.xhr?
+      render 'edit', layout: '_viewport'
+    else
+      render 'edit', layout: 'browser'
+    end
   end
 
   def create
@@ -35,16 +47,6 @@ class NotesController < ApplicationController
     @note = Note.new(params[:note])
 
     if @note.save
-      render :json => @note
-    else
-      render :json => @note.errors,  :status => :unprocessable_entity
-    end
-  end
-
-  def update
-    @note = Note.find(params[:id])
-
-    if @note.update_attributes(params[:note])
       render :json => @note
     else
       render :json => @note.errors,  :status => :unprocessable_entity

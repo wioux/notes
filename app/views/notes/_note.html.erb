@@ -1,6 +1,6 @@
 <div class="note" data-id="<%= note.id %>"
-                  data-url="<%= note_path(note, f: params[:f]) %>"
-                  data-edit-url="<%= edit_note_path(note, f: params[:f]) %>">
+                  data-url="<%= note.id && note_path(note, f: params[:f]) %>"
+                  data-edit-url="<%= note.id && edit_note_path(note, f: params[:f]) %>">
   <div class="note-display">
     <% if note.is_history? %>
     <strong>This note has been deleted</strong>
