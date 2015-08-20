@@ -1,5 +1,5 @@
 class NotesController < ApplicationController
-  before_filter :execute_search, only: [:index, :show, :edit, :new, :sidebar]
+  before_filter :execute_search, only: [:index, :show, :edit, :new]
 
   def index
     render :layout => 'browser'
@@ -78,10 +78,6 @@ class NotesController < ApplicationController
   def preview
     @note = Note.new(params[:note])
     render @note
-  end
-
-  def sidebar
-    render partial: 'layouts/sidebar'
   end
 
   def tune_widget

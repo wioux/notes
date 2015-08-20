@@ -5,16 +5,7 @@ Browser = {
   },
 
   load: function(url) {
-    var query = url.split('?', 2)[1] || '';
-    $.ajax({
-      url: '/sidebar',
-      method: 'get',
-      data: query,
-      success: function(response) {
-        Turbolinks.replace(response, { change: 'sidebar' });
-        window.history.pushState({ turbolinks: true, url: url }, '', url);
-      }
-    });
+    Turbolinks.visit(url, { change: 'sidebar' });
   },
 
   updateItemStates: function() {
@@ -41,6 +32,16 @@ Browser = {
 };
 
 $(document).on('page:change', function() {
+  $('#filterer input[type=search]').autocomplete({
+    source: '/autocomplete',
+    appendTo: $('#filterer'),
+    delay: 0,
+    select: function() {
+      var form = $(this).parents('form');
+      setTimeout(function() { form.submit() }, 1);
+    }
+  });
+
   renderNote();
 });
 
@@ -67,13 +68,13 @@ $(document).ready(function() {
     Browser.destroy(item_id, $(this).attr('href'));
   });
 
-  $('#filterer input[type=search]').autocomplete({
-    source: '/autocomplete',
-    appendTo: $('#filterer'),
-    delay: 0,
-    select: function() {
-      var form = $(this).parents('form');
-      setTimeout(function() { form.submit() }, 1);
-    }
+  $(document).on('click', '#filterer #filter-clearer', function(e) {
+    e.preventDefault();
+    Browser.load(window.location.pathname, false);
+  });
+
+  $(document).on('submit', '#filterer form', function(e) {
+    e.preventDefault();
+    Browser.load($(this).attr('action') + '?' + $(this).serialize());
   });
 });
