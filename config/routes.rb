@@ -8,7 +8,7 @@ Notes::Application.routes.draw do
   get '/autocomplete', :to => 'notes#autocomplete'
   get '/tags/autocomplete', :to => 'tags#autocomplete'
 
-  resources :notes, :only => [:index, :new, :create, :update, :show, :destroy] do
+  resources :notes do
     collection do
       patch 'preview'
       get 'filter'

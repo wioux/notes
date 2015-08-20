@@ -4,7 +4,7 @@ $(document).ready(function() {
     case 'n':
       if (e.ctrlKey && !e.altKey && !e.metaKey) {
         e.preventDefault();
-        Viewer.loadBox('new', Viewer.editMode);
+        Viewer.load('/notes/new');
       }
       break;
     case 'i':

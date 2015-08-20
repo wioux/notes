@@ -1,4 +1,6 @@
-<div class="note" data-id="<%= note.id %>">
+<div class="note" data-id="<%= note.id %>"
+                  data-url="<%= note_path(note, f: params[:f]) %>"
+                  data-edit-url="<%= edit_note_path(note, f: params[:f]) %>">
   <div class="note-display">
     <span class="title"><%= note.title %></span>
     <div class="body">
@@ -16,65 +18,9 @@
 
       <div class="tags">
         <% note.tags.map(&:label).each do |tag| %>
-          <%= tag_link("/notes?f=.", tag) %>
+          <%= tag_link(url_for(f: '.'), tag) %>
         <% end %>
       </div>
     </footer>
-  </div>
-
-  <div class="note-edit" style="display: none">
-    <%= form_for(note, :html => {'data-note-id' => note.id}) do |f| %>
-    <%= f.hidden_field :date %>
-
-    <div style="position: absolute; top: 4px; width: 90%">
-      <%= f.text_field :title, :class => 'form-control', :style => 'width: 100%; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px' %>
-      <div class="unsaved-indicator">*</div>
-    </div>
-
-    <%= f.text_area :body, :class => 'form-control', :style => 'position: absolute; top: 37px; bottom: 36px; width: 90%; border-radius: 0px; resize: none' %>
-
-    <div style="position: absolute; bottom: 2px; width: 90%">
-      <div class="input-group">
-        <div class="input-group-btn">
-          <div class="btn btn-default" data-toggle="modal" data-target="form:visible .tag-selector" style="border-top: 0px; border-top-left-radius: 0px; border-top-right-radius: 0px; padding-top: 7px;">Tags</div>
-        </div>
-
-        <%= f.text_field :tag_list, :class => 'form-control', :style => 'border-top: 0px; border-top-left-radius: 0px; border-top-right-radius: 0px; width: 100%' %>
-        <div class="input-group-btn">
-          <div class="btn btn-default" data-toggle="modal" data-target="form:visible .attachment-selector" style="border-top: 0px; border-top-left-radius: 0px; border-top-right-radius: 0px; padding-top: 7px;">Attachments</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal attachment-selector" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header"><h3 style="margin: 0px">Attachments</h3></div>
-          <div class="modal-body">
-            <strong>Add Attachments:</strong>
-            <div style="padding-left: 10px">
-              <% note.attachments.build %>
-              <%= f.fields_for(:attachments) do |sf| %>
-              <%= attachment_edit(sf) %>
-              <% end %>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal tag-selector" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header"><h3 style="margin: 0px">Tags</h3></div>
-          <div class="modal-body">
-            <% Tag.labels.each do |tag| %>
-            <%= tag_selector_button(note, tag) %>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-    <% end %>
   </div>
 </div>

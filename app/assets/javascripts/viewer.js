@@ -1,60 +1,35 @@
 
 Viewer = {
     visibleItem: function() {
-        var id = Viewer.visibleBox().attr('data-id');
-        return id ? parseInt(id) : id;
+      var id = Viewer.visibleBox().attr('data-id');
+      return id ? parseInt(id) : id;
     },
 
     visibleBox: function() {
-        return $('#viewport #content > *:visible');
+      return $('#viewport #content > *:visible');
     },
 
-    boxFor: function(id) {
-        return $('#viewport #content > *[data-id='+id+']');
-    },
-
-    hideAll: function() {
-        $('#viewport #content > *').hide();
-    },
-
-    loadBox: function(item_id, callback) {
-        var unsaved = Viewer.visibleBox().find('form.hasUnsavedChanges')[0];
-        if (unsaved && !confirm("Discard changes?"))
+    load: function(url) {
+      var unsaved = Viewer.visibleBox().find('form.hasUnsavedChanges')[0];
+      if (unsaved && !confirm("Discard changes?"))
             return;
 
-        $.get('/notes/'+item_id, function(response) {
-            box = Viewer.addBox(response);
-            renderNote()
-
-            Viewer.hideAll();
-            box.show();
-
-//          this will remove the new note form
-//          Viewer.unpinnedBoxes().not(':visible').remove();
-
-            callback && callback();
-        });
+      Turbolinks.visit(url, { change: 'viewport' });
     },
 
     editMode: function() {
       var note = Viewer.visibleBox();
-      if (note.find('.note-edit:visible')[0]) {
-        if (note.find('form.hasUnsavedChanges')[0])
-          if (!confirm("Discard changes?"))
-            return;
-        Turbolinks.visit('/?item_id='+note.attr('data-id'));
-      } else {
-        note.find('.note-display').hide();
-        note.find('.note-edit').show().find('textarea[name=note\\[body\\]]').focus();
-      }
+      if (note.find('.note-edit:visible')[0])
+        Viewer.load(note.attr('data-url'));
+      else
+        Viewer.load(note.attr('data-edit-url'));
     },
 
     save: function() {
-      Viewer.visibleBox().find('form:visible').each(function() {
-        var form = $(this);
-        submitNote(form, function(response) {
-          Turbolinks.visit('/?item_id='+response.id);
-          Browser.refresh();
+      var note = Viewer.visibleBox();
+      note.find('form:visible').each(function() {
+        submitNote($(this), function(response) {
+          Turbolinks.visit(note.attr('data-url'));
         });
       });
     },
@@ -83,8 +58,21 @@ Viewer = {
 
 $(document).ready(function() {
     $(window).bind('beforeunload', function() {
-        var unsaved = Viewer.visibleBox().find('form.hasUnsavedChanges');
-        if (unsaved[0])
-            return 'There are unsaved changes';
+      var unsaved = Viewer.visibleBox().find('form.hasUnsavedChanges');
+      if (unsaved[0])
+        return 'There are unsaved changes';
     });
+
+  $(document).on('page:before-change', function(e) {
+    var unsaved = Viewer.visibleBox().find('form.hasUnsavedChanges');
+    if (unsaved[0] && !confirm('There are unsaved changes. Really navigate away?'))
+      e.preventDefault();
+  });
+
+  $(document).on('click', '#viewport .tags a', function(e) {
+    if (!e.metaKey) {
+      e.preventDefault();
+      Browser.load($(this).attr('href'));
+    }
+  });
 });

@@ -19,6 +19,7 @@ gem 'turbolinks', github: 'rails/turbolinks'
 
 group :development, :test do
   gem 'rspec-rails'
+  gem 'pry'
 end
 
 

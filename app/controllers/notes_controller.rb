@@ -1,4 +1,6 @@
 class NotesController < ApplicationController
+  before_filter :execute_search, only: [:index, :show, :edit, :new]
+
   def index
     render :layout => 'browser'
   end
@@ -9,6 +11,16 @@ class NotesController < ApplicationController
       format.html{ render layout: 'browser' }
       format.json{ render :json => @note }
     end
+  end
+
+  def edit
+    @note = Note.find(params[:id])
+    render layout: 'browser'
+  end
+
+  def new
+    @note = Note.new
+    render 'edit', layout: 'browser'
   end
 
   def create
@@ -42,22 +54,6 @@ class NotesController < ApplicationController
     end
   end
 
-  def filter
-    tags = Tag.labels
-    notes = Filter.new(params[:filter]).notes
-    notes.map! do |note|
-      {
-        :id => note.id,
-        :url => note_path(note),
-        :original_date => note.original_date,
-        :preview => note.preview,
-        :tags => note.tags.map{ |tag| {:short_label => tag.short_label} }
-      }
-    end
-
-    render :json => {:notes => notes, :tags => tags}
-  end
-
   def autocomplete
     term = params[:term]
     if term[0] == '.'
@@ -77,13 +73,12 @@ class NotesController < ApplicationController
     render :layout => 'basic'
   end
 
-  def new
-    @note = Note.new
-    render @note
-  end
-
   def preview
     @note = Note.new(params[:note])
     render @note
+  end
+
+  def execute_search
+    @filtered_notes = Filter.new(params[:f]).notes
   end
 end

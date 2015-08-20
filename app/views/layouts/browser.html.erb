@@ -5,10 +5,12 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
-  <%= yield(:head) %>
+  <script type="text/javascript">
+    Turbolinks.pagesCached(0);
+  </script>
 </head>
 <body>
-  <div id="sidebar" data-turbolinks-permanent="true">
+  <div id="sidebar">
     <div class="row">
       <div id="filterer" class="col-md-3">
         <form action="<%= request.fullpath %>" style="position: relative">
@@ -18,18 +20,22 @@
           </span>
 
           <span id="filter-clearer">
-            <span><i class="glyphicon glyphicon-ban-circle"></i></span>
+            <a href="<%= url_for(f: nil) %>"><i class="glyphicon glyphicon-ban-circle"></i></a>
           </span>
 
           <div>
-            <input type="search" value="<%= params[:f] %>" class="form-control"/>
+            <input type="search" name="f" value="<%= params[:f] %>" class="form-control"/>
           </div>
 
           <div id="filter-controls" class="btn-group">
             <span id="filter-tags" class="btn btn-default btn-xs" data-toggle="dropdown">
               Tags <span class="caret"></span>
             </span>
-            <ul id="filter-tags-dropdown" class="dropdown-menu" role="menu"></ul>
+            <ul id="filter-tags-dropdown" class="dropdown-menu" role="menu">
+              <% Tag.labels.each do |tag| %>
+              <li><a href="<%= url_for(f: '.'+tag) %>"><%= tag %></a></li>
+              <% end %>
+            </ul>
           </div>
         </form>
       </div>
@@ -37,7 +43,30 @@
 
     <div class="row">
       <div id="browser" class="col-md-3">
-        <ul></ul>
+        <ul>
+          <% @filtered_notes.each do |result| %>
+          <li class="selector" data-item-id="<%= result.id %>"
+                               data-sort="<%= result.original_date %>">
+            <span class="preview">
+              <a href="<%= note_path(result, f: params[:f]) %>"><%= result.preview %></a>
+            </span>
+            <span class="actions btn-group">
+              <a href="<%= note_path(result) %>" class="btn btn-default btn-xs destroyer">
+                destroy
+              </a>
+            </span>
+            <% result.tags.each_with_index do |tag, i| %>
+            <span class="tag" style="color: <%= tag_color %>"><%= tag.short_label %></span><%= ', ' unless i == result.tags.length-1 %>
+            <% end %>
+          </li>
+          <% end %>
+
+          <% if @filtered_notes.empty? %>
+          <li style="text-align: center">No results</li>
+          <% else %>
+          <li style="text-align: center">No more results</li>
+          <% end %>
+        </ul>
       </div>
     </div>
   </div>
