@@ -42,7 +42,7 @@ Browser = {
 
     for (i=ind; i < notes.notes.length; ++i) {
       $('#browser ul li[data-item-id='+notes.notes[i].id+']').
-        find('.preview').html(notes.notes[i].preview);
+        find('.preview a').html(notes.notes[i].preview);
     }
   },
 
@@ -66,12 +66,12 @@ Browser = {
                'data-sort="'+item.original_date+'" >');
 
     var actions = $('<span class="actions btn-group">');
-    var destroy = $('<button type="button"/>').
+    var destroy = $('<a/>').attr('href', item.url).
         addClass('btn btn-default btn-xs destroyer').text('destroy');
     actions.append(destroy);
 
     var preview = $('<span class="preview">');
-    preview.append($('<a>').attr('href', '/?item_id='+item.id).html(item.preview));
+    preview.append($('<a>').attr('href', item.url).html(item.preview));
     li.append(preview);
     li.append(actions);
 
@@ -140,12 +140,12 @@ Browser = {
     }
   },
 
-  destroy: function(item_id) {
+  destroy: function(item_id, url) {
     var selector = $('#browser ul .selector[data-item-id='+item_id+']');
     $.ajax({
       method: 'post',
       data: { '_method': 'delete' },
-      url: '/notes/'+item_id,
+      url: url,
       success: function() {
         return selector.css('position', 'relative').
           animate({left: -selector.width()}, 'slow',
@@ -175,6 +175,7 @@ $(document).ready(function() {
   });
 
   $('#browser').on('click', 'ul .selector .destroyer', function(e) {
+    e.preventDefault();
     e.stopPropagation();
     var selector = $(this).parents('.selector');
     var preview = selector.find('.preview').text();
@@ -183,7 +184,7 @@ $(document).ready(function() {
     if (!confirm("Confirm to destroy:\n\n"+preview))
       return;
 
-    Browser.destroy(item_id);
+    Browser.destroy(item_id, $(this).attr('href'));
   });
 
 

@@ -1,13 +1,12 @@
 class NotesController < ApplicationController
-  def browse
-    @item_id = params[:item_id].presence
+  def index
     render :layout => 'browser'
   end
 
   def show
     @note = Note.find(params[:id])
     respond_to do |format|
-      format.html{ render @note }
+      format.html{ render layout: 'browser' }
       format.json{ render :json => @note }
     end
   end
@@ -49,6 +48,7 @@ class NotesController < ApplicationController
     notes.map! do |note|
       {
         :id => note.id,
+        :url => note_path(note),
         :original_date => note.original_date,
         :preview => note.preview,
         :tags => note.tags.map{ |tag| {:short_label => tag.short_label} }
