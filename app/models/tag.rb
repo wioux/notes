@@ -27,7 +27,7 @@ class Tag < ActiveRecord::Base
 
   def self.autocomplete(term)
     Tag.uniq.where('tags.label like ?', "%#{term}%").
-      where('tags.label != ?', term).pluck(:label)
+      where('tags.label != ?', term).order(:label).pluck(:label)
   end
 
   def short_label

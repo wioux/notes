@@ -65,7 +65,7 @@ class NotesController < ApplicationController
   def autocomplete
     term = params[:term]
     if term[0] == '.'
-      matches = Tag.autocomplete(term[1..-1]).sort.map do |tag|
+      matches = Tag.autocomplete(term[1..-1]).map do |tag|
         {:label => '.'+tag, :value => '.'+tag}
       end
     else
