@@ -17,11 +17,8 @@
 class Note < ActiveRecord::Base
   attr_accessible :body, :date, :title, :tag_list
 
-  has_many :attachments, :dependent => :destroy
-  accepts_nested_attributes_for :attachments
-  attr_accessible :attachments_attributes
-
   include Note::History
   include Note::Tags
+  include Note::Attachments
   include Note::Json
 end
