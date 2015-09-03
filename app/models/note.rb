@@ -17,26 +17,12 @@
 class Note < ActiveRecord::Base
   attr_accessible :body, :date, :title, :tag_list
 
-  has_many :tags, :dependent => :destroy
-
   has_many :attachments, :dependent => :destroy
   accepts_nested_attributes_for :attachments
   attr_accessible :attachments_attributes
 
   include Note::History
-
-  def tag_list
-    tags.map(&:label).join(', ')
-  end
-
-  def tag_list=(list)
-    list = list.split(/\s*,\s*/)
-    self.tags = list.map{ |label| tags.build(:label => label) }
-  end
-
-  def tagged?(label)
-    tags.map(&:label).include?(label)
-  end
+  include Note::Tags
 
   def preview(maxlen=40)
     preview = title.blank? ? body : title
