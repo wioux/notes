@@ -41,14 +41,6 @@ class Filter
     scope.order('notes.original_date DESC')
   end
 
-  def has_tag?(tag)
-    tags.include? tag
-  end
-
-  def has_subtag?(sup)
-    !tags.select{ |x| x =~ /\A#{sup}:/ }.empty?
-  end
-
   def notes
     scope
   end
