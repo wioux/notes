@@ -25,16 +25,16 @@ class Filter
       scope = Note.preload(:tags)
     else
       ids = []
+
       @tags.each do |tag|
-        ids.concat Note.joins(:tags).where('tags.label = ? OR tags.label LIKE ?',
-                                           tag, "#{tag}:%").pluck(:id)
+        ids.concat tag_matches(tag).pluck(:note_id)
       end
+
       @strings.each do |string|
-        ids.concat Note.where('title LIKE ? or body LIKE ?',
-                              "%#{string}%", "%#{string}%").pluck(:id)
-        ids.concat Note.joins(:attachments).where('attachments.file_name LIKE ?',
-                                                  "%#{string}%").pluck(:id)
+        ids.concat note_matches(string).pluck(:id)
+        ids.concat attachment_matches(string).pluck(:note_id)
       end
+
       scope = Note.preload(:tags).where(:id => ids)
     end
 
@@ -43,5 +43,19 @@ class Filter
 
   def notes
     scope
+  end
+
+  private
+
+  def note_matches(term)
+    Note.where('title LIKE ? or body LIKE ?', "%#{term}%", "%#{term}%")
+  end
+
+  def tag_matches(term)
+    Tag.where('label = ? OR label LIKE ?', term, "#{term}:%")
+  end
+
+  def attachment_matches(term)
+    Attachment.where('file_name LIKE ?', "%#{term}%")
   end
 end
