@@ -22,7 +22,7 @@ class Filter
 
   def scope
     if @string.blank?
-      scope = Note.includes(:tags)
+      scope = Note.preload(:tags)
     else
       ids = []
       @tags.each do |tag|
