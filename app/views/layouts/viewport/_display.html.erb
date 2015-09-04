@@ -1,0 +1,27 @@
+<div class="<%= type %>"
+     data-id="<%= id %>"
+     data-url="<%= url %>"
+     data-edit-url="<%= edit_url %>">
+  <div class="display">
+    <%= yield %>
+  </div>
+
+  <footer>
+    <% if item.respond_to?(:attachments) %>
+    <div class="attachments" style="float: right">
+      <% if item.attachments.present? %>
+        <strong>Attachments:</strong>
+      <% end %>
+      <% item.attachments.each do |attachment| %>
+        <%= attachment_link(attachment) %>
+      <% end %>
+    </div>
+    <% end %>
+
+    <div class="tags">
+      <% item.tags.map(&:label).each do |tag| %>
+        <%= tag_link(url_for(f: '.'), tag) %>
+      <% end %>
+    </div>
+  </footer>
+</div>

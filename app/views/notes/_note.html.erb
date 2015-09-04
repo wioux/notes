@@ -1,26 +1,7 @@
-<div class="note" data-id="note/<%= note.id %>"
-                  data-url="<%= note.id && note_path(note, f: params[:f]) %>"
-                  data-edit-url="<%= note.id && edit_note_path(note, f: params[:f]) %>">
-  <div class="note-display">
-    <span class="title"><%= note.title %></span>
-    <div class="body">
-      <%= raw ::MarkdownHTML.render(note.body || '') %>
-    </div>
-    <footer>
-      <div class="attachments" style="float: right">
-        <% if note.attachments.present? %>
-          <strong>Attachments:</strong>
-        <% end %>
-        <% note.attachments.each do |attachment| %>
-          <%= attachment_link(attachment) %>
-        <% end %>
-      </div>
+<%= display_viewport(note) do %>
+  <span class="title"><%= note.title %></span>
 
-      <div class="tags">
-        <% note.tags.map(&:label).each do |tag| %>
-          <%= tag_link(url_for(f: '.'), tag) %>
-        <% end %>
-      </div>
-    </footer>
+  <div class="body">
+    <%= raw ::MarkdownHTML.render(note.body || '') %>
   </div>
-</div>
+<% end %>
