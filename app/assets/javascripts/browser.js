@@ -35,6 +35,7 @@ $(document).on('page:change', function() {
   $('#filterer input[type=search]').autocomplete({
     source: '/autocomplete',
     appendTo: $('#filterer'),
+    autoFocus: true,
     delay: 0,
     select: function() {
       var form = $(this).parents('form');
