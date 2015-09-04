@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Note do
+RSpec.describe Note do
   describe '#tag_list' do
     it 'should equal the comma separated list of tags' do
       note = Note.create!(:body => 'whatever')
