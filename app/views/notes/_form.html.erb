@@ -1,6 +1,6 @@
-<div class="note" data-id="<%= note.id %>" data-url="<%= note.new_record? ? request.referer : note_path(note, f: params[:f]) %>">
-  <div class="note-edit">
-    <%= form_for(note, :html => {'data-note-id' => note.id}) do |f| %>
+<div class="note" data-id="note/<%= note.id %>" data-url="<%= note.new_record? ? request.referer : note_path(note, f: params[:f]) %>">
+  <div class="edit">
+    <%= form_for(note, :html => {'data-note-id' => note.id, 'data-preview-url' => preview_notes_path}) do |f| %>
     <%= f.hidden_field :date %>
 
     <div style="position: absolute; top: 4px; width: 90%">

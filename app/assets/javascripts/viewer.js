@@ -1,12 +1,16 @@
 
 Viewer = {
+  // Handlers must implement
+  //   - submit(form, callback)
+  //   - renderPage()
+  handlers: {},
+
   contents: function(selector) {
     return $('#viewport #content > * ' + (selector || ''));
   },
 
   itemId: function() {
-    var id = Viewer.contents().attr('data-id');
-    return id ? parseInt(id) : id;
+    return Viewer.contents().attr('data-id');
   },
 
   load: function(url) {
@@ -26,32 +30,36 @@ Viewer = {
   },
 
   editMode: function() {
-    var note = Viewer.contents();
-    if (note.find('.note-edit')[0])
-      Viewer.load(note.attr('data-url'));
+    var content = Viewer.contents();
+    if (content.find('.edit')[0])
+      Viewer.load(content.attr('data-url'));
     else
-      Viewer.load(note.attr('data-edit-url'));
+      Viewer.load(content.attr('data-edit-url'));
   },
 
   save: function() {
-    var note = Viewer.contents();
-    var form = note.find('form:visible');
-    Note.submit(form, function(response) {
-      Turbolinks.visit(note.attr('data-url'));
+    var content = Viewer.contents();
+    var itemId = Viewer.itemId();
+    var type = itemId.split('/')[0];
+    var form = content.find('.edit form:visible');
+    Viewer.handlers[type].submit(form, function(response) {
+      Turbolinks.visit(content.attr('data-url'));
     });
   },
 
   inspect: function() {
-    Viewer.contents('form').each(function() {
+    var itemId = Viewer.itemId();
+    var type = itemId.split('/')[0];
+    Viewer.contents('.edit form[data-preview-url]').each(function() {
       var form = $(this);
       $.ajax({
-        url: '/notes/preview',
+        url: form.attr('data-preview-url'),
         method: 'post',
         data: form.serialize(),
         success: function(resp) {
           $('#inspector .modal-body').html(resp);
           $('#inspector').modal();
-          Note.render();
+          Viewer.handlers[type].renderPage();
         }
       });
     });

@@ -10,6 +10,12 @@ Browser = {
 
   updateItemStates: function() {
     var selected = Viewer.itemId();
+
+    if (!selected)
+      return;
+
+    selected = selected.replace('/', '\\/');
+
     $('#browser ul li.selected').not('[data-item-id='+selected+']').
       removeClass('selected');
     $('#browser ul li[data-item-id='+selected+']:not(.selected)').
@@ -17,6 +23,7 @@ Browser = {
   },
 
   destroy: function(item_id, url) {
+    item_id = item_id.replace('/', '\\/');
     var selector = $('#browser ul .selector[data-item-id='+item_id+']');
     $.ajax({
       method: 'post',

@@ -36,7 +36,7 @@
     <div id="browser" class="col-md-3">
       <ul>
         <% @filtered_notes.each do |result| %>
-        <li class="selector" data-item-id="<%= result.id %>"
+        <li class="selector" data-item-id="<%= result.class.name.downcase %>/<%= result.id %>"
             data-sort="<%= result.original_date %>">
           <span class="preview">
             <a href="<%= note_path(result, f: params[:f]) %>"><%= result.preview %></a>
