@@ -41,6 +41,13 @@ ActiveRecord::Schema.define(version: 20150904064124) do
     t.datetime "original_date"
   end
 
+  create_table "saved_filters", force: true do |t|
+    t.string   "name",       null: false
+    t.string   "value",      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "tags", force: true do |t|
     t.string   "label",      null: false
     t.integer  "note_id",    null: false
