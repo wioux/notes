@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150904011843) do
+ActiveRecord::Schema.define(version: 20150904064124) do
 
   create_table "attachments", force: true do |t|
     t.integer  "note_id",      null: false
@@ -22,22 +22,23 @@ ActiveRecord::Schema.define(version: 20150904011843) do
     t.string   "content_type"
   end
 
+  create_table "note_versions", force: true do |t|
+    t.string   "title",      default: "", null: false
+    t.text     "body",       default: "", null: false
+    t.datetime "date"
+    t.string   "tag_list"
+    t.integer  "note_id",                 null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "notes", force: true do |t|
     t.string   "title"
     t.text     "body"
     t.datetime "date"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.datetime "original_date"
-    t.boolean  "is_history",    default: false, null: false
-    t.integer  "present_id"
-  end
-
-  create_table "saved_filters", force: true do |t|
-    t.string   "name",       null: false
-    t.string   "value",      null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "tags", force: true do |t|

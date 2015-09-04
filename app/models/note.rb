@@ -9,14 +9,12 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  original_date :datetime
-#  is_history    :boolean          default(FALSE), not null
-#  present_id    :integer
 #
 
 class Note < ActiveRecord::Base
   attr_accessible :body, :date, :title, :tag_list
 
-  include Note::History
+  include Note::Versions
   include Note::Tags
   include Note::Attachments
   include Note::Json

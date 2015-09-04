@@ -2,10 +2,6 @@
                   data-url="<%= note.id && note_path(note, f: params[:f]) %>"
                   data-edit-url="<%= note.id && edit_note_path(note, f: params[:f]) %>">
   <div class="note-display">
-    <% if note.is_history? %>
-      <strong class="notice">This note has been deleted</strong>
-      <hr />
-    <% end %>
     <span class="title"><%= note.title %></span>
     <div class="body">
       <%= raw ::MarkdownHTML.render(note.body || '') %>

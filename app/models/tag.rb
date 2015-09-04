@@ -14,10 +14,8 @@ class Tag < ActiveRecord::Base
 
   belongs_to :note
 
-  scope :with_present_notes, ->{ joins(:note).merge(Note.without_history) }
-
   def self.labels
-    tags = uniq.with_present_notes.pluck(:label)
+    tags = uniq.pluck(:label)
 
     tags.each do |tag|
       parts = tag.split(':')
@@ -30,7 +28,7 @@ class Tag < ActiveRecord::Base
   end
 
   def self.autocomplete(term)
-    uniq.with_present_notes.where('tags.label like ?', "%#{term}%").
+    uniq.where('tags.label like ?', "%#{term}%").
       where('tags.label != ?', term).order(:label).pluck(:label)
   end
 

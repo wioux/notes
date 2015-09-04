@@ -6,7 +6,7 @@ class NotesController < ApplicationController
   end
 
   def show
-    @note = Note.with_history.find(params[:id])
+    @note = Note.find(params[:id])
     if request.xhr?
       render layout: '_viewport'
     else
@@ -55,9 +55,11 @@ class NotesController < ApplicationController
 
   def destroy
     @note = Note.find(params[:id])
-    if @note.become_history
-      render :json => {:success => true}
+    @note.transaction do
+      @note.save_version!
+      @note.destroy
     end
+    render json: { :success => true }
   end
 
   def autocomplete

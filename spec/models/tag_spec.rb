@@ -14,7 +14,7 @@ require 'spec_helper'
 RSpec.describe Tag, :type => :model do
   let(:note_1){ Note.create }
   let(:note_2){ Note.create }
-  let(:note_3){ Note.create.tap(&:become_history) }
+  let(:note_3){ Note.create.build_version.tap(&:save) }
 
   describe '.labels' do
     it "should return an array containing the labels of all tags" do
@@ -43,11 +43,6 @@ RSpec.describe Tag, :type => :model do
       Tag.create!({label: 'two', note: note_2}, without_protection: true)
       expect(Tag.labels).to eq(['one', 'two'])
     end
-
-    it "should exclude tags on notes which are history" do
-      Tag.create!({label: 'one', note: note_3}, without_protection: true)
-      expect(Tag.labels).to eq([])
-    end
   end
 
   describe '.autocomplete' do
@@ -63,11 +58,6 @@ RSpec.describe Tag, :type => :model do
     it "shouldn't return exact matches" do
       Tag.create!({label: 'one', note: note_1}, without_protection: true)
       expect(Tag.autocomplete('one')).to eq([])
-    end
-
-    it "shouldn't match tags on notes which are history" do
-      Tag.create!({label: 'one', note: note_3}, without_protection: true)
-      expect(Tag.autocomplete('on')).to eq([])
     end
   end
 end

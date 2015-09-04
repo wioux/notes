@@ -36,17 +36,27 @@ RSpec.describe Note do
   end
 
   describe '#save' do
-    it "should save a copy in history when updating a note" do
+    it "should save a copy in versions when updating a note" do
       note = Note.create!(:title => 't', :body => 'b', :date => Time.at(1))
 
       note = Note.find(note.id)
       note.title = 'title'
       note.save!
 
-      expect( note.history.count ).to eq(1)
+      expect( note.versions.count ).to eq(1)
 
-      copy = note.history.first
+      copy = note.versions.take!
       expect([copy.title, copy.body, copy.date]).to eq(['t', 'b', Time.at(1)])
+    end
+
+    it "should not save a copy in versions if there are no changes" do
+      note = Note.create!(:title => 't', :body => 'b', :date => Time.at(1))
+
+      note = Note.find(note.id)
+      note.title = "#{note.title}"
+      note.save!
+
+      expect( note.versions.count ).to eq(0)
     end
   end
 end
