@@ -88,5 +88,6 @@ class NotesController < ApplicationController
 
   def execute_search
     @filtered_notes = Filter.new(params[:f]).notes
+    @saved_filters = SavedFilter.all
   end
 end

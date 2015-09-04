@@ -21,4 +21,6 @@ Notes::Application.routes.draw do
   end
 
   resources :attachments, :only => :show
+
+  resources :saved_filters, only: [:create, :destroy]
 end

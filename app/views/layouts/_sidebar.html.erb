@@ -1,14 +1,13 @@
 <div id="sidebar">
   <div class="row">
     <div id="filterer" class="col-md-3">
-      <form action="<%= request.path %>" style="position: relative">
-        <span id="filter-focuser">
-          <img src="/spinner.gif" />
-          <span><i class="glyphicon glyphicon-filter"></i></span>
-        </span>
-
+      <form action="<%= request.path %>" class="filter_mode" style="position: relative">
         <span id="filter-clearer">
           <a href="#"><i class="glyphicon glyphicon-ban-circle"></i></a>
+        </span>
+
+        <span id="filter-saver">
+          <span class="glyphicon glyphicon-pushpin"></span>
         </span>
 
         <div>
@@ -21,9 +20,13 @@
           </span>
           <ul id="filter-tags-dropdown" class="dropdown-menu" role="menu">
             <% Tag.labels.each do |tag| %>
-            <li><a href="<%= url_for(f: '.'+tag) %>"><%= tag %></a></li>
+              <li><a href="<%= url_for(f: '.'+tag) %>"><%= tag %></a></li>
             <% end %>
           </ul>
+
+          <% @saved_filters.each do |filter| %>
+            <a href="<%= url_for(f: filter.value) %>" class="btn btn-default btn-xs"><%= filter.name %></a>
+          <% end %>
         </div>
       </form>
     </div>
