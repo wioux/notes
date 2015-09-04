@@ -5,9 +5,10 @@ class Note
     # TODO: note, tags are destroyed in historical notes
 
     included do
-      default_scope { where(:is_history => false) }
+      default_scope { without_history }
       scope :history, -> { where(:is_history => true) }
       scope :with_history, -> { where(:is_history => [true, false]) }
+      scope :without_history, -> { where(is_history: false) }
 
       belongs_to :present, :class_name => 'Note'
       has_many :history, -> { where(:is_history => true) },
