@@ -55,9 +55,7 @@ class NotesController < ApplicationController
 
   def destroy
     @note = Note.find(params[:id])
-    @note.is_history = true
-    @note.present_id = @note.id
-    if @note.save
+    if @note.become_history
       render :json => {:success => true}
     end
   end
