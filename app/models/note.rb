@@ -11,7 +11,6 @@
 #  original_date :datetime
 #  is_history    :boolean          default(FALSE), not null
 #  present_id    :integer
-#  is_pinned     :boolean          default(FALSE), not null
 #
 
 class Note < ActiveRecord::Base

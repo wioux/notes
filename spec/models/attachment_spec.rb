@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: attachments
+#
+#  id           :integer          not null, primary key
+#  note_id      :integer          not null
+#  location     :string(255)      not null
+#  file_name    :string(255)      not null
+#  created_at   :datetime
+#  updated_at   :datetime
+#  content_type :string(255)
+#
+
 require 'spec_helper'
 
 RSpec.describe Attachment, :type => :model do
