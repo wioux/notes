@@ -40,7 +40,7 @@ Note = {
   renderAbc: function() {
     $('div.abc:not(.rendered)').each(function() {
         var abc = $(this).text();
-        ABCJS.renderAbc(this, abc, {}, {staffwidth: 800, paddingbottom: -30});
+        ABCJS.renderAbc(this, abc, {}, {staffwidth: 800, paddingbottom: 0});
         $(this).addClass('rendered');
 
         var midi_link = $(this).append('<div class="midi" />').find('.midi')[0];
