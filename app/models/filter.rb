@@ -1,9 +1,8 @@
 class Filter
-  attr_reader :tags, :strings, :options
+  attr_reader :tags, :strings
 
-  def initialize(string, options={})
+  def initialize(string)
     @string = string
-    @options = options
 
     @tags = []
     @strings = []
