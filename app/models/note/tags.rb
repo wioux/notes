@@ -4,6 +4,10 @@ class Note
 
     included do
       has_many :tags, :dependent => :destroy
+
+      scope :tagged, ->(tag) {
+        where("tags.label = ? OR tags.label LIKE ?", tag, "#{tag}:%")
+      }
     end
 
     def tag_list
