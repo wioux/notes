@@ -13,7 +13,7 @@ Viewer = {
     return Viewer.contents().attr('data-id');
   },
 
-  load: function(url) {
+  load: function(url, callback) {
     var unsaved = Viewer.contents('form.hasUnsavedChanges')[0];
     if (unsaved && !confirm("Discard changes?"))
       return;
@@ -23,8 +23,8 @@ Viewer = {
       method: 'get',
       success: function(response) {
         Turbolinks.replace(response, { change: 'viewport' });
-        window.history.pushState({ turbolinks: true, url: url }, '', url);
         $('#viewport *[autofocus]').focus();
+        callback && callback();
       }
     });
   },

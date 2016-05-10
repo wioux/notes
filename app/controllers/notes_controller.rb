@@ -2,7 +2,17 @@ class NotesController < ApplicationController
   before_filter :execute_search, only: [:index, :show, :edit, :new]
 
   def index
-    render :layout => 'browser'
+    respond_to do |format|
+      format.html{ render layout: "browser" }
+      format.json do
+        items = @filtered_notes.as_json(only: :id, methods: :preview,
+                                        include: {
+                                          tags: { only: :id, methods: :short_label }
+                                        })
+        items.each{ |item| item["url"] = note_path(item["id"]) }
+        render json: { results: items, tags: Tag.labels, saved_filters: @saved_filters }
+      end
+    end
   end
 
   def show
