@@ -79,7 +79,7 @@ var Sidebar = React.createClass({
     });
 
     Browser.ref.setFilter(f, false);
-    Viewer.load(location, function() {
+    Viewer.load(location.href, function() {
       Browser.ref.setState({ active: Viewer.itemId() });
     });
   },
