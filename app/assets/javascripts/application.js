@@ -9,35 +9,41 @@
 //= require_tree ../../../vendor/assets/javascripts
 //= require_tree .
 
+function pushState(url) {
+  url = url || location.pathname;
+  if (app.refs.browser.state.filter.match(/\S/))
+    url += "?f="+encodeURIComponent(app.refs.browser.state.filter);
+  window.history.pushState({}, '', url);
+}
+
+function popState() {
+  var f = "";
+  (location.search || "?f=").substr(1).split("&").forEach(function(param) {
+    var kv = param.split("=", 2);
+    if (kv[0] == "f")
+      f = decodeURIComponent(kv[1]);
+  });
+
+  if (f != app.refs.browser.state.filter)
+    app.filter(f, false);
+
+  if (location.pathname != "/")
+    app.load(location.href, false);
+}
+
 $(document).ready(function() {
-  var app;
-  var pushstate = function(url) {
-    url = url || location.pathname;
-    if (app.refs.browser.state.filter.match(/\S/))
-      url += "?f="+encodeURIComponent(app.refs.browser.state.filter);
-    window.history.pushState({}, '', url);
-  };
-
-  var popstate = function() {
-    var f = "";
-    (location.search || "?f=").substr(1).split("&").forEach(function(param) {
-      var kv = param.split("=", 2);
-      if (kv[0] == "f")
-        f = decodeURIComponent(kv[1]);
-    });
-
-    if (f != app.refs.browser.state.filter)
-      app.filter(f, false);
-
-    if (location.pathname != "/")
-      app.load(location.href, false);
-  };
-
   var props = $("#app_container *").data("reactProps");
-  props.onload = pushstate;
-  props.onfilter = pushstate;
-  app = ReactDOM.render(React.createElement(App, props),
-                        $('#app_container *')[0]);
+  props.onload = pushState;
+  props.onfilter = pushState;
+  window.onpopstate = popState;
+
+  window.app = ReactDOM.render(React.createElement(App, props),
+                               $('#app_container *')[0]);
+
+  $(window).bind('beforeunload', function() {
+    if (app.hasUnsavedChanges())
+      return 'There are unsaved changes.';
+  });
 
   $(document).on('click', 'a[data-tag]', function(e) {
     if (!e.metaKey) {
@@ -85,13 +91,4 @@ $(document).ready(function() {
       break;
     }
   });
-
-  window.onpopstate = popstate;
-
-  $(window).bind('beforeunload', function() {
-    if (app.hasUnsavedChanges())
-      return 'There are unsaved changes.';
-  });
-
-  window.app = app;
 });
