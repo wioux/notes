@@ -42,6 +42,11 @@ $(document).ready(function() {
     }
   });
 
+  $(document).on('submit', '.note form', function(e) {
+    e.preventDefault();
+    app.save();
+  });
+
   $(window).on('keydown', function(e) {
     switch(String.fromCharCode(e.which).toLowerCase()) {
     case 'n':
