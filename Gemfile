@@ -15,8 +15,6 @@ gem 'annotate'
 
 gem 'abcjs-rails'
 
-gem 'turbolinks', github: 'rails/turbolinks'
-
 gem 'react-rails'
 
 group :development, :test do
