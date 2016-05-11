@@ -2,7 +2,7 @@
 var App = React.createClass({
   getInitialState: function() {
     return {
-      active: this.props.initialActive || null
+      active: this.props.initialActive
     };
   },
 
@@ -34,9 +34,6 @@ var App = React.createClass({
   },
 
   edit: function() {
-    if (!this.state.active)
-      return;
-
     var url = this.state.active.url.split("?", 2)[0];
     if (url.match(/\/edit$/))
       this.load(url.replace(/\/edit$/, ""));
@@ -45,9 +42,6 @@ var App = React.createClass({
   },
 
   save: function() {
-    if (!this.state.active)
-      return;
-
     var self = this;
     var form = $("form", this.refs.viewport.refs.ui);
     var create = form.attr("id").match(/^new_/);
@@ -96,13 +90,13 @@ var App = React.createClass({
                  initialFilters={this.props.initialFilters}
                  initialFilter={this.props.initialFilter}
                  initialResults={this.props.initialResults}
-                 initialActive={this.state.active ? this.state.active.id : null}
+                 initialActive={this.state.active.id}
                  searchPath={this.props.searchPath}
                  activate={this.load}
                  destroy={this.destroy} />
         <Viewport ref="viewport"
-                  id={this.state.active ? this.state.active.id : null}
-                  html={this.state.active ? this.state.active.html : null} />
+                  id={this.state.active.id}
+                  html={this.state.active.html} />
       </div>
     );
   }

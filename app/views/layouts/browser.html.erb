@@ -14,9 +14,9 @@
                                  initialFilters: [],
                                  initialFilter: params[:f],
                                  initialResults: filter_results,
-                                 initialActive: @note && { id: "notes/#{@note.id}",
-                                                           url: note_path(@note),
-                                                           html: yield              }
+                                 initialActive: { id: @note ? "notes/#{@note.id}" : "notes",
+                                                  url: request.fullpath,
+                                                  html: yield              }
                                },
                                prerender: true %>
   </div>
