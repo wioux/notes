@@ -20,20 +20,11 @@ Note = {
             cache: false,
             contentType: false,
             processData: false,
-            success: callback
+            success: function(resp) {
+              form.removeClass("hasUnsavedChanges");
+              callback && callback(resp);
+            }
         });
-    });
-  },
-
-  renderPage: function() {
-    Note.renderAbc();
-    $('.note .body table').tablesorter();
-    $('.note .body table').addClass('table table-striped');
-
-    $('.note .edit input[name*=tag_list]').autocomplete({
-      source: '/tags/autocomplete',
-      position: { my: 'left bottom', at: 'left top' },
-      delay: 0
     });
   },
 
@@ -73,13 +64,7 @@ Note = {
   }
 };
 
-$(document).on('page:change', function() {
-  Note.renderPage();
-});
-
 $(document).ready(function() {
-  Viewer.handlers['note'] = Note;
-
   $(document).on('show.bs.modal', '.tag-selector', function() {
     var tags = $('.note .edit input[name=note\\[tag_list\\]]').val().split(/\s*,\s*/);
     $(this).find('.btn').each(function() {

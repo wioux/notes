@@ -36,7 +36,9 @@ class NotesController < ApplicationController
   def update
     @note = Note.find(params[:id])
     if @note.update_attributes(params[:note])
-      render :json => @note
+      item = @note.as_json
+      item["url"] = note_path(@note)
+      render json: item
     else
       render :json => @note.errors,  :status => :unprocessable_entity
     end
@@ -57,7 +59,9 @@ class NotesController < ApplicationController
     @note = Note.new(params[:note])
 
     if @note.save
-      render :json => @note
+      item = @note.as_json
+      item["url"] = note_path(@note)
+      render json: item
     else
       render :json => @note.errors,  :status => :unprocessable_entity
     end

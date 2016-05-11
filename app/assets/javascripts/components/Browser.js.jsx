@@ -3,103 +3,47 @@ var Sidebar = React.createClass({
   getInitialState: function() {
     return {
       tags: [],
-      savedFilters: [],
-      searchPath: "",
+      filters: [],
       filter: "",
       results: [],
       active: null
     };
   },
 
-  onFilterChange: function(e) {
+  onInputChange: function(e) {
     this.setState({ filter: e.target.value });
   },
 
-  onActivate: function(item) {
-    var self = this;
-    Viewer.load(item.props.url, function() {
-      self.setState({ active: item.props.itemId });
-      self.pushHistory(item.props.url);
-    });
-  },
-
-  onDestroy: function(item, ui) {
-    if (!confirm("Confirm to destroy:\n\n"+item.props.preview))
+  destroy: function(item, ui) {
+    if (!confirm("Confirm to destroy:\n\n" + item.props.preview))
       return;
 
     var self = this;
-    $.ajax({
-      method: "post",
-      data: { "_method": "delete" },
-      url: item.props.url,
-      success: function() {
-        $(ui).css('position', 'relative').
-          animate({left: -$(ui).width()}, 'slow', function() {
-            var newResults = self.state.results
-                .filter(function(i) { return i.url != item.props.url });
-            self.setState({ results: newResults });
-          });
-      }
+    this.props.destroy(item.props.url, function() {
+      $(ui).css('position', 'relative').
+        animate({left: -$(ui).width()}, 'slow', function() {
+          var newResults = self.state.results
+              .filter(function(i) { return i.url != item.props.url });
+          self.setState({ results: newResults });
+        });
     });
   },
 
-  clearFilter: function() {
-    this.setFilter("");
-  },
-
-  setFilter: function(f, history) {
-    this.setState({ filter: f }, function() { this.getResults(null, history) });
-  },
-
-  getResults: function(e, history) {
-    var self = this;
+  clearFilter: function(e) {
     e && e.preventDefault();
-
-    history = arguments[1] === undefined ? true : history;
-    history && this.pushHistory();
-
-    $.get(this.state.searchPath+"?f=" + this.state.filter, function(filter) {
-      self.setState({ results: filter.results, tags: filter.tags });
-    });
+    this.filter("", function() { Browser.focus() });
   },
 
-  pushHistory: function(url) {
-    url = url || location.pathname;
-    if (this.state.filter.match(/\S/))
-      url += "?f="+encodeURIComponent(this.state.filter);
-    window.history.pushState({}, '', url);
+  refresh: function(e) {
+    e && e.preventDefault();
+    this.filter(this.state.filter);
   },
 
-  popHistory: function() {
-    var f = "";
-    (location.search || "?f=").substr(1).split("&").forEach(function(param) {
-      var kv = param.split("=", 2);
-      if (kv[0] == "f")
-        f = decodeURIComponent(kv[1]);
-    });
-
-    Browser.ref.setFilter(f, false);
-    Viewer.load(location.href, function() {
-      Browser.ref.setState({ active: Viewer.itemId() });
-    });
-  },
-
-  componentDidMount: function() {
+  filter: function(f, callback) {
     var self = this;
-    $("input[type=search]", this.refs.filterer).autocomplete({
-      source: '/autocomplete',
-      appendTo: this.refs.filterer,
-      autoFocus: true,
-      delay: 0,
-
-      open: function(e, ui) {
-        if (!$(this).parents('.filter_mode')[0])
-          $(this).autocomplete('close');
-      },
-
-      select: function(e, select) {
-        self.setFilter(select.item.value);
-      }
+    $.get(this.props.searchPath+"?f="+f, function(resp) {
+      self.setState({ filter: f, results: resp.results, tags: resp.tags });
+      callback && callback.call(self);
     });
   },
 
@@ -109,14 +53,14 @@ var Sidebar = React.createClass({
     };
 
     var tag = function(tag) {
-      return <li key={tag}><a href={"?f=." + tag}>{tag}</a></li>;
+      return <li key={tag}><a href={"?f=." + tag} data-tag={tag}>{tag}</a></li>;
     };
 
     return (
       <div id="sidebar">
         <div className="row">
           <div id="filterer" className="col-md-3" ref="filterer">
-            <form action={this.state.searchPath} className="filter_mode" style={{position: "relative"}} onSubmit={this.getResults}>
+            <form action={this.props.searchPath} className="filter_mode" style={{position: "relative"}} onSubmit={this.refresh}>
               <span id="filter-clearer" onClick={this.clearFilter}>
                 <a href="#"><i className="glyphicon glyphicon-ban-circle"></i></a>
               </span>
@@ -126,7 +70,7 @@ var Sidebar = React.createClass({
               </span>
               
               <div>
-                <input type="search" className="form-control" name="f" value={this.state.filter} onChange={this.onFilterChange} />
+                <input type="search" className="form-control" name="f" value={this.state.filter} onChange={this.onInputChange} />
               </div>
               
               <div id="filter-controls" className="btn-group">
@@ -137,7 +81,7 @@ var Sidebar = React.createClass({
                   {this.state.tags.map(tag)};
                 </ul>
               
-               {this.state.savedFilters.map(savedFilter)}
+               {this.state.filters.map(savedFilter)}
               </div>
             </form>
           </div>
@@ -145,8 +89,8 @@ var Sidebar = React.createClass({
         <div className="row">
           <div id="browser" className="col-md-3">
             <FilterResults results={this.state.results} selectedId={this.state.active}
-                           onActivate={this.onActivate}
-                           onDestroy={this.onDestroy}/>
+                           activate={this.props.activate}
+                           destroy={this.destroy} />
           </div>
         </div>
       </div>
@@ -163,16 +107,16 @@ var Sidebar = React.createClass({
   };
 
   var FilterResult = React.createClass({
-    onClick: function(e) {
+    click: function(e) {
       if (!$(e.target).is(".destroyer") && !e.metaKey) {
         e.preventDefault();
-        this.props.onActivate(this);
+        this.props.activate(this.props.url);
       };
     },
 
-    onDestroy: function(e) {
+    destroy: function(e) {
       e.preventDefault();
-      this.props.onDestroy(this, $(e.target.closest('li'))[0]);
+      this.props.destroy(this, $(e.target.closest('li'))[0]);
     },
 
     render: function() {
@@ -186,12 +130,12 @@ var Sidebar = React.createClass({
       };
 
       return (
-        <li className={this.props.selected ? "selected" : ""} onClick={this.onClick}>
+        <li className={this.props.selected ? "selected" : ""} onClick={this.click}>
           <span className="preview">
             <a href={this.props.url}>{this.props.preview}</a>
           </span>
           <span className="actions btn-group">
-            <a href={this.props.url} className="btn btn-default btn-xs destroyer" onClick={this.onDestroy}>
+            <a href={this.props.url} className="btn btn-default btn-xs destroyer" onClick={this.destroy}>
               destroy
             </a>
           </span>
@@ -207,13 +151,13 @@ var Sidebar = React.createClass({
       var self = this, selectedId = this.props.selectedId;
       var results = this.props.results.map(function(result) {
         return <FilterResult key={result.id}
-                             itemId={"note/"+result.id}
+                             itemId={"notes/"+result.id}
                              url={result.url}
-                             selected={"note/"+result.id == selectedId}
+                             selected={"notes/"+result.id == selectedId}
                              preview={result.preview}
                              tags={result.tags}
-                             onActivate={self.props.onActivate}
-                             onDestroy={self.props.onDestroy} />;
+                             activate={self.props.activate}
+                             destroy={self.props.destroy} />;
       });
 
       if (results.length)
