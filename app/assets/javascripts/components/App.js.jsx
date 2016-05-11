@@ -35,8 +35,8 @@ var App = React.createClass({
 
   edit: function() {
     var url = this.state.active.url.split("?", 2)[0];
-    if (url.match(/\/edit$/))
-      this.load(url.replace(/\/edit$/, ""));
+    if (url.match(/\/(edit|new)$/))
+      this.load(url.replace(/\/(edit|new)$/, ""));
     else
       this.load(url + "/edit");
   },
@@ -58,7 +58,8 @@ var App = React.createClass({
 
     var self = this;
     $.get(url, function(html) {
-      var id = url.split("?", 2)[0].match(/([^\/]+\/[^\/]+)(\/edit)?$/)[1];
+      var id = url.split("?", 2)[0].match(/([^\/]+\/[^\/]+)(\/edit)?$/);
+      id = id ? id[1] : url.split("?", 2)[0].match(/[^\/]+$/)[0];
       self.refs.browser.setState({ active : id });
       self.setState({
         active: {
