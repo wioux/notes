@@ -57,6 +57,11 @@ $(document).ready(function() {
     app.save();
   });
 
+  $(document).on("click", "#item_actions a", function(e) {
+    e.preventDefault();
+    app.load(this.href);
+  });
+
   $(window).on('keydown', function(e) {
     switch(String.fromCharCode(e.which).toLowerCase()) {
     case 'n':

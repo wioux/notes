@@ -1,6 +1,5 @@
 <div class="note">
   <%= form_for(note) do |f| %>
-    <div class="unsaved-indicator">*</div>
     <%= f.hidden_field :date %>
 
     <div style="position: absolute; top: 4px; width: 90%">
@@ -35,5 +34,15 @@
         </div>
       </div>
     </div>
+  <% end %>
+
+  <%= controls do %>
+    <% if note.persisted? %>
+      <a href="<%= note_path(note, f: params[:f]) %>" title="Discard changes"
+         class="glyphicon glyphicon-remove"></a>
+    <% else %>
+      <a href="<%= notes_path(f: params[:f]) %>" title="Discard changes"
+         class="glyphicon glyphicon-remove"></a>
+    <% end %>
   <% end %>
 </div>

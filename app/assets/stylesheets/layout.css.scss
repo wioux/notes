@@ -31,6 +31,27 @@ html, body, #app_container, #app_container > *, #app, #viewport {
     padding-left: 10px;
 }
 
+#controls {
+  position: fixed;
+  top: 6px;
+  right: 12px;
+  width: 20px;
+
+  .glyphicon {
+      color: #888;
+      font-size: 24px;
+  }
+
+  a.glyphicon {
+      text-decoration: none;
+      color: #bbb;
+
+      &:hover {
+          color: #888;
+      }
+  }
+}
+
 @media print {
     #results, #filterer {
         display: none;
