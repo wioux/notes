@@ -50,9 +50,10 @@ var App = React.createClass({
 
     var self = this;
     var form = $("form", this.refs.viewport.refs.ui);
+    var create = form.attr("id").match(/^new_/);
     Note.submit(form, function(resp) {
-      R = resp;
-      self.load(resp.url);
+      if (create)
+        self.load(resp.url);
       self.refs.browser.refresh();
     });
   },
