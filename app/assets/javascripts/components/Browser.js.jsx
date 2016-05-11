@@ -41,7 +41,7 @@ var Sidebar = React.createClass({
 
   filter: function(f, callback) {
     var self = this;
-    $.get(this.props.searchPath+"?f="+f, function(resp) {
+    $.get(this.props.searchPath+".json?f="+f, function(resp) {
       self.setState({ filter: f, results: resp.results, tags: resp.tags });
       callback && callback.call(self);
     });
