@@ -12,7 +12,6 @@ var App = React.createClass({
     $("input[type=search]", this.refs.sidebar.refs.filterer).autocomplete({
       source: this.props.autoCompletePath,
       appendTo: this.refs.sidebar.refs.filterer,
-      autoFocus: true,
       delay: 0,
 
       open: function(e, ui) {
