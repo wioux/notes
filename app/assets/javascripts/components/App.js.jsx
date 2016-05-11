@@ -2,8 +2,7 @@
 var App = React.createClass({
   getInitialState: function() {
     return {
-      tags: [],
-      active: null
+      active: this.props.initialActive || null
     };
   },
 
@@ -70,7 +69,7 @@ var App = React.createClass({
         active: {
           id: id,
           url: url,
-          html: $(html).find("#content").html()
+          html: html
         }
       });
       if (callbacks !== false)
@@ -92,6 +91,11 @@ var App = React.createClass({
     return (
       <div id="app">
         <Sidebar ref="sidebar"
+                 initialTags={this.props.initialTags}
+                 initialFilters={this.props.initialFilters}
+                 initialFilter={this.props.initialFilter}
+                 initialResults={this.props.initialResults}
+                 initialActive={this.state.active ? this.state.active.id : null}
                  searchPath={this.props.searchPath}
                  activate={this.load}
                  destroy={this.destroy} />

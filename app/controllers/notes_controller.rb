@@ -1,36 +1,27 @@
 class NotesController < ApplicationController
-  before_filter :execute_search, only: [:index, :show, :edit, :new]
+  helper_method :filter_results
 
   def index
     respond_to do |format|
-      format.html{ render layout: "browser" }
+      format.html do
+        render layout: (request.xhr? ? nil : "browser")
+      end
       format.json do
-        items = @filtered_notes.as_json(only: :id, methods: :preview,
-                                        include: {
-                                          tags: { only: :id, methods: :short_label }
-                                        })
-        items.each{ |item| item["url"] = note_path(item["id"]) }
-        render json: { results: items, tags: Tag.labels, saved_filters: @saved_filters }
+        render json: { results: filter_results,
+                       tags: Tag.labels,
+                       saved_filters: SavedFilter.all }
       end
     end
   end
 
   def show
     @note = Note.find(params[:id])
-    if request.xhr?
-      render layout: '_viewport'
-    else
-      render layout: 'browser'
-    end
+    render layout: (request.xhr? ? nil : "browser")
   end
 
   def edit
     @note = Note.find(params[:id])
-    if request.xhr?
-      render layout: '_viewport'
-    else
-      render layout: 'browser'
-    end
+    render layout: (request.xhr? ? nil : "browser")
   end
 
   def update
@@ -46,11 +37,7 @@ class NotesController < ApplicationController
 
   def new
     @note = Note.new
-    if request.xhr?
-      render 'edit', layout: '_viewport'
-    else
-      render 'edit', layout: 'browser'
-    end
+    render layout: (request.xhr? ? nil : "browser")
   end
 
   def create
@@ -102,8 +89,16 @@ class NotesController < ApplicationController
 
   private
 
-  def execute_search
-    @filtered_notes = Filter.new(params[:f]).notes
-    @saved_filters = SavedFilter.all
+  def filter_results
+    @filter_results ||=
+      begin
+        results = Filter.new(params[:f]).notes.as_json(
+          only: :id, methods: :preview,
+          include: {
+            tags: { only: :id, methods: :short_label }
+          }
+        )
+        results.each{ |item| item["url"] = note_path(item["id"]) }
+      end
   end
 end

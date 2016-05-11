@@ -66,7 +66,7 @@ Note = {
 
 $(document).ready(function() {
   $(document).on('show.bs.modal', '.tag-selector', function() {
-    var tags = $('.note .edit input[name=note\\[tag_list\\]]').val().split(/\s*,\s*/);
+    var tags = $('.note input[name=note\\[tag_list\\]]').val().split(/\s*,\s*/);
     $(this).find('.btn').each(function() {
       if (tags.indexOf($(this).text()) == -1) {
         $(this).removeClass('active');
@@ -77,7 +77,7 @@ $(document).ready(function() {
   });
 
   $(document).on('click', '.tag-selector .btn', function() {
-    var input = $('.note .edit input[name=note\\[tag_list\\]]')[0];
+    var input = $('.note input[name=note\\[tag_list\\]]')[0];
     if ($(this).is('.active')) {
       var text = input.value.match(/\S/) ? ', '+$(this).text() : $(this).text();
       input.value = input.value.replace(/,?\s*$/, '') + text;
@@ -91,28 +91,11 @@ $(document).ready(function() {
     $(input).trigger('input');
   });
 
-  $(document).on('change', '.note .edit form input[type=file]', function() {
-    var new_field = $(this).clone();
-    var new_id = this.id.replace(/(note_attachments_attributes_)(\d+)/,
-                                 function(e, p1, p2) {
-                                   return p1+(parseInt(p2)+1);
-                                 });
-    var new_name = this.name.replace(/(note\[attachments_attributes\]\[)(\d)+/,
-                                     function(e, p1, p2) {
-                                       return p1+(parseInt(p2)+1);
-                                     });
-    new_field.attr('id', new_id);
-    new_field.attr('name', new_name);
-    new_field.val('');
-    $(this).parent().append(new_field);
-  });
-
-
   var makeDirty = function() {
     var id = $(this).parents('.note').attr('data-id');
     $(this).parents('form').addClass('hasUnsavedChanges');
   };
 
-  $(document).on('input', '.note .edit form :input', makeDirty);
-  $(document).on('change', '.note .edit form input[type=file]', makeDirty);
+  $(document).on('input', '.note form :input', makeDirty);
+  $(document).on('change', '.note form input[type=file]', makeDirty);
 });

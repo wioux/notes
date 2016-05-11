@@ -1,7 +1,15 @@
-<%= display_viewport(note) do %>
+<div class="note">
   <span class="title"><%= note.title %></span>
 
   <div class="body">
     <%= raw ::MarkdownHTML.render(note.body || '') %>
   </div>
-<% end %>
+
+  <footer>
+    <div class="tags">
+      <% note.tags.map(&:label).each do |tag| %>
+        <%= tag_link(url_for(f: '.'), tag) %>
+      <% end %>
+    </div>
+  </footer>
+</div>

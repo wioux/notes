@@ -6,8 +6,6 @@ Browser = {
 };
 
 $(document).ready(function() {
-  $("body").empty().append('<div id="app_container">');
-
   var app;
   var pushstate = function(url) {
     url = url || location.pathname;
@@ -16,7 +14,6 @@ $(document).ready(function() {
     window.history.pushState({}, '', url);
   };
 
-  var initialize = true;
   var popstate = function() {
     var f = "";
     (location.search || "?f=").substr(1).split("&").forEach(function(param) {
@@ -25,23 +22,18 @@ $(document).ready(function() {
         f = decodeURIComponent(kv[1]);
     });
 
-    if (f != app.refs.sidebar.state.filter || initialize)
+    if (f != app.refs.sidebar.state.filter)
       app.filter(f, false);
 
     if (location.pathname != "/")
       app.load(location.href, false);
-
-    initialize = false;
   };
 
-  var props = {
-    searchPath: "/notes.json",
-    autoCompletePath: "/autocomplete",
-    onload: pushstate,
-    onfilter: pushstate
-  };
+  var props = $("#app_container *").data("reactProps");
+  props.onload = pushstate;
+  props.onfilter = pushstate;
   app = ReactDOM.render(React.createElement(App, props),
-                        $('#app_container')[0]);
+                        $('#app_container *')[0]);
 
   $(document).on('click', 'a[data-tag]', function(e) {
     if (!e.metaKey) {
@@ -86,7 +78,6 @@ $(document).ready(function() {
   });
 
   window.onpopstate = popstate;
-  popstate();
 
   $(window).bind('beforeunload', function() {
     if (app.hasUnsavedChanges())

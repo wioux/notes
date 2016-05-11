@@ -76,7 +76,7 @@
         margin-top: 4px;
     }
 
-    .tag-links, .attachment-link {
+    .tag-links {
         padding: 3px;
         margin-right: 4px;
         background-color: #ddd;
@@ -91,24 +91,22 @@
     width: 90%;
 }
 
-.note .edit {
-    form {
-        .unsaved-indicator {
-            position: absolute;
-            top: 16px;
-            right: 35px;
-            font-weight: bold;
-        }
-        &:not(.hasUnsavedChanges) .unsaved-indicator {
-            display: none;
-        }
-        &.hasUnsavedChanges .unsaved-indicator {
-            display: inline;
-        }
+.note form {
+    .unsaved-indicator {
+        position: absolute;
+        top: 16px;
+        right: 35px;
+        font-weight: bold;
+    }
+    &:not(.hasUnsavedChanges) .unsaved-indicator {
+        display: none;
+    }
+    &.hasUnsavedChanges .unsaved-indicator {
+        display: inline;
+    }
 
-        .tag-selector span {
-            margin: 2px;
-        }
+    .tag-selector span {
+        margin: 2px;
     }
 }
 

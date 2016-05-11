@@ -3,7 +3,7 @@ var Viewport = React.createClass({
   componentDidMount: function() {
     $('.note .body table').tablesorter();
 
-    $('.note .edit input[name*=tag_list]').autocomplete({
+    $('.note input[name*=tag_list]').autocomplete({
       source: '/tags/autocomplete',
       position: { my: 'left bottom', at: 'left top' },
       delay: 0

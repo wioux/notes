@@ -10,22 +10,6 @@ module NotesHelper
     (links << '</span>').html_safe
   end
 
-  def attachment_link(attachment)
-    content_tag(:span, :class => 'attachment-link') do
-      content_tag(:a, :href => url_for(attachment)){ attachment.file_name }
-    end
-  end
-
-  def attachment_edit(form)
-    if form.object.new_record?
-      content_tag(:div) do
-        form.file_field :uploaded_file, :style => 'margin-top: 8px'
-      end
-    else
-      content_tag(:div){ content_tag :strong, form.object.file_name }
-    end
-  end
-
   def tag_selector_button(note, tag)
     css_class = 'btn btn-default btn-sm'
     css_class << ' active' if note.tagged?(tag)

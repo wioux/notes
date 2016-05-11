@@ -7,7 +7,18 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <%= render 'layouts/sidebar' %>
-  <%= render 'layouts/viewport' %>
+  <div id="app_container">
+    <%= react_component "App", { searchPath: notes_path(format: "json"),
+                                 autoCompletePath: autocomplete_path,
+                                 initialTags: Tag.labels,
+                                 initialFilters: [],
+                                 initialFilter: params[:f],
+                                 initialResults: filter_results,
+                                 initialActive: @note && { id: "notes/#{@note.id}",
+                                                           url: note_path(@note),
+                                                           html: render(@note)     }
+                                 },
+                                 prerender: true %>
+  </div>
 </body>
 </html>

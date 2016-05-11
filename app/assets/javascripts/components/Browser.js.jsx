@@ -2,11 +2,11 @@
 var Sidebar = React.createClass({
   getInitialState: function() {
     return {
-      tags: [],
-      filters: [],
-      filter: "",
-      results: [],
-      active: null
+      tags: this.props.initialTags || [],
+      filters: this.props.initialFilters || [],
+      filter: this.props.initialFilter || "",
+      results: this.props.initialResults || [],
+      active: this.props.initialActive || null
     };
   },
 
