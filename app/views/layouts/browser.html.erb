@@ -16,7 +16,7 @@
                                  initialResults: filter_results,
                                  initialActive: @note && { id: "notes/#{@note.id}",
                                                            url: note_path(@note),
-                                                           html: render(@note)     }
+                                                           html: yield              }
                                },
                                prerender: true %>
   </div>
