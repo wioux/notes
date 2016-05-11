@@ -21,7 +21,11 @@ Note = {
             contentType: false,
             processData: false,
             success: function(resp) {
-              form.removeClass("hasUnsavedChanges");
+              form.removeClass("hasUnsavedChanges")
+                .find("input[type=submit]")
+                .removeClass("btn-warning")
+                .addClass("btn-success");
+
               callback && callback(resp);
             }
         });
@@ -94,6 +98,9 @@ $(document).ready(function() {
   var makeDirty = function() {
     var id = $(this).parents('.note').attr('data-id');
     $(this).parents('form').addClass('hasUnsavedChanges');
+    $(this).parents('form').find('input[type=submit]')
+      .removeClass('btn-success')
+      .addClass('btn-warning');
   };
 
   $(document).on('input', '.note form :input', makeDirty);
