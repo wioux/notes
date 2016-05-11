@@ -9,7 +9,7 @@ html, body, #app_container, #app_container > *, #app, #viewport {
     left: 0px;
 }
 
-#browser {
+#results {
     position: fixed;
     top: 68px;
     left: 0px;
@@ -32,7 +32,7 @@ html, body, #app_container, #app_container > *, #app, #viewport {
 }
 
 @media print {
-    #browser, #filterer {
+    #results, #filterer {
         display: none;
     }
 

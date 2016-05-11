@@ -1,5 +1,5 @@
 
-var Sidebar = React.createClass({
+var Browser = React.createClass({
   getInitialState: function() {
     return {
       tags: this.props.initialTags || [],
@@ -12,6 +12,10 @@ var Sidebar = React.createClass({
 
   onInputChange: function(e) {
     this.setState({ filter: e.target.value });
+  },
+
+  focus: function() {
+    $("input[type=search]", this.refs.filterer).focus().select();
   },
 
   destroy: function(item, ui) {
@@ -31,7 +35,7 @@ var Sidebar = React.createClass({
 
   clearFilter: function(e) {
     e && e.preventDefault();
-    this.filter("", function() { Browser.focus() });
+    this.filter("", this.focus);
   },
 
   refresh: function(e) {
@@ -57,7 +61,7 @@ var Sidebar = React.createClass({
     };
 
     return (
-      <div id="sidebar">
+      <div id="browser">
         <div className="row">
           <div id="filterer" className="col-md-3" ref="filterer">
             <form action={this.props.searchPath} className="filter_mode" style={{position: "relative"}} onSubmit={this.refresh}>
@@ -87,7 +91,7 @@ var Sidebar = React.createClass({
           </div>
         </div>
         <div className="row">
-          <div id="browser" className="col-md-3">
+          <div id="results" className="col-md-3">
             <FilterResults results={this.state.results} selectedId={this.state.active}
                            activate={this.props.activate}
                            destroy={this.destroy} />

@@ -1,4 +1,4 @@
-#browser {
+#results {
     height: 100%;
     overflow: auto;
 
@@ -23,7 +23,7 @@
         }
     }
 }
-#browser li {
+#results li {
     padding-left: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -33,16 +33,16 @@
       color: #000;
     }
 }
-#browser li:first-child {
+#results li:first-child {
         border-top: none;
 }
-#browser li.selected {
+#results li.selected {
     background-color: #99ccff;
 }
-#browser li .preview {
+#results li .preview {
     display: block;
     font-weight: bold;
 }
-#browser li .tag {
+#results li .tag {
     font-size: 0.9em;
 }

@@ -8,9 +8,9 @@ var App = React.createClass({
 
   componentDidMount: function() {
     var self = this;
-    $("input[type=search]", this.refs.sidebar.refs.filterer).autocomplete({
+    $("input[type=search]", this.refs.browser.refs.filterer).autocomplete({
       source: this.props.autoCompletePath,
-      appendTo: this.refs.sidebar.refs.filterer,
+      appendTo: this.refs.browser.refs.filterer,
       delay: 0,
 
       open: function(e, ui) {
@@ -30,7 +30,7 @@ var App = React.createClass({
 
   filter: function(f, callbacks) {
     var cb = callbacks === undefined ? this.props.onfilter : undefined;
-    this.refs.sidebar.filter(f, cb);
+    this.refs.browser.filter(f, cb);
   },
 
   edit: function() {
@@ -53,7 +53,7 @@ var App = React.createClass({
     Note.submit(form, function(resp) {
       R = resp;
       self.load(resp.url);
-      self.refs.sidebar.refresh();
+      self.refs.browser.refresh();
     });
   },
 
@@ -64,7 +64,7 @@ var App = React.createClass({
     var self = this;
     $.get(url, function(html) {
       var id = url.split("?", 2)[0].match(/([^\/]+\/[^\/]+)(\/edit)?$/)[1];
-      self.refs.sidebar.setState({ active : id });
+      self.refs.browser.setState({ active : id });
       self.setState({
         active: {
           id: id,
@@ -90,7 +90,7 @@ var App = React.createClass({
   render: function() {
     return (
       <div id="app">
-        <Sidebar ref="sidebar"
+        <Browser ref="browser"
                  initialTags={this.props.initialTags}
                  initialFilters={this.props.initialFilters}
                  initialFilter={this.props.initialFilter}

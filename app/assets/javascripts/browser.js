@@ -1,16 +1,10 @@
 
-Browser = {
-  focus: function() {
-    $('#filterer input').focus().select();
-  }
-};
-
 $(document).ready(function() {
   var app;
   var pushstate = function(url) {
     url = url || location.pathname;
-    if (app.refs.sidebar.state.filter.match(/\S/))
-      url += "?f="+encodeURIComponent(app.refs.sidebar.state.filter);
+    if (app.refs.browser.state.filter.match(/\S/))
+      url += "?f="+encodeURIComponent(app.refs.browser.state.filter);
     window.history.pushState({}, '', url);
   };
 
@@ -22,7 +16,7 @@ $(document).ready(function() {
         f = decodeURIComponent(kv[1]);
     });
 
-    if (f != app.refs.sidebar.state.filter)
+    if (f != app.refs.browser.state.filter)
       app.filter(f, false);
 
     if (location.pathname != "/")
