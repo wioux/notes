@@ -43,9 +43,9 @@ var App = React.createClass({
 
   save: function() {
     var self = this;
-    var form = $("form", this.refs.viewport.refs.ui);
-    var create = form.attr("id").match(/^new_/);
-    Note.submit(form, function(resp) {
+    var viewport = this.refs.viewport;
+    var create = $("form", viewport.refs.ui).attr("id").match(/^new_/);
+    Note.submit(viewport, function(resp) {
       if (create)
         self.load(resp.url);
       self.refs.browser.refresh();

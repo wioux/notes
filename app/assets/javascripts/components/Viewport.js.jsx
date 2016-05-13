@@ -1,6 +1,8 @@
 
 var Viewport = React.createClass({
   componentDidMount: function() {
+    var self = this;
+
     $('.note .body table').tablesorter();
 
     $('.note input[name*=tag_list]').autocomplete({
@@ -9,7 +11,28 @@ var Viewport = React.createClass({
       delay: 0
     });
 
-    $('.note textarea').focus();
+    if ($(".editor textarea:visible", this.refs.ui)[0]) {
+      var source = $(".editor textarea:visible", this.refs.ui).val();
+      $(".editor textarea:visible", this.refs.ui).css("display", "none");
+
+      var editor = new ProseMirror({
+        place: $(".editor", this.refs.ui)[0],
+        doc: source, docFormat: "markdown",
+        menuBar: true
+      });
+
+      editor.on("change", function() {
+        if (editor.history.undoDepth)
+          Note.makeDirty();
+        else
+          Note.makeClean();
+
+      });
+
+      editor.focus();
+
+      this.editor = editor
+    }
 
     Note.renderAbc();
   },

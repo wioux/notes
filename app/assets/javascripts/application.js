@@ -71,13 +71,6 @@ $(document).ready(function() {
       }
       break;
 
-    case 'i':
-      if (!e.ctrlKey && !e.altKey && e.metaKey) {
-        e.preventDefault();
-        Viewer.inspect();
-      }
-      break;
-
     case 'e':
       if (!e.ctrlKey && !e.altKey && e.metaKey) {
         e.preventDefault();

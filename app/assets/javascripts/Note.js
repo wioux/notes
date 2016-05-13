@@ -1,6 +1,11 @@
 
 Note = {
-  submit: function(form, callback) {
+  submit: function(viewport, callback) {
+    var form = $("form", viewport.refs.ui);
+    var editor = viewport.editor;
+
+    form.find("textarea").val(editor.getContent("markdown"));
+
     var date = '';
     var now = new Date();
     date += 1900 + now.getYear() + '/';
@@ -21,11 +26,7 @@ Note = {
             contentType: false,
             processData: false,
             success: function(resp) {
-              form.removeClass("hasUnsavedChanges")
-                .find("input[type=submit]")
-                .removeClass("btn-warning")
-                .addClass("btn-success");
-
+              Note.makeClean();
               callback && callback(resp);
             }
         });
@@ -65,6 +66,22 @@ Note = {
         });
         $(midi_link).prepend(player, '<br />');
     });
+  },
+
+  makeDirty: function() {
+    $(".note form:not(.hasUnsavedChanges)").first()
+      .addClass('hasUnsavedChanges')
+      .find('input[type=submit]')
+      .removeClass('btn-success')
+      .addClass('btn-warning');
+  },
+
+  makeClean: function() {
+    $(".note form.hasUnsavedChanges").first()
+      .removeClass('hasUnsavedChanges')
+      .find('input[type=submit]')
+      .removeClass('btn-warning')
+      .addClass('btn-success');
   }
 };
 
@@ -95,14 +112,6 @@ $(document).ready(function() {
     $(input).trigger('input');
   });
 
-  var makeDirty = function() {
-    var id = $(this).parents('.note').attr('data-id');
-    $(this).parents('form').addClass('hasUnsavedChanges');
-    $(this).parents('form').find('input[type=submit]')
-      .removeClass('btn-success')
-      .addClass('btn-warning');
-  };
-
-  $(document).on('input', '.note form :input', makeDirty);
-  $(document).on('change', '.note form input[type=file]', makeDirty);
+  $(document).on('input', '.note form :input', Note.makeDirty);
+  $(document).on('change', '.note form input[type=file]', Note.makeDirty);
 });

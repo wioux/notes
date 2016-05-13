@@ -92,6 +92,34 @@
 }
 
 .note form {
+    *, *:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+    .editor {
+        textarea {
+            position: absolute;
+            top: 37px;
+            bottom: 36px;
+            width: 90%;
+        }
+
+        .ProseMirror {
+            position: absolute;
+            top: 37px;
+            bottom: 36px;
+            width: 90%;
+        }
+
+        .ProseMirror-content {
+            position: absolute;
+            top: 23px;
+            bottom: 0px;
+            overflow-y: auto;
+        }
+    }
+
     .tag-selector span {
         margin: 2px;
     }
