@@ -82,7 +82,7 @@ var Browser = React.createClass({
                   Tags <span className="caret"></span>
                 </span>
                 <ul id="filter-tags-dropdown" className="dropdown-menu" role="menu">
-                  {this.state.tags.map(tag)};
+                  {this.state.tags.map(tag)}
                 </ul>
               
                {this.state.filters.map(savedFilter)}
