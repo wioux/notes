@@ -8,6 +8,7 @@ gem 'rack-mini-profiler'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
+gem 'pg'
 
 gem 'json'
 
