@@ -4671,7 +4671,20 @@ _model.LinkMark.register("command", "unset", {
 _model.LinkMark.register("command", "set", {
   derive: {
     inverseSelect: true,
-    params: [{ label: "Target", attr: "href" }, { label: "Title", attr: "title" }]
+    params: [
+      { label: "Target", attr: "href",
+        prefill: function(pm) {
+          var t = _format.toText(pm.doc.cut(pm.selection.from, pm.selection.to));
+          if (t.match(/^\w+:\/\//))
+            return t;
+        }},
+      { label: "Title", attr: "title",
+        prefill: function(pm) {
+          var t = _format.toText(pm.doc.cut(pm.selection.from, pm.selection.to));
+          if (!t.match(/^\w+:\/\//))
+            return t;
+        }}
+    ]
   },
   label: "Add link",
   menu: { group: "inline", rank: 30, display: linkIcon }
@@ -4926,6 +4939,7 @@ _model.HorizontalRule.register("command", "insert", {
   keys: ["Mod-Shift--"],
   menu: { group: "insert", rank: 70, display: { type: "label", label: "Horizontal rule" } }
 });
+
 },{"../format":21,"../model":34,"./command":5}],17:[function(require,module,exports){
 "use strict";
 
