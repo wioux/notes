@@ -2,24 +2,25 @@
   <%= form_for(note) do |f| %>
     <%= f.hidden_field :date %>
 
-    <div style="position: absolute; top: 4px; width: 90%">
-      <%= f.text_field :title, :class => 'form-control', :style => 'width: 100%; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px' %>
+    <div class="title">
+      <%= f.text_field :title, "class": "form-control", autocomplete: "off" %>
     </div>
 
     <div class="editor">
-      <%= f.text_area :body, :class => 'form-control', :style => 'border-radius: 0px; resize: none', autofocus: true, :autocomplete => 'off' %>
+      <%= f.text_area :body, "class": "form-control", autofocus: true %>
     </div>
 
-    <div style="position: absolute; bottom: 2px; width: 90%">
+    <div class="tags">
       <div class="input-group">
         <div class="input-group-btn">
-          <div class="btn btn-default" data-toggle="modal" data-target="form:visible .tag-selector" style="border-top: 0px; border-top-left-radius: 0px; border-top-right-radius: 0px; padding-top: 7px;">Tags</div>
+          <div class="btn btn-default" data-toggle="modal"
+               data-target="form:visible .tag-selector">Tags</div>
         </div>
 
-        <%= f.text_field :tag_list, :class => 'form-control', :style => 'border-top: 0px; border-top-left-radius: 0px; border-top-right-radius: 0px; width: 100%', :autocomplete => 'off' %>
+        <%= f.text_field :tag_list, "class": "form-control", autocomplete: "off" %>
 
         <div class="input-group-btn">
-          <input type="submit" value="Save" class="btn btn-default btn-success" style="border-top: 0px; border-top-left-radius: 0px; border-top-right-radius: 0px; padding-top: 7px;" />
+          <input type="submit" value="Save" class="btn btn-default btn-success" />
         </div>
       </div>
     </div>

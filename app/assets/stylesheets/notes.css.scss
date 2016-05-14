@@ -97,12 +97,54 @@
         box-shadow: none;
     }
 
+    .title {
+        position: absolute;
+        top: 4px;
+        width: 90%;
+
+        input {
+            width: 100%;
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+        }
+    }
+
+    .tags {
+        position: absolute;
+        bottom: 2px;
+        width: 90%;
+
+        .input-group-btn:first-child .btn {
+            border-top: 0px;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+            padding-top: 7px;
+        }
+
+        input {
+            width: 100%;
+            border-top: 0px;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+        }
+
+        .input-group-btn:last-child .btn {
+            border-top: 0px;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+            padding-top: 7px;
+        }
+    }
+
     .editor {
         textarea {
             position: absolute;
             top: 37px;
             bottom: 36px;
             width: 90%;
+
+            border-radius: 0px;
+            resize: none;
         }
 
         .ProseMirror {
