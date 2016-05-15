@@ -7335,7 +7335,7 @@ def(_model.Image, function (state, node) {
 });
 
 def(_model.HardBreak, function (state) {
-  return state.write("\\\n");
+  return state.write("  \n");
 });
 
 def(_model.Text, function (state, node) {
