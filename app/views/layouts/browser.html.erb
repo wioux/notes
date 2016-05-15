@@ -10,7 +10,7 @@
   <div id="app_container">
     <%= react_component "App", { searchPath: notes_path,
                                  autoCompletePath: autocomplete_path,
-                                 initialTags: Tag.labels,
+                                 initialTags: current_user.tags.labels,
                                  initialFilters: [],
                                  initialFilter: params[:f],
                                  initialResults: filter_results,

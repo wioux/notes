@@ -9,10 +9,13 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  original_date :datetime
+#  user_id       :integer          not null
 #
 
 class Note < ActiveRecord::Base
   attr_accessible :body, :date, :title, :tag_list
+
+  belongs_to :user
 
   include Note::Versions
   include Note::Tags

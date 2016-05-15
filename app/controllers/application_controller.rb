@@ -3,6 +3,9 @@ class ApplicationController < ActionController::Base
 
   before_filter :logged_in?, :except => :login
 
+  attr_reader :current_user
+  helper_method :current_user
+
   def logged_in?
     if session[:user_id].blank?
       render "application/welcome", layout: "logged_out", locals: { user: User.new }

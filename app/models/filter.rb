@@ -1,7 +1,8 @@
 class Filter
-  attr_reader :tags, :strings
+  attr_reader :user, :tags, :strings
 
-  def initialize(string)
+  def initialize(user, string)
+    @user = user
     @string = string
 
     @tags = []
@@ -21,7 +22,7 @@ class Filter
 
   def scope
     if @string.blank?
-      scope = Note.preload(:tags)
+      scope = user.notes.preload(:tags)
     else
       ids = []
 
@@ -34,7 +35,7 @@ class Filter
         ids.concat attachment_matches(string).pluck(:note_id)
       end
 
-      scope = Note.preload(:tags).where(:id => ids)
+      scope = user.notes.preload(:tags).where(id: ids)
     end
 
     scope.order('notes.original_date DESC')
@@ -47,11 +48,11 @@ class Filter
   private
 
   def note_matches(term)
-    Note.where('title LIKE ? or body LIKE ?', "%#{term}%", "%#{term}%")
+    user.notes.where('title LIKE ? or body LIKE ?', "%#{term}%", "%#{term}%")
   end
 
   def tag_matches(term)
-    Tag.where('label = ? OR label LIKE ?', term, "#{term}:%")
+    user.tags.where('label = ? OR label LIKE ?', term, "#{term}:%")
   end
 
   def attachment_matches(term)

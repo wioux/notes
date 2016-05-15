@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: notes
+#
+#  id            :integer          not null, primary key
+#  title         :string(255)
+#  body          :text
+#  date          :datetime
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  original_date :datetime
+#  user_id       :integer          not null
+#
+
 require 'spec_helper'
 
 RSpec.describe Note do

@@ -8,7 +8,7 @@ class NotesController < ApplicationController
       end
       format.json do
         render json: { results: filter_results,
-                       tags: Tag.labels,
+                       tags: current_user.tags.labels,
                        saved_filters: SavedFilter.all }
       end
     end
@@ -102,7 +102,7 @@ class NotesController < ApplicationController
   def filter_results
     @filter_results ||=
       begin
-        results = Filter.new(params[:f]).notes.as_json(
+        results = Filter.new(current_user, params[:f]).notes.as_json(
           only: :id, methods: :preview,
           include: {
             tags: { only: :id, methods: :short_label }

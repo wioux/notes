@@ -30,7 +30,7 @@
         <div class="modal-content">
           <div class="modal-header"><h3>Tags</h3></div>
           <div class="modal-body">
-            <% Tag.labels.each do |tag| %>
+            <% current_user.tags.labels.each do |tag| %>
               <%= tag_selector_button(note, tag) %>
             <% end %>
           </div>

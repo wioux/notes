@@ -13,6 +13,9 @@ class User < ActiveRecord::Base
   attr_accessor :password
   before_save :compute_password_digest, :unless => proc{ |u| u.password.blank? }
 
+  has_many :notes
+  has_many :tags, through: :notes
+
   def self.authenticate(name, password)
     find_by_login_name(name).try(:verify, password)
   end

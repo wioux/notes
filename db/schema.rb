@@ -11,55 +11,56 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150904064124) do
+ActiveRecord::Schema.define(version: 20160515044303) do
 
-  create_table "attachments", force: true do |t|
-    t.integer  "note_id",      null: false
-    t.string   "location",     null: false
-    t.string   "file_name",    null: false
+  create_table "attachments", force: :cascade do |t|
+    t.integer  "note_id",                  null: false
+    t.string   "location",     limit: 255, null: false
+    t.string   "file_name",    limit: 255, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "content_type"
+    t.string   "content_type", limit: 255
   end
 
-  create_table "note_versions", force: true do |t|
-    t.string   "title",      default: "", null: false
-    t.text     "body",       default: "", null: false
+  create_table "note_versions", force: :cascade do |t|
+    t.string   "title",      limit: 255, default: "", null: false
+    t.text     "body",                   default: "", null: false
     t.datetime "date"
-    t.string   "tag_list"
-    t.integer  "note_id",                 null: false
+    t.string   "tag_list",   limit: 255
+    t.integer  "note_id",                             null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "notes", force: true do |t|
-    t.string   "title"
+  create_table "notes", force: :cascade do |t|
+    t.string   "title",         limit: 255
     t.text     "body"
     t.datetime "date"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.datetime "original_date"
+    t.integer  "user_id",                   null: false
   end
 
-  create_table "saved_filters", force: true do |t|
-    t.string   "name",       null: false
-    t.string   "value",      null: false
+  create_table "saved_filters", force: :cascade do |t|
+    t.string   "name",       limit: 255, null: false
+    t.string   "value",      limit: 255, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "tags", force: true do |t|
-    t.string   "label",      null: false
-    t.integer  "note_id",    null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "tags", force: :cascade do |t|
+    t.string   "label",      limit: 255, null: false
+    t.integer  "note_id",                null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
-  create_table "users", force: true do |t|
-    t.string   "login_name",      null: false
-    t.string   "password_digest", null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+  create_table "users", force: :cascade do |t|
+    t.string   "login_name",      limit: 255, null: false
+    t.string   "password_digest", limit: 255, null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
 end
