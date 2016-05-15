@@ -1,4 +1,16 @@
-<%= form_tag('/login', :method => 'post', :class => 'form-horizontal') do %>
-  <input type="password" class="input-xxlarge" name="password" />
-  <input type="submit" value="Log In" />
+
+<%= form_for(user, url: login_path, method: "post", html: { "class": "form-horizontal" }) do |f| %>
+  <% if user.errors.any? %>
+    <ul>
+    <% user.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  <% end %>
+
+  <%= f.text_field :login_name, placeholder: "Username", "class": "input-xxlarge", autofocus: user.login_name.blank? %>
+
+  <%= f.password_field :password, placeholder: "Password", "class": "input-xxlarge", autofocus: user.login_name.present?  %>
+
+  <%= f.submit "Log In" %>
 <% end %>

@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   def logged_in?
     if session[:user_id].blank?
-      render 'application/welcome', :layout => 'logged_out'
+      render "application/welcome", layout: "logged_out", locals: { user: User.new }
       return false
     else
       @current_user = User.find(session[:user_id])
@@ -13,11 +13,14 @@ class ApplicationController < ActionController::Base
   end
 
   def login
-    user = User.first
-    if user.verify(params[:password])
+    user = User.find_by!(login_name: params[:user][:login_name])
+    if user.verify(params[:user][:password])
       session[:user_id] = user.id
+      redirect_to "/"
+    else
+      user.errors.add("password", "is incorrect")
+      render "application/welcome", layout: "logged_out", locals: { user: user }
     end
-    redirect_to '/'
   end
 
   def logout
