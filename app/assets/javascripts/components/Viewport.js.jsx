@@ -21,12 +21,11 @@ var Viewport = React.createClass({
         menuBar: true
       });
 
-      editor.on("change", function() {
+      editor.on("transform", function() {
         if (editor.history.undoDepth)
           Note.makeDirty();
         else
           Note.makeClean();
-
       });
 
       editor.focus();
