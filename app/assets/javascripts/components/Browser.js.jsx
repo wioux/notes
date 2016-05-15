@@ -35,12 +35,17 @@ var Browser = React.createClass({
 
   clearFilter: function(e) {
     e && e.preventDefault();
-    this.filter("", this.focus);
+
+    var self = this;
+    this.filter("", function() {
+      self.props.search();
+      self.focus();
+    });
   },
 
   refresh: function(e) {
     e && e.preventDefault();
-    this.filter(this.state.filter);
+    this.filter(this.state.filter, this.props.search);
   },
 
   filter: function(f, callback) {

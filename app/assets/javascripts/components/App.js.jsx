@@ -96,6 +96,7 @@ var App = React.createClass({
                  initialResults={this.props.initialResults}
                  initialActive={this.state.active.id}
                  searchPath={this.props.searchPath}
+                 search={this.props.onfilter}
                  activate={this.load}
                  destroy={this.destroy} />
         <Viewport ref="viewport"
