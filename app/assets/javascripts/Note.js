@@ -23,6 +23,7 @@ Note = {
             method: form.attr('method'),
             data: formData,
             cache: false,
+            dataType: "json",
             contentType: false,
             processData: false,
             success: function(resp) {
