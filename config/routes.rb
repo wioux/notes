@@ -12,7 +12,6 @@ Notes::Application.routes.draw do
 
   resources :notes do
     collection do
-      patch 'preview'
       get 'filter'
       get 'browse'
 

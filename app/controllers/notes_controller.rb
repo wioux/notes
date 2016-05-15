@@ -88,11 +88,6 @@ class NotesController < ApplicationController
     render :json => matches.flatten
   end
 
-  def preview
-    @note = Note.new(params[:note])
-    render @note
-  end
-
   def tune_widget
     render :layout => 'basic'
   end
