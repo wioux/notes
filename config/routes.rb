@@ -16,8 +16,4 @@ Notes::Application.routes.draw do
       get 'tune_widget'
     end
   end
-
-  resources :attachments, :only => :show
-
-  resources :saved_filters, only: [:create, :destroy]
 end
