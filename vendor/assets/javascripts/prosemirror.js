@@ -4674,18 +4674,8 @@ _model.LinkMark.register("command", "set", {
   derive: {
     inverseSelect: true,
     params: [
-      { label: "Target", attr: "href",
-        prefill: function(pm) {
-          var t = _format.toText(pm.doc.cut(pm.selection.from, pm.selection.to));
-          if (t.match(/^\w+:\/\//))
-            return t;
-        }},
-      { label: "Title", attr: "title",
-        prefill: function(pm) {
-          var t = _format.toText(pm.doc.cut(pm.selection.from, pm.selection.to));
-          if (!t.match(/^\w+:\/\//))
-            return t;
-        }}
+      { label: "Target", attr: "href" },
+      { label: "Title", attr: "title" }
     ]
   },
   label: "Add link",
@@ -20746,8 +20736,10 @@ module.exports=/[\0-\uD7FF\uDC00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-
 },{}],122:[function(require,module,exports){
 
 window.ProseMirror = require("prosemirror").ProseMirror;
+
 require("prosemirror/dist/markdown");
 require("prosemirror/dist/menu/menubar");
+
 
 },{"prosemirror":11,"prosemirror/dist/markdown":26,"prosemirror/dist/menu/menubar":30}],123:[function(require,module,exports){
 (function (global){
