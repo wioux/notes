@@ -35,6 +35,10 @@ $(document).ready(function() {
   var props = $("#app_container *").data("reactProps");
   props.onload = pushState;
   props.onfilter = pushState;
+  props.ondestroy = function(url) {
+    if (url.split("?", 2)[0] == location.pathname)
+      pushState("/notes")
+  };
   window.onpopstate = popState;
 
   window.app = ReactDOM.render(React.createElement(App, props),

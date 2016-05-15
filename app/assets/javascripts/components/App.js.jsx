@@ -79,7 +79,10 @@ var App = React.createClass({
       method: "post",
       data: { "_method": "delete" },
       url: url,
-      success: callback
+      success: function() {
+        self.props.ondestroy(url);
+        callback && callback();
+      }
     });
   },
 
