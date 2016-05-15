@@ -1,5 +1,5 @@
 class Filter
-  attr_reader :user, :tags, :strings
+  attr_reader :user, :tags, :strings, :excluded_tags
 
   def initialize(user, string)
     @user = user
@@ -7,12 +7,16 @@ class Filter
 
     @tags = []
     @strings = []
+    @excluded_tags = []
     until string.blank?
       if string =~ /\A\s+/
         string = $'
       elsif string =~ /\A\.(\S+)/
         tag, string = $1, $'
         @tags << tag
+      elsif string =~ /\A-\.(\S+)/
+        tag, string = $1, $'
+        @excluded_tags << tag
       elsif string =~ /\A"([^"]+)"/ || string =~ /\A(\S+)/
         search, string = $1, $'
         @strings << search
@@ -21,9 +25,9 @@ class Filter
   end
 
   def scope
-    if @string.blank?
-      scope = user.notes.preload(:tags)
-    else
+    scope = user.notes
+
+    if @tags.present? || @strings.present?
       ids = []
 
       @tags.each do |tag|
@@ -35,10 +39,20 @@ class Filter
         ids.concat attachment_matches(string).pluck(:note_id)
       end
 
-      scope = user.notes.preload(:tags).where(id: ids)
+      scope = scope.where(id: ids)
     end
 
-    scope.order('notes.original_date DESC')
+    if excluded_tags.present?
+      excludes = excluded_tags.map do |t|
+        user.notes.joins(:tags).tagged(t).ids
+      end.flatten
+
+      if excludes.present?
+        scope = scope.where("notes.id NOT IN (?)", excludes)
+      end
+    end
+
+    scope.preload(:tags).order('notes.original_date DESC')
   end
 
   def notes
