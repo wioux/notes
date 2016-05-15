@@ -15,17 +15,17 @@ class NotesController < ApplicationController
   end
 
   def show
-    @note = Note.find(params[:id])
+    @note = current_user.notes.find(params[:id])
     render layout: (request.xhr? ? nil : "browser")
   end
 
   def edit
-    @note = Note.find(params[:id])
+    @note = current_user.notes.find(params[:id])
     render layout: (request.xhr? ? nil : "browser")
   end
 
   def update
-    @note = Note.find(params[:id])
+    @note = current_user.notes.find(params[:id])
     if @note.update_attributes(params[:note])
       respond_to do |format|
         format.html{ redirect_to @note }
@@ -41,14 +41,14 @@ class NotesController < ApplicationController
   end
 
   def new
-    @note = Note.new
+    @note = current_user.notes.new
     render layout: (request.xhr? ? nil : "browser")
   end
 
   def create
     params[:note][:date] = Time.utc(*params[:note][:date].split('/').map(&:to_i))
 
-    @note = Note.new(params[:note])
+    @note = current_user.notes.new(params[:note])
 
     if @note.save
       respond_to do |format|
@@ -65,7 +65,7 @@ class NotesController < ApplicationController
   end
 
   def destroy
-    @note = Note.find(params[:id])
+    @note = current_user.notes.find(params[:id])
     @note.transaction do
       @note.save_version!
       @note.destroy
@@ -76,11 +76,11 @@ class NotesController < ApplicationController
   def autocomplete
     term = params[:term]
     if term[0] == '.'
-      matches = Tag.autocomplete(term[1..-1]).map do |tag|
+      matches = current_user.tags.autocomplete(term[1..-1]).map do |tag|
         {:label => '.'+tag, :value => '.'+tag}
       end
     else
-      notes = Note.where('notes.title like ?', "%#{params[:term]}%")
+      notes = current_user.notes.where('notes.title like ?', "%#{params[:term]}%")
       matches = notes.pluck(:title).uniq.sort.map do |title|
         {:label => title, :value => title.inspect}
       end
