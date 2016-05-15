@@ -4,7 +4,7 @@ Note = {
     var form = $("form", viewport.refs.ui);
     var editor = viewport.editor;
 
-    form.find("textarea").val(editor.getContent("markdown"));
+    form.find("textarea").val(editor.getContent("markdown", { hardBreak: "  \n" }));
 
     var date = '';
     var now = new Date();

@@ -3689,12 +3689,13 @@ var ProseMirror = exports.ProseMirror = function () {
     // :: (?string) → any
     // Get the editor's content in a given format. When `format` is not
     // given, a `Node` is returned. If it is given, it should be an
-    // existing [serialization format](#format).
+    // existing [serialization format](#format). Options to the serializer
+  // may be given as a second argument.
 
   }, {
     key: "getContent",
-    value: function getContent(format) {
-      return format ? (0, _format.serializeTo)(this.doc, format) : this.doc;
+    value: function getContent(format, options) {
+      return format ? (0, _format.serializeTo)(this.doc, format, options) : this.doc;
     }
   }, {
     key: "setDocInner",
@@ -4199,6 +4200,7 @@ var Operation = function Operation(pm) {
   this.mappings = [];
   this.composing = null;
 };
+
 },{"../dom":1,"../format":21,"../util/event":52,"../util/map":53,"../util/sortedinsert":55,"./css":6,"./dompos":8,"./draw":9,"./history":10,"./input":12,"./options":14,"./range":15,"./selection":17,"./transform":18,"browserkeymap":56}],14:[function(require,module,exports){
 "use strict";
 
@@ -7033,7 +7035,10 @@ var MarkdownSerializer = function () {
     this.inTightList = false;
     // :: Object
     // The options passed to the serializer.
-    this.options = options;
+    //
+    // **`hardBreak`**: ?string
+    //   : Markdown to use for hard line breaks. Defaults to an escaped newline.
+    this.options = Object.assign({ hardBreak: "\\\n" }, options);
   }
 
   _createClass(MarkdownSerializer, [{
@@ -7335,7 +7340,7 @@ def(_model.Image, function (state, node) {
 });
 
 def(_model.HardBreak, function (state) {
-  return state.write("  \n");
+  return state.write(state.options.hardBreak);
 });
 
 def(_model.Text, function (state, node) {
@@ -7356,6 +7361,7 @@ _model.LinkMark.prototype.closeMarkdown = function (state, mark) {
 };
 
 _model.CodeMark.prototype.openMarkdown = _model.CodeMark.prototype.closeMarkdown = "`";
+
 },{"../format":21,"../model":34}],28:[function(require,module,exports){
 "use strict";
 
