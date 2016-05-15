@@ -52,6 +52,10 @@
             margin-bottom: 0px;
         }
 
+        p + ul, p + ol {
+            margin-top: -10px;
+        }
+
         table {
             width: auto;
         }
