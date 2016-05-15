@@ -3,7 +3,8 @@
     <%= f.hidden_field :date %>
 
     <div class="title">
-      <%= f.text_field :title, "class": "form-control", autocomplete: "off" %>
+      <%= f.text_field :title, "class": "form-control", autocomplete: "off",
+          placeholder: f.object.persisted? ? "Add a title" : "A new note" %>
     </div>
 
     <div class="editor">
@@ -17,7 +18,8 @@
                data-target="form:visible .tag-selector">Tags</div>
         </div>
 
-        <%= f.text_field :tag_list, "class": "form-control", autocomplete: "off" %>
+        <%= f.text_field :tag_list, "class": "form-control", autocomplete: "off",
+            placeholder: "Add tags (separate with commas)" %>
 
         <div class="input-group-btn">
           <input type="submit" value="Save" class="btn btn-default btn-success" />

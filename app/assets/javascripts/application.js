@@ -57,7 +57,7 @@ $(document).ready(function() {
     app.save();
   });
 
-  $(document).on("click", "#item_actions a", function(e) {
+  $(document).on("click", "#controls a:not([data-logout])", function(e) {
     e.preventDefault();
     app.load(this.href);
   });
