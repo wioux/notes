@@ -8,17 +8,17 @@
 </head>
 <body>
   <div id="app_container">
-    <%= react_component "App", { searchPath: notes_path,
-                                 autoCompletePath: autocomplete_path,
-                                 initialTags: current_user.tags.labels,
-                                 initialFilters: [],
-                                 initialFilter: params[:f],
-                                 initialResults: filter_results,
-                                 initialActive: { id: @note ? "notes/#{@note.id}" : "notes",
-                                                  url: request.fullpath,
-                                                  html: yield              }
-                               },
-                               prerender: true %>
+    <%= react_component "App", {
+          searchPath: notes_path,
+          autoCompletePath: autocomplete_path,
+          initialTags: current_user.tags.labels,
+          initialFilters: [],
+          initialFilter: params[:f],
+          initialResults: filter_results,
+          initialActive: { id: @note ? "notes/#{@note.id}" : "notes",
+                           url: request.fullpath,
+                           html: yield              }
+        }, prerender: true %>
   </div>
 </body>
 </html>
