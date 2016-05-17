@@ -61,7 +61,7 @@ $(document).ready(function() {
     app.save();
   });
 
-  $(document).on("click", "#controls a:not([data-logout])", function(e) {
+  $(document).on("click", "#controls .navigate a", function(e) {
     e.preventDefault();
     app.load(this.href);
   });
