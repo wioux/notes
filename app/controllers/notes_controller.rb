@@ -24,9 +24,17 @@ class NotesController < ApplicationController
     render layout: (request.xhr? ? nil : "browser")
   end
 
-  def update
-    @note = current_user.notes.find(params[:id])
-    if @note.update_attributes(params[:note])
+  def new
+    @note = notes_scope.new
+    render layout: (request.xhr? ? nil : "browser")
+  end
+
+  def create
+    params[:note][:date] = Time.utc(*params[:note][:date].split('/').map(&:to_i))
+
+    @note = current_user.notes.new(params[:note])
+
+    if @note.save
       respond_to do |format|
         format.html{ redirect_to note_path(@note, f: params[:f]) }
         format.json do
@@ -40,17 +48,9 @@ class NotesController < ApplicationController
     end
   end
 
-  def new
-    @note = notes_scope.new
-    render layout: (request.xhr? ? nil : "browser")
-  end
-
-  def create
-    params[:note][:date] = Time.utc(*params[:note][:date].split('/').map(&:to_i))
-
-    @note = current_user.notes.new(params[:note])
-
-    if @note.save
+  def update
+    @note = current_user.notes.find(params[:id])
+    if @note.update_attributes(params[:note])
       respond_to do |format|
         format.html{ redirect_to note_path(@note, f: params[:f]) }
         format.json do
