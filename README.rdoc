@@ -1,7 +1,0 @@
-the way the exitWarning is cancelled on note save is weird?
-
-add like #formatted_date= to note, don't break apart the param in notes_controller.rb
-
-add like #set_filter to notes_controller.rb, call it at top of index
-
-what is NotesController#show ?
