@@ -59,7 +59,7 @@ var App = React.createClass({
     var self = this;
     $.get(url, function(html) {
       var id = url.split("?", 2)[0].match(/([^\/]+\/[^\/]+)(\/edit)?$/);
-      id = id ? id[1] : url.split("?", 2)[0].match(/[^\/]+$/)[0];
+      id = id ? id[1] : url.split("?", 2)[0].match(/[^\/]*$/)[0];
       self.refs.browser.setState({ active : id });
       self.setState({
         active: {
