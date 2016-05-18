@@ -1,5 +1,5 @@
 
-<%= form_for(user, url: login_path, method: "post", html: { "class": "form-horizontal" }) do |f| %>
+<%= form_for(user, url: sessions_path, method: "post", html: { "class": "form-horizontal" }) do |f| %>
   <% if user.errors.any? %>
     <ul>
     <% user.errors.full_messages.each do |msg| %>

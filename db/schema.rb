@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160515044303) do
+ActiveRecord::Schema.define(version: 20160517045653) do
 
   create_table "attachments", force: :cascade do |t|
     t.integer  "note_id",                  null: false
@@ -36,10 +36,11 @@ ActiveRecord::Schema.define(version: 20160515044303) do
     t.string   "title",         limit: 255
     t.text     "body"
     t.datetime "date"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
     t.datetime "original_date"
-    t.integer  "user_id",                   null: false
+    t.integer  "user_id",                                   null: false
+    t.boolean  "public",                    default: false, null: false
   end
 
   create_table "saved_filters", force: :cascade do |t|

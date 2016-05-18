@@ -22,7 +22,7 @@ class Note
     end
 
     def save_version
-      @version.try(:save!) if changed?
+      @version.try(:save!) if title_changed? || body_changed?
     end
 
     def save_original_date

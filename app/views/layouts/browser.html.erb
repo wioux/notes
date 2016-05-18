@@ -11,7 +11,7 @@
     <%= react_component "App", {
           searchPath: notes_path,
           autoCompletePath: autocomplete_path,
-          initialTags: current_user.tags.labels,
+          initialTags: tag_labels,
           initialFilters: [],
           initialFilter: params[:f],
           initialResults: filter_results,

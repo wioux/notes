@@ -42,13 +42,20 @@ html, body, #app_container, #app_container > *, #app, #viewport {
       font-size: 24px;
   }
 
-  a.glyphicon {
+  a.glyphicon, button .glyphicon {
       text-decoration: none;
       color: #bbb;
 
       &:hover {
           color: #888;
       }
+  }
+
+  button {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background-color: #fff;
   }
 }
 

@@ -13,7 +13,7 @@
 #
 
 class Note < ActiveRecord::Base
-  attr_accessible :body, :date, :title, :tag_list
+  attr_accessible :body, :date, :public, :title, :tag_list
 
   belongs_to :user
 

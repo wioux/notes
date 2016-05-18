@@ -1,7 +1,7 @@
 class Filter
   attr_reader :user, :tags, :strings, :excluded_tags
 
-  def initialize(user, string)
+  def initialize(string, user: nil)
     @user = user
     @string = string
 
@@ -25,7 +25,7 @@ class Filter
   end
 
   def scope
-    scope = user.notes
+    scope = notes_scope
 
     if @tags.present? || @strings.present?
       ids = []
@@ -44,7 +44,7 @@ class Filter
 
     if excluded_tags.present?
       excludes = excluded_tags.map do |t|
-        user.notes.joins(:tags).tagged(t).ids
+        notes_scope.joins(:tags).tagged(t).ids
       end.flatten
 
       if excludes.present?
@@ -62,14 +62,31 @@ class Filter
   private
 
   def note_matches(term)
-    user.notes.where('title LIKE ? or body LIKE ?', "%#{term}%", "%#{term}%")
+    notes_scope.where('title LIKE ? or body LIKE ?', "%#{term}%", "%#{term}%")
   end
 
   def tag_matches(term)
-    user.tags.where('label = ? OR label LIKE ?', term, "#{term}:%")
+    tags_scope.where('label = ? OR label LIKE ?', term, "#{term}:%")
   end
 
   def attachment_matches(term)
     Attachment.where('file_name LIKE ?', "%#{term}%")
+  end
+
+  def notes_scope
+    if user
+      Note.where("notes.user_id = ? OR notes.public = ?", user.id, true)
+    else
+      Note.where(public: true)
+    end
+  end
+
+  def tags_scope
+    if user
+      Tag.joins(:note).where("notes.public = ? OR notes.user_id = ?",
+                             true, user.id)
+    else
+      Tag.joins(:note).where(notes: { public: true })
+    end
   end
 end

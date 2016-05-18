@@ -13,8 +13,16 @@
     </div>
   </footer>
 
-  <%= controls do %>
+  <%= controls(note.user == current_user) do %>
     <a href="<%= edit_note_path(note, f: params[:f]) %>" title="Edit this item"
        class="glyphicon glyphicon-pencil"></a>
+
+    <%= form_for(note, html: { id: "toggle_published_note_#{note.id}" }) do |f| %>
+      <%= hidden_field_tag :f, params[:f] %>
+      <%= f.hidden_field :public, value: !note.public? %>
+      <button type="submit" form="<%= f.options[:html][:id] %>" title="<%= note.public ? "Un-publish" : "Publish" %> this note">
+        <span class="glyphicon glyphicon-eye-<%= note.public ? "close" : "open" %>"></span>
+      </button>
+    <% end %>
   <% end %>
 </div>

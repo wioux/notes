@@ -8,24 +8,24 @@ class NotesController < ApplicationController
       end
       format.json do
         render json: { results: filter_results,
-                       tags: current_user.tags.labels,
+                       tags: tags_scope.labels,
                        saved_filters: SavedFilter.all }
       end
     end
   end
 
   def show
-    @note = current_user.notes.find(params[:id])
+    @note = notes_scope.find(params[:id])
     render layout: (request.xhr? ? nil : "browser")
   end
 
   def edit
-    @note = current_user.notes.find(params[:id])
+    @note = notes_scope.find(params[:id])
     render layout: (request.xhr? ? nil : "browser")
   end
 
   def update
-    @note = current_user.notes.find(params[:id])
+    @note = notes_scope.find(params[:id])
     if @note.update_attributes(params[:note])
       respond_to do |format|
         format.html{ redirect_to @note }
@@ -41,14 +41,14 @@ class NotesController < ApplicationController
   end
 
   def new
-    @note = current_user.notes.new
+    @note = notes_scope.new
     render layout: (request.xhr? ? nil : "browser")
   end
 
   def create
     params[:note][:date] = Time.utc(*params[:note][:date].split('/').map(&:to_i))
 
-    @note = current_user.notes.new(params[:note])
+    @note = notes_scope.new(params[:note])
 
     if @note.save
       respond_to do |format|
@@ -65,7 +65,7 @@ class NotesController < ApplicationController
   end
 
   def destroy
-    @note = current_user.notes.find(params[:id])
+    @note = notes_scope.find(params[:id])
     @note.transaction do
       @note.save_version!
       @note.destroy
@@ -76,11 +76,11 @@ class NotesController < ApplicationController
   def autocomplete
     term = params[:term]
     if term[0] == '.'
-      matches = current_user.tags.autocomplete(term[1..-1]).map do |tag|
+      matches = tags_scope.autocomplete(term[1..-1]).map do |tag|
         {:label => '.'+tag, :value => '.'+tag}
       end
     else
-      notes = current_user.notes.where('notes.title like ?', "%#{params[:term]}%")
+      notes = notes_scope.where('notes.title like ?', "%#{params[:term]}%")
       matches = notes.pluck(:title).uniq.sort.map do |title|
         {:label => title, :value => title.inspect}
       end
@@ -97,7 +97,7 @@ class NotesController < ApplicationController
   def filter_results
     @filter_results ||=
       begin
-        results = Filter.new(current_user, params[:f]).notes.as_json(
+        results = Filter.new(params[:f], user: current_user).notes.as_json(
           only: :id, methods: :preview,
           include: {
             tags: { only: :id, methods: :short_label }
@@ -105,5 +105,22 @@ class NotesController < ApplicationController
         )
         results.each{ |item| item["url"] = note_path(item["id"], f: params[:f]) }
       end
+  end
+
+  def notes_scope
+    if logged_in?
+      Note.where("notes.user_id = ? OR notes.public = ?", current_user.id, true)
+    else
+      Note.where(public: true)
+    end
+  end
+
+  def tags_scope
+    if logged_in?
+      Tag.joins(:note).where("notes.public = ? OR notes.user_id = ?",
+                             true, current_user.id)
+    else
+      Tag.joins(:note).where(notes: { public: true })
+    end
   end
 end
