@@ -41,7 +41,7 @@
     </div>
   <% end %>
 
-  <%= controls do %>
+  <%= actions do %>
     <% if note.persisted? %>
       <a href="<%= note_path(note, f: params[:f]) %>" title="Discard changes"
          class="glyphicon glyphicon-remove" data-edit-action="true"></a>

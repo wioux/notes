@@ -61,7 +61,7 @@ $(document).ready(function() {
     app.save();
   });
 
-  $(document).on("click", "#controls .navigate a", function(e) {
+  $(document).on("click", "#actions .navigate a", function(e) {
     e.preventDefault();
     app.load(this.href);
   });
@@ -72,7 +72,7 @@ $(document).ready(function() {
     case 'n':
       if (e.ctrlKey && !e.altKey && !e.metaKey) {
         e.preventDefault();
-        url = $("#controls a[data-new-action]").attr("href");
+        url = $("#actions a[data-new-action]").attr("href");
         url && app.load(url);
       }
       break;
@@ -80,7 +80,7 @@ $(document).ready(function() {
     case 'e':
       if (!e.ctrlKey && !e.altKey && e.metaKey) {
         e.preventDefault();
-        url = $("#controls a[data-edit-action]").attr("href");
+        url = $("#actions a[data-edit-action]").attr("href");
         url && app.load(url);
       }
       break;

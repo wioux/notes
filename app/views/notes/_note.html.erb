@@ -13,7 +13,7 @@
     </div>
   </footer>
 
-  <%= controls(note.user == current_user) do %>
+  <%= actions(note.user == current_user) do %>
     <a href="<%= edit_note_path(note, f: params[:f]) %>" title="Edit this item"
        class="glyphicon glyphicon-pencil" data-edit-action="true"></a>
 

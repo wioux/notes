@@ -3,12 +3,12 @@ module ApplicationHelper
     @current_user
   end
 
-  def controls(cond=true, &block)
+  def actions(cond=true, &block)
     item_actions = capture(&block) if cond && block_given?
     item_actions = item_actions.presence.try(:+, content_tag(:hr))
 
-    controls = []
-    controls << content_tag(:div, "class": "navigate") do
+    actions = []
+    actions << content_tag(:div, "class": "navigate") do
       content = content_tag(:div, id: "item_actions"){ item_actions }
       content << content_tag(:a, "", "href": root_path,
                                      "class": "glyphicon glyphicon-book",
@@ -20,23 +20,23 @@ module ApplicationHelper
       content << content_tag(:hr)
     end
 
-    controls << content_tag(:span, "", "class": "glyphicon glyphicon-user",
-                                       "title": "Your account")
+    actions << content_tag(:span, "", "class": "glyphicon glyphicon-user",
+                                      "title": "Your account")
     if logged_in?
-      controls << content_tag(:a, "", "href": "/settings",
-                                      "class": "glyphicon glyphicon-cog",
-                                      "title": "Settings")
-      controls << content_tag(:a, "", "href": logout_path,
-                                      "class": "glyphicon glyphicon-log-out",
-                                      "title": "Log out",
-                                      "data-logout": true)
+      actions << content_tag(:a, "", "href": "/settings",
+                                     "class": "glyphicon glyphicon-cog",
+                                     "title": "Settings")
+      actions << content_tag(:a, "", "href": logout_path,
+                                     "class": "glyphicon glyphicon-log-out",
+                                     "title": "Log out",
+                                     "data-logout": true)
     else
-      controls << content_tag(:a, "", "href": login_path,
-                              "title": "Log in",
-                              "class": "glyphicon glyphicon-log-in")
+      actions << content_tag(:a, "", "href": login_path,
+                             "title": "Log in",
+                             "class": "glyphicon glyphicon-log-in")
     end
 
-    content_tag(:div, id: "controls"){ controls.join.html_safe }
+    content_tag(:div, id: "actions"){ actions.join.html_safe }
   end
 
   def tag_labels
