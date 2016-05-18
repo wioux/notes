@@ -15,9 +15,13 @@
 require 'spec_helper'
 
 RSpec.describe Note do
+  let(:user){
+    User.create!({ login_name: "user", password_digest: "" }, without_protection: true)
+  }
+
   describe '#tag_list' do
     it 'should equal the comma separated list of tags' do
-      note = Note.create!(:body => 'whatever')
+      note = user.notes.create!(:body => 'whatever')
       note.tags.create!(:label => 'one')
       note.tags.create!(:label => 'two')
       note.tags.create!(:label => 'three')
@@ -38,7 +42,7 @@ RSpec.describe Note do
     end
 
     it 'should override all old tags' do
-      note = Note.create!(:body => 'whatever')
+      note = user.notes.create!(:body => 'whatever')
       note.tags.create!(:label => 'one')
       note.tags.create!(:label => 'two')
       note.tags.create!(:label => 'three')
@@ -51,7 +55,7 @@ RSpec.describe Note do
 
   describe '#save' do
     it "should save a copy in versions when updating a note" do
-      note = Note.create!(:title => 't', :body => 'b', :date => Time.at(1))
+      note = user.notes.create!(:title => 't', :body => 'b', :date => Time.at(1))
 
       note = Note.find(note.id)
       note.title = 'title'
@@ -64,7 +68,7 @@ RSpec.describe Note do
     end
 
     it "should not save a copy in versions if there are no changes" do
-      note = Note.create!(:title => 't', :body => 'b', :date => Time.at(1))
+      note = user.notes.create!(:title => 't', :body => 'b', :date => Time.at(1))
 
       note = Note.find(note.id)
       note.title = "#{note.title}"

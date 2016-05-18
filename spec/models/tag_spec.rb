@@ -12,9 +12,13 @@
 require 'spec_helper'
 
 RSpec.describe Tag, :type => :model do
-  let(:note_1){ Note.create }
-  let(:note_2){ Note.create }
-  let(:note_3){ Note.create.build_version.tap(&:save) }
+  let(:user){
+    User.create!({ login_name: "user", password_digest: "" }, without_protection: true)
+  }
+
+  let(:note_1){ user.notes.create }
+  let(:note_2){ user.notes.create }
+  let(:note_3){ user.notes.create.build_version.tap(&:save) }
 
   describe '.labels' do
     it "should return an array containing the labels of all tags" do
