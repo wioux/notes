@@ -44,10 +44,10 @@
   <%= controls do %>
     <% if note.persisted? %>
       <a href="<%= note_path(note, f: params[:f]) %>" title="Discard changes"
-         class="glyphicon glyphicon-remove"></a>
+         class="glyphicon glyphicon-remove" data-edit-action="true"></a>
     <% else %>
       <a href="<%= notes_path(f: params[:f]) %>" title="Discard changes"
-         class="glyphicon glyphicon-remove"></a>
+         class="glyphicon glyphicon-remove" data-edit-action="true"></a>
     <% end %>
   <% end %>
 </div>

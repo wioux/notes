@@ -67,18 +67,21 @@ $(document).ready(function() {
   });
 
   $(window).on('keydown', function(e) {
+    var url;
     switch(String.fromCharCode(e.which).toLowerCase()) {
     case 'n':
       if (e.ctrlKey && !e.altKey && !e.metaKey) {
         e.preventDefault();
-        app.load('/notes/new');
+        url = $("#controls a[data-new-action]").attr("href");
+        url && app.load(url);
       }
       break;
 
     case 'e':
       if (!e.ctrlKey && !e.altKey && e.metaKey) {
         e.preventDefault();
-        app.edit();
+        url = $("#controls a[data-edit-action]").attr("href");
+        url && app.load(url);
       }
       break;
 

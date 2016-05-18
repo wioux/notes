@@ -15,7 +15,7 @@
 
   <%= controls(note.user == current_user) do %>
     <a href="<%= edit_note_path(note, f: params[:f]) %>" title="Edit this item"
-       class="glyphicon glyphicon-pencil"></a>
+       class="glyphicon glyphicon-pencil" data-edit-action="true"></a>
 
     <%= form_for(note, html: { id: "toggle_published_note_#{note.id}" }) do |f| %>
       <%= hidden_field_tag :f, params[:f] %>

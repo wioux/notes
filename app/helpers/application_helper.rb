@@ -15,6 +15,7 @@ module ApplicationHelper
                                      "title": "Browse all notes")
       content << content_tag(:a, "", "href": new_note_path(f: params[:f]),
                                      "class": "glyphicon glyphicon-plus",
+                                     "data-new-action": true,
                                      "title": "Create a note") if logged_in?
       content << content_tag(:hr)
     end

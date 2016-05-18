@@ -33,14 +33,6 @@ var App = React.createClass({
     this.refs.browser.filter(f, cb);
   },
 
-  edit: function() {
-    var url = this.state.active.url.split("?", 2)[0];
-    if (url.match(/\/(edit|new)$/))
-      this.load(url.replace(/\/(edit|new)$/, ""));
-    else
-      this.load(url + "/edit");
-  },
-
   save: function() {
     var self = this;
     var viewport = this.refs.viewport;
