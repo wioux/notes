@@ -12,12 +12,13 @@ class ApplicationController < ActionController::Base
   end
 
   def create_session
-    user = User.find_by!(login_name: params[:user][:login_name])
-    if user.verify(params[:user][:password])
+    user = User.find_by(login_name: params[:user][:login_name])
+    if user.try(:verify, params[:user][:password])
       session[:user_id] = user.id
       redirect_to "/"
     else
-      user.errors.add("password", "is incorrect")
+      user ||= User.new(login_name: params[:user][:login_name])
+      user.errors.add("user name or password", "is incorrect")
       render "login", layout: "logged_out", locals: { user: user }
     end
   end
