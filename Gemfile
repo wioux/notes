@@ -4,8 +4,7 @@ gem 'rails', '~> 4.2'
 
 gem 'rack-mini-profiler'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+gem 'dotenv-rails'
 
 gem 'sqlite3'
 gem 'pg'
