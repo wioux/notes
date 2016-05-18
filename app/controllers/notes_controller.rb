@@ -28,10 +28,10 @@ class NotesController < ApplicationController
     @note = notes_scope.find(params[:id])
     if @note.update_attributes(params[:note])
       respond_to do |format|
-        format.html{ redirect_to @note }
+        format.html{ redirect_to note_path(@note, f: params[:f]) }
         format.json do
           item = @note.as_json
-          item["url"] = note_path(@note)
+          item["url"] = note_path(@note, f: params[:f])
           render json: item
         end
       end
@@ -52,10 +52,10 @@ class NotesController < ApplicationController
 
     if @note.save
       respond_to do |format|
-        format.html{ redirect_to @note }
+        format.html{ redirect_to note_path(@note, f: params[:f]) }
         format.json do
           item = @note.as_json
-          item["url"] = note_path(@note)
+          item["url"] = note_path(@note, f: params[:f])
           render json: item
         end
       end
