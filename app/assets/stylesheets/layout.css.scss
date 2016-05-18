@@ -25,9 +25,6 @@ html, body, #app_container, #app_container > *, #app, #viewport {
     overflow-x: auto;
     min-height: 100%;
 
-    // Fixes a weird problem in Chrome:
-    // after changing note, #viewport #content is invisible until page resize
-    float: none;
     padding-left: 10px;
 }
 
