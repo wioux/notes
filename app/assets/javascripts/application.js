@@ -56,7 +56,7 @@ $(document).ready(function() {
     }
   });
 
-  $(document).on('submit', '.note form', function(e) {
+  $(document).on('submit', '.note form[id^=edit_note_], .note form#new_note', function(e) {
     e.preventDefault();
     app.save();
   });
