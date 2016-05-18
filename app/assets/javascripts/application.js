@@ -89,9 +89,6 @@ $(document).ready(function() {
       if (!e.ctrlKey && !e.altKey && e.metaKey) {
         e.preventDefault();
         app.save();
-      } else if (e.ctrlKey && !e.altKey && !e.metaKey) {
-        e.preventDefault();
-        Browser.focus();
       }
       break;
     }
