@@ -67,7 +67,7 @@ class Filter
   end
 
   def tag_matches(term)
-    tags_scope.where('lower(label) = ? OR lower(label) ILIKE ?',
+    tags_scope.where('lower(label) = ? OR lower(label) LIKE ?',
                      term.downcase, "#{term.downcase}:%")
   end
 
