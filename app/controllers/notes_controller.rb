@@ -80,7 +80,7 @@ class NotesController < ApplicationController
         {:label => '.'+tag, :value => '.'+tag}
       end
     else
-      notes = notes_scope.where('notes.title like ?', "%#{params[:term]}%")
+      notes = notes_scope.where('lower(notes.title) LIKE ?', "%#{params[:term].downcase}%")
       matches = notes.pluck(:title).uniq.sort.map do |title|
         {:label => title, :value => title.inspect}
       end

@@ -62,11 +62,13 @@ class Filter
   private
 
   def note_matches(term)
-    notes_scope.where('title LIKE ? or body LIKE ?', "%#{term}%", "%#{term}%")
+    notes_scope.where('lower(title) LIKE ? or lower(body) LIKE ?',
+                      "%#{term.downcase}%", "%#{term.downcase}%")
   end
 
   def tag_matches(term)
-    tags_scope.where('label = ? OR label LIKE ?', term, "#{term}:%")
+    tags_scope.where('lower(label) = ? OR lower(label) ILIKE ?',
+                     term.downcase, "#{term.downcase}:%")
   end
 
   def attachment_matches(term)
