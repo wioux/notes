@@ -25,7 +25,7 @@ class NotesController < ApplicationController
   end
 
   def update
-    @note = notes_scope.find(params[:id])
+    @note = current_user.notes.find(params[:id])
     if @note.update_attributes(params[:note])
       respond_to do |format|
         format.html{ redirect_to note_path(@note, f: params[:f]) }
@@ -48,7 +48,7 @@ class NotesController < ApplicationController
   def create
     params[:note][:date] = Time.utc(*params[:note][:date].split('/').map(&:to_i))
 
-    @note = notes_scope.new(params[:note])
+    @note = current_user.notes.new(params[:note])
 
     if @note.save
       respond_to do |format|
@@ -65,7 +65,7 @@ class NotesController < ApplicationController
   end
 
   def destroy
-    @note = notes_scope.find(params[:id])
+    @note = current_user.notes.find(params[:id])
     @note.transaction do
       @note.save_version!
       @note.destroy
