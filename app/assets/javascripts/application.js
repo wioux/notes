@@ -39,6 +39,9 @@ $(document).ready(function() {
     if (url.split("?", 2)[0] == location.pathname)
       pushState("/notes")
   };
+  props.onactivate = function() {
+    window.scrollTo(0, $("#viewport").offset().top);
+  };
   window.onpopstate = popState;
 
   window.app = ReactDOM.render(React.createElement(App, props),
@@ -61,9 +64,20 @@ $(document).ready(function() {
     app.save();
   });
 
+  $(document).on("click", "#actions a[data-search-action=true]", function(e) {
+    $("#browser").show();
+    window.scrollTo(0, 0);
+  });
+
   $(document).on("click", "#actions .navigate a", function(e) {
     e.preventDefault();
     app.load(this.href);
+  });
+
+  $(document).on("click", "#actions .navigate a[data-edit-action], #actions .navigate a[data-new-action]", function(e) {
+    // looking at a[data-search-action] here is lazy...
+    if ($("#actions a[data-search-action=true]").is(":visible"))
+      $("#browser").hide();
   });
 
   $(window).on('keydown', function(e) {

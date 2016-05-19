@@ -10,9 +10,10 @@ module ApplicationHelper
     actions = []
     actions << content_tag(:div, "class": "navigate") do
       content = content_tag(:div, id: "item_actions"){ item_actions }
-      content << content_tag(:a, "", "href": root_path,
-                                     "class": "glyphicon glyphicon-book",
-                                     "title": "Browse all notes")
+      content << content_tag(:a, "", "href": "#browser",
+                                     "class": "glyphicon glyphicon-search",
+                                     "data-search-action": true,
+                                     "title": "Search notes")
       content << content_tag(:a, "", "href": new_note_path(f: params[:f]),
                                      "class": "glyphicon glyphicon-plus",
                                      "data-new-action": true,

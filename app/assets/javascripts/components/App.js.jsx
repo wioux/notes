@@ -44,7 +44,11 @@ var App = React.createClass({
     });
   },
 
-  load: function(url, callbacks) {
+  activate: function(url) {
+    this.load(url, true, this.props.onactivate);
+  },
+
+  load: function(url, signal, callback) {
     if (this.hasUnsavedChanges() && !confirm('There are unsaved changes. Really navigate away?'))
       return this.props["onload"](this.state.active.url.split("?", 2)[0]);
 
@@ -52,6 +56,7 @@ var App = React.createClass({
     $.get(url, function(html) {
       var id = url.split("?", 2)[0].match(/([^\/]+\/[^\/]+)(\/edit)?$/);
       id = id ? id[1] : url.split("?", 2)[0].match(/[^\/]*$/)[0];
+      id = id.split("#", 2)[0];
       self.refs.browser.setState({ active : id });
       self.setState({
         active: {
@@ -60,8 +65,9 @@ var App = React.createClass({
           html: html
         }
       });
-      if (callbacks !== false)
+      if (signal !== false)
         self.props["onload"](url.split("?", 2)[0]);
+      callback && callback();
     });
   },
 
@@ -80,7 +86,7 @@ var App = React.createClass({
 
   render: function() {
     return (
-      <div id="app">
+      <div id="app" className="container-fluid">
         <Browser ref="browser"
                  initialTags={this.props.initialTags}
                  initialFilters={this.props.initialFilters}
@@ -89,7 +95,7 @@ var App = React.createClass({
                  initialActive={this.state.active.id}
                  searchPath={this.props.searchPath}
                  search={this.props.onfilter}
-                 activate={this.load}
+                 activate={this.activate}
                  destroy={this.destroy} />
         <Viewport ref="viewport"
                   id={this.state.active.id}

@@ -104,7 +104,7 @@
     .title {
         position: absolute;
         top: 4px;
-        width: 90%;
+        width: 100%;
 
         input {
             width: 100%;
@@ -113,10 +113,34 @@
         }
     }
 
+    .editor {
+        textarea {
+            position: absolute;
+            top: 37px;
+            bottom: 36px;
+            width: 100%;
+        }
+
+        .ProseMirror {
+            position: absolute;
+            top: 37px;
+            bottom: 36px;
+            width: 100%;
+        }
+
+        .ProseMirror-content {
+            position: absolute;
+            top: 23px;
+            bottom: 0px;
+            overflow-y: auto;
+            width: 100%;
+        }
+    }
+
     .tags {
         position: absolute;
         bottom: 2px;
-        width: 90%;
+        width: 100%;
 
         .input-group-btn:first-child .btn {
             border-top: 0px;
@@ -140,31 +164,9 @@
         }
     }
 
-    .editor {
-        textarea {
-            position: absolute;
-            top: 37px;
-            bottom: 36px;
-            width: 90%;
-
-            border-radius: 0px;
-            resize: none;
-        }
-
-        .ProseMirror {
-            position: absolute;
-            top: 37px;
-            bottom: 36px;
-            width: 90%;
-        }
-
-        .ProseMirror-content {
-            position: absolute;
-            top: 23px;
-            bottom: 0px;
-            overflow-y: auto;
-            width: 100%;
-        }
+    .editor textarea {
+        border-radius: 0px;
+        resize: none;
     }
 
     .tag-selector span {
@@ -200,5 +202,30 @@
 
     .note footer {
         display: none;
+    }
+}
+
+@media (min-width: 992px) {
+}
+
+@media (max-width: 991px) {
+    .note p {
+        text-align: justify;
+    }
+
+    .note form[id^=edit_note], .note form#new_note {
+        position: fixed;
+        top: 6px;
+        bottom: 6px;
+        left: 6px;
+        right: 65px;
+    }
+
+    .note.edit #actions [data-search-action=true] {
+        display: none;
+    }
+
+    .ProseMirror-content {
+        padding-top: 23px;
     }
 }

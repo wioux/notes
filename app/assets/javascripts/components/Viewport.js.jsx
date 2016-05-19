@@ -46,10 +46,8 @@ var Viewport = React.createClass({
 
   render: function() {
     return (
-      <div id="viewport" className="row">
-        <div className="col-md-3" />
-        <div id="content" ref="ui" className="col-md-8"
-             dangerouslySetInnerHTML={this.getHtml()} />
+      <div id="viewport" className="col-md-8">
+        <div id="content" ref="ui" dangerouslySetInnerHTML={this.getHtml()} />
       </div>
     );
   }

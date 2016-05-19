@@ -66,41 +66,37 @@ var Browser = React.createClass({
     };
 
     return (
-      <div id="browser">
-        <div className="row">
-          <div id="filterer" className="col-md-3" ref="filterer">
-            <form action={this.props.searchPath} className="filter_mode" style={{position: "relative"}} onSubmit={this.refresh}>
-              <span id="filter-clearer" onClick={this.clearFilter}>
-                <a href="#"><i className="glyphicon glyphicon-ban-circle"></i></a>
+      <div id="browser" className="col-md-3">
+        <div id="filterer" ref="filterer">
+          <form action={this.props.searchPath} className="filter_mode" style={{position: "relative"}} onSubmit={this.refresh}>
+            <span id="filter-clearer" onClick={this.clearFilter}>
+              <a href="#"><i className="glyphicon glyphicon-ban-circle"></i></a>
+            </span>
+
+            <span id="filter-saver">
+              <span className="glyphicon glyphicon-pushpin"></span>
+            </span>
+
+            <div>
+              <input type="search" className="form-control" name="f" value={this.state.filter} onChange={this.onInputChange} />
+            </div>
+
+            <div id="filter-controls" className="btn-group">
+              <span id="filter-tags" className="btn btn-default btn-xs" data-toggle="dropdown">
+                Tags <span className="caret"></span>
               </span>
-              
-              <span id="filter-saver">
-                <span className="glyphicon glyphicon-pushpin"></span>
-              </span>
-              
-              <div>
-                <input type="search" className="form-control" name="f" value={this.state.filter} onChange={this.onInputChange} />
-              </div>
-              
-              <div id="filter-controls" className="btn-group">
-                <span id="filter-tags" className="btn btn-default btn-xs" data-toggle="dropdown">
-                  Tags <span className="caret"></span>
-                </span>
-                <ul id="filter-tags-dropdown" className="dropdown-menu" role="menu">
-                  {this.state.tags.map(tag)}
-                </ul>
-              
-               {this.state.filters.map(savedFilter)}
-              </div>
-            </form>
-          </div>
+              <ul id="filter-tags-dropdown" className="dropdown-menu" role="menu">
+                {this.state.tags.map(tag)}
+              </ul>
+
+             {this.state.filters.map(savedFilter)}
+            </div>
+          </form>
         </div>
-        <div className="row">
-          <div id="results" className="col-md-3">
-            <FilterResults results={this.state.results} selectedId={this.state.active}
-                           activate={this.props.activate}
-                           destroy={this.destroy} />
-          </div>
+        <div id="results">
+          <FilterResults results={this.state.results} selectedId={this.state.active}
+                         activate={this.props.activate}
+                         destroy={this.destroy} />
         </div>
       </div>
     );
