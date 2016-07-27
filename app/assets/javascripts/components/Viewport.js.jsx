@@ -11,29 +11,32 @@ var Viewport = React.createClass({
       delay: 0
     });
 
-    if ($(".editor textarea:visible", this.refs.ui)[0]) {
-      var source = $(".editor textarea:visible", this.refs.ui).val();
-      $(".editor textarea:visible", this.refs.ui).css("display", "none");
+    if ($(".editor textarea", this.refs.ui)[0]) {
+      var source = $(".editor textarea", this.refs.ui).val();
+      $(".editor textarea", this.refs.ui).remove();
 
-      var editor = new ProseMirror({
-        place: $(".editor", this.refs.ui)[0],
-        doc: source, docFormat: "markdown",
-        menuBar: true
+      var editor = new MediumEditor([$(".editor", this.refs.ui)[0]], {
+        autoLink: true,
+        toolbar: {
+          buttons: ["h2", "h3", "bold", "italic", "underline", "anchor",
+                    "quote", "pre", "abc", "orderedlist", "unorderedlist",
+                    "outdent", "indent", "hr"],
+        },
+        paste: {
+          forcePlainText: false
+        },
+        extensions: { "abc": new AbcButton() }
       });
 
-      editor.on("transform", function() {
-        if (editor.history.undoDepth)
-          Note.makeDirty();
-        else
-          Note.makeClean();
-      });
+      editor.setContent(source.length ? source : "<p></p>", 0);
+      editor.subscribe("editableInput", Note.makeDirty);
 
-      editor.focus();
+      $(".editor", this.refs.ui).focus();
 
       this.editor = editor
+    } else {
+      Note.renderAbc();
     }
-
-    Note.renderAbc();
   },
 
   componentDidUpdate: function() {

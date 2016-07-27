@@ -15,7 +15,7 @@
         font-size: 2em;
     }
 
-    .body, .ProseMirror-content {
+    .body {
         margin-top: 8px;
 
         h1,h2,h3,h4 {
@@ -64,7 +64,7 @@
             margin-top: 15px;
         }
 
-        div.abc {
+        .abc {
             margin-left: auto;
             margin-right: auto;
         }
@@ -114,27 +114,25 @@
     }
 
     .editor {
-        textarea {
-            position: absolute;
-            top: 37px;
-            bottom: 36px;
-            width: 100%;
-        }
+      position: absolute;
+      top: 37px;
+      bottom: 36px;
+      width: 100%;
 
-        .ProseMirror {
-            position: absolute;
-            top: 37px;
-            bottom: 36px;
-            width: 100%;
-        }
+      textarea {
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+      }
 
-        .ProseMirror-content {
-            position: absolute;
-            top: 23px;
-            bottom: 0px;
-            overflow-y: auto;
-            width: 100%;
-        }
+      &.medium-editor-element {
+        top: 38px;
+        overflow-y: auto;
+        border-left: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        padding: 6px 12px;
+      }
     }
 
     .tags {
@@ -191,6 +189,20 @@
     }
 }
 
+/* a little touch up on the medium editor theme (beagle) */
+.medium-editor-toolbar li button {
+  padding-top: 11px;
+
+  &:hover {
+    color: #ccc;
+  }
+
+  &.medium-editor-button-active:hover {
+    color: #a2d7c7;
+  }
+}
+
+
 .tag-selector .modal-header h3 {
     margin: 0px;
 }
@@ -223,9 +235,5 @@
 
     .note.edit #actions [data-search-action=true] {
         display: none;
-    }
-
-    .ProseMirror-content {
-        padding-top: 23px;
     }
 }

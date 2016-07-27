@@ -5,8 +5,8 @@
 //= require abcjs-rails
 //= require react
 //= require react_ujs
-//= require components
 //= require_tree ../../../vendor/assets/javascripts
+//= require components
 //= require_tree .
 
 function pushState(url) {

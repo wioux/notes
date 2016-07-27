@@ -2,7 +2,7 @@
   <span class="title"><%= note.title %></span>
 
   <div class="body">
-    <%= raw ::MarkdownHTML.render(note.body || '') %>
+    <%= sanitize note.body %>
   </div>
 
   <footer>

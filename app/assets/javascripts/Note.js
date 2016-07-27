@@ -1,10 +1,9 @@
 
 Note = {
   submit: function(viewport, callback) {
-    var form = $("form", viewport.refs.ui);
-    var editor = viewport.editor;
-
-    form.find("textarea").val(editor.getContent("markdown", { hardBreak: "  \n" }));
+    var form = $("form", viewport.refs.ui)[0];
+    if (!form)
+      return;
 
     var date = '';
     var now = new Date();
@@ -14,29 +13,32 @@ Note = {
     date += now.getHours() + '/';
     date += now.getMinutes() + '/';
     date += now.getSeconds();
-    form.find('input[name=note\\[date\\]]').val(date);
 
-    var formData = new FormData(form[0]);
-    form.each(function() {
-        $.ajax({
-            url: form.attr('action'),
-            method: form.attr('method'),
-            data: formData,
-            cache: false,
-            dataType: "json",
-            contentType: false,
-            processData: false,
-            success: function(resp) {
-              Note.makeClean();
-              callback && callback(resp);
-            }
-        });
+    var fd = new FormData(form);
+    fd.append("note[date]", date);
+    fd.append("note[body]", $(".editor", viewport.refs.ui).html());
+
+    $.ajax({
+      url: form.action,
+      method: form.method,
+      data: fd,
+      cache: false,
+      dataType: "json",
+      contentType: false,
+      processData: false,
+      success: function(resp) {
+        Note.makeClean();
+        callback && callback(resp);
+      }
     });
   },
 
   renderAbc: function() {
-    $('div.abc:not(.rendered)').each(function() {
-        var abc = $(this).text();
+    $('pre.abc:not(.rendered)').each(function() {
+      if ($(this).parents(".editor").length)
+        return;
+
+        var abc = this.innerText;
         ABCJS.renderAbc(this, abc, {}, {staffwidth: 800, paddingbottom: 0});
         $(this).addClass('rendered');
 

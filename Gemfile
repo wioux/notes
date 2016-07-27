@@ -54,9 +54,6 @@ gem 'jquery-ui-rails'
 # To use debugger
 # gem 'ruby-debug'
 
-# Markdown Parser
-gem 'redcarpet', '~> 2.3.0'
-
 gem 'bootstrap-sass', '~> 3.2.0'
 
 gem 'bcrypt-ruby', :require => 'bcrypt'

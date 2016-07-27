@@ -10,8 +10,8 @@
  *
  *= require_self
  *= require jquery-ui
- *= require_tree .
  *= require_tree ../../../vendor/assets/stylesheets
+ *= require_tree .
  */
 
 @import 'bootstrap-sprockets';
