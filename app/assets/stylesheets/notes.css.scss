@@ -15,6 +15,10 @@
         font-size: 2em;
     }
 
+    h1.title {
+      margin-top: 0px;
+    }
+
     .body {
         margin-top: 8px;
 
@@ -103,7 +107,6 @@
 
     .title {
         position: absolute;
-        top: 4px;
         width: 100%;
 
         input {
@@ -115,7 +118,7 @@
 
     .editor {
       position: absolute;
-      top: 37px;
+      top: 33px;
       bottom: 36px;
       width: 100%;
 
@@ -126,7 +129,7 @@
       }
 
       &.medium-editor-element {
-        top: 38px;
+        top: 34px;
         overflow-y: auto;
         border-left: 1px solid #ccc;
         border-right: 1px solid #ccc;
