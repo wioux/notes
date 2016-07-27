@@ -52,6 +52,7 @@ var Browser = React.createClass({
     var self = this;
     $.get(this.props.searchPath+".json?f="+f, function(resp) {
       self.setState({ filter: f, results: resp.results, tags: resp.tags });
+      $("input[type=search]", self.refs.filterer).autocomplete("close");
       callback && callback.call(self);
     });
   },
