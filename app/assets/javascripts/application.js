@@ -33,7 +33,13 @@ function popState() {
 
 $(document).ready(function() {
   var props = $("#app_container *").data("reactProps");
-  props.onload = pushState;
+  props.onload = function(url) {
+    // this has the effect of hiding the browser on small screens,
+    // while making sure it is shown if the window is expanded
+    $("#browser").css("display", "");
+
+    pushState(url);
+  }
   props.onfilter = pushState;
   props.ondestroy = function(url) {
     if (url.split("?", 2)[0] == location.pathname)
@@ -65,19 +71,14 @@ $(document).ready(function() {
   });
 
   $(document).on("click", "#actions a[data-search-action=true]", function(e) {
+    e.preventDefault();
     $("#browser").show();
     window.scrollTo(0, 0);
   });
 
-  $(document).on("click", "#actions .navigate a", function(e) {
+  $(document).on("click", "#actions .navigate a:not([data-search-action])",function(e) {
     e.preventDefault();
     app.load(this.href);
-  });
-
-  $(document).on("click", "#actions .navigate a[data-edit-action], #actions .navigate a[data-new-action]", function(e) {
-    // looking at a[data-search-action] here is lazy...
-    if ($("#actions a[data-search-action=true]").is(":visible"))
-      $("#browser").hide();
   });
 
   $(window).on('keydown', function(e) {
