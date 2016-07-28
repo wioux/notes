@@ -50,11 +50,17 @@ class Note
 
       # i'd prefer not to permit any attributes (except href), but
       # "indent" command needs custom style and abc notes uses class="abc"
-      tags = [*"h1".."h7", "p", "ol", "ul", "li", "blockquote", "pre",
+      tags = [*"h1".."h7", "p", "ol", "ul", "li",
+              "blockquote", "pre", "table", "thead", "tbody", "tr", "th", "td",
               "a", "b", "strong", "i", "em", "u"]
       body = sanitizer.sanitize(self.body, tags: tags, attributes: %w(style class href))
 
       doc = Nokogiri::HTML::DocumentFragment.parse(body)
+
+      doc.css("table").each do |node|
+        node.set_attribute("class", "table")
+      end
+
       doc.css("h1, h2, h3, h4, h5, h6, h7").each_with_index do |node, inode|
         id = node.text.gsub(/\s+/, "-") + "-#{inode}"
         node.set_attribute("id", id.downcase)

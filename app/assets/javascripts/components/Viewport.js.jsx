@@ -19,14 +19,17 @@ var Viewport = React.createClass({
         autoLink: true,
         toolbar: {
           buttons: ["h2", "h3", "bold", "italic", "underline", "anchor",
-                    "quote", "pre", "abc", "orderedlist", "unorderedlist",
+                    "quote", "pre", "abc", "orderedlist", "unorderedlist", "table",
                     "outdent", "indent", "hr"],
         },
         paste: {
           forcePlainText: false,
           cleanPastedHTML: true
         },
-        extensions: { "abc": new AbcButton() }
+        extensions: {
+          "abc": new AbcButton(),
+          "tables": new MediumEditorTable()
+        }
       });
 
       editor.setContent(source.length ? source : "<p></p>", 0);
