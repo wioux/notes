@@ -71,11 +71,12 @@ var Browser = React.createClass({
         <div id="filterer" ref="filterer">
           <form action={this.props.searchPath} className="filter_mode" style={{position: "relative"}} onSubmit={this.refresh}>
             <span id="filter-clearer" onClick={this.clearFilter}>
-              <a href="#"><i className="glyphicon glyphicon-ban-circle"></i></a>
+              <a href="#"><i className="fa fa-ban"></i></a>
             </span>
 
             <span id="filter-saver">
-              <span className="glyphicon glyphicon-pushpin"></span>
+              { /* glyphicon-pushpin looks better */ }
+              <span className="fa fa-thumb-tack"></span>
             </span>
 
             <div>

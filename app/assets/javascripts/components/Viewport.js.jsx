@@ -17,10 +17,11 @@ var Viewport = React.createClass({
 
       var editor = new MediumEditor([$(".editor", this.refs.ui)[0]], {
         autoLink: true,
+        buttonLabels: "fontawesome",
         toolbar: {
           buttons: ["h2", "h3", "bold", "italic", "underline", "anchor",
                     "quote", "pre", "abc", "orderedlist", "unorderedlist", "table",
-                    "outdent", "indent", "hr"],
+                    "outdent", "indent", "hr"]
         },
         paste: {
           forcePlainText: false,

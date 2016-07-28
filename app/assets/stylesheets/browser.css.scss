@@ -138,12 +138,12 @@ html, body, #app_container, #app_container > *, #app {
   right: 12px;
   width: 20px;
 
-  .glyphicon {
+  .fa {
       color: #888;
       font-size: 24px;
   }
 
-  a.glyphicon, button .glyphicon {
+  a.fa, button .fa {
       text-decoration: none;
       color: #bbb;
 
@@ -182,7 +182,7 @@ html, body, #app_container, #app_container > *, #app {
         padding-left: 6px
     }
 
-    #actions .glyphicon {
+    #actions .fa {
         right: 15px;
         font-size: 30px;
     }

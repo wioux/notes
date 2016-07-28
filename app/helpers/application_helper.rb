@@ -11,30 +11,30 @@ module ApplicationHelper
     actions << content_tag(:div, "class": "navigate") do
       content = content_tag(:div, id: "item_actions"){ item_actions }
       content << content_tag(:a, "", "href": "#browser",
-                                     "class": "glyphicon glyphicon-search",
+                                     "class": "fa fa-search",
                                      "data-search-action": true,
                                      "title": "Search notes")
       content << content_tag(:a, "", "href": new_note_path(f: params[:f]),
-                                     "class": "glyphicon glyphicon-plus",
+                                     "class": "fa fa-plus",
                                      "data-new-action": true,
                                      "title": "Create a note") if logged_in?
       content << content_tag(:hr)
     end
 
-    actions << content_tag(:span, "", "class": "glyphicon glyphicon-user",
+    actions << content_tag(:span, "", "class": "fa fa-user",
                                       "title": "Your account")
     if logged_in?
       actions << content_tag(:a, "", "href": "/settings",
-                                     "class": "glyphicon glyphicon-cog",
+                                     "class": "fa fa-cog",
                                      "title": "Settings")
       actions << content_tag(:a, "", "href": logout_path,
-                                     "class": "glyphicon glyphicon-log-out",
+                                     "class": "fa fa-sign-out",
                                      "title": "Log out",
                                      "data-logout": true)
     else
       actions << content_tag(:a, "", "href": login_path,
                              "title": "Log in",
-                             "class": "glyphicon glyphicon-log-in")
+                             "class": "fa fa-sign-in")
     end
 
     content_tag(:div, id: "actions"){ actions.join.html_safe }

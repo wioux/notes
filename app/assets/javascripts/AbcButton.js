@@ -3,6 +3,7 @@ var AbcButton = MediumEditor.extensions.button.extend({
   name: "abc",
 
   contentDefault: "<b>abc</b>",
+  contentFA: '<i class="fa fa-music"></i>',
   aria: "abc notes",
 
   handleClick: function(e) {

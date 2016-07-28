@@ -15,13 +15,13 @@
 
   <%= actions(note.user == current_user) do %>
     <a href="<%= edit_note_path(note, f: params[:f]) %>" title="Edit this item"
-       class="glyphicon glyphicon-pencil" data-edit-action="true"></a>
+       class="fa fa-pencil" data-edit-action="true"></a>
 
     <%= form_for(note, html: { id: "toggle_published_note_#{note.id}" }) do |f| %>
       <%= hidden_field_tag :f, params[:f] %>
       <%= f.hidden_field :public, value: !note.public? %>
       <button type="submit" form="<%= f.options[:html][:id] %>" title="<%= note.public ? "Un-publish" : "Publish" %> this note">
-        <span class="glyphicon glyphicon-eye-<%= note.public ? "close" : "open" %>"></span>
+        <span class="fa fa-eye<%= "-slash" if note.public? %>"></span>
       </button>
     <% end %>
   <% end %>
