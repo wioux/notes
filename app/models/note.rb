@@ -21,4 +21,5 @@ class Note < ActiveRecord::Base
   include Note::Tags
   include Note::Attachments
   include Note::Json
+  include Note::Content
 end

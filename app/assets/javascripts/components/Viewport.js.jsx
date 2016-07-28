@@ -23,7 +23,8 @@ var Viewport = React.createClass({
                     "outdent", "indent", "hr"],
         },
         paste: {
-          forcePlainText: false
+          forcePlainText: false,
+          cleanPastedHTML: true
         },
         extensions: { "abc": new AbcButton() }
       });
