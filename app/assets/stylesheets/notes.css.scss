@@ -20,7 +20,9 @@
     }
 
     .body {
-        margin-top: 8px;
+        &:not(.editor) {
+          margin-top: 8px;
+        }
 
         h1,h2,h3,h4 {
             margin-bottom: 6px;
