@@ -2,6 +2,7 @@ html, body, #app_container, #app_container > *, #app {
     height: 100%;
     margin: 0px;
     padding: 0px;
+    overflow: hidden;
 }
 
 #app_container {

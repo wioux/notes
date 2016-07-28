@@ -16,4 +16,6 @@ Notes::Application.routes.draw do
       get "tune_widget"
     end
   end
+
+  resources :documents, only: [:show]
 end

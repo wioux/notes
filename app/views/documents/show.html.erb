@@ -1,0 +1,13 @@
+<div id="document" class="container-fluid">
+  <% if (outline = @note.outline.to_h).present? %>
+    <div class="outline col-md-3">
+      <h2>Outline</h2>
+      <%= toc(outline) %>
+    </div>
+  <% end %>
+
+  <div class="content col-md-7 col-md-offset-3">
+    <h1><%= @note.title %></h1>
+    <%= sanitize @note.body %>
+  </div>
+</div>

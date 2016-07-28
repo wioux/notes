@@ -21,6 +21,28 @@ class Note
       end
     end
 
+    def outline
+      doc = Nokogiri::HTML(body){ |config| config.nonet }
+
+      outline = Outline.new
+      doc.css("h1, h2, h3, h4, h5, h6, h7").each do |node|
+        if !outline.parent || outline.level < node.name
+          outline = outline.child(node.text, node.name)
+        else
+          while outline.parent && node.name <= outline.level
+            outline = outline.parent
+          end
+
+          outline = outline.child(node.text, node.name)
+        end
+
+        outline.anchor = node.attribute("id").try(:value)
+      end
+
+      outline = outline.parent while outline.parent
+      outline
+    end
+
     private
 
     def fix_html
@@ -39,6 +61,40 @@ class Note
       end
 
       self.body = doc.to_s
+    end
+
+    class Outline
+      attr_accessor :parent, :title, :anchor, :level, :children
+
+      def initialize
+        @children = []
+      end
+
+      def child(title, level)
+        Outline.new.tap do |child|
+          child.parent = self
+          child.title = title
+          child.level = level
+          children << child
+        end
+      end
+
+      def to_s
+        if parent
+          ["- " * level[/\d+/].to_i + title,
+           *children.map(&:to_s)].join("\n")
+        else
+          children.map(&:to_s).join("\n")
+        end
+      end
+
+      def to_h
+        if parent
+          { title: title, anchor: anchor, children: children.map(&:to_h) }
+        else
+          children.map(&:to_h)
+        end
+      end
     end
   end
 end

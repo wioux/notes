@@ -1,0 +1,56 @@
+
+#document {
+  height: 100%;
+  padding: 0px;
+  overflow: auto;
+
+  .content h1, .outline h2 {
+    margin-top: 20px;
+  }
+
+  .outline {
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    overflow-y: auto;
+    padding-bottom: 30px;
+    padding-left: 30px;
+
+    a {
+      color: #000;
+      display: inline-block;
+      width: 100%;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      text-overflow: ellipsis;
+
+      &:hover {
+        background-color: #eee;
+      }
+    }
+
+    padding-left: 10px;
+    > h2 { padding-left: 20px }
+
+    ul {
+      list-style-type: none;
+      margin-bottom: 0px;
+      padding-left: 0px;
+    }
+
+    > ul {
+      > li > a { padding-left: 20px }
+      > li {
+        font-weight: bold;
+      }
+
+      > li > ul {
+        > li > a { padding-left: 40px; }
+
+        li {
+          font-weight: normal;
+        }
+      }
+    }
+  }
+}
