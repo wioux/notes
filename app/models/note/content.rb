@@ -50,7 +50,7 @@ class Note
 
       # i'd prefer not to permit any attributes (except href), but
       # "indent" command needs custom style and abc notes uses class="abc"
-      tags = [*"h1".."h7", "p", "ol", "ul", "li",
+      tags = [*"h1".."h7", "p", "ol", "ul", "li", "br", "hr",
               "blockquote", "pre", "table", "thead", "tbody", "tr", "th", "td",
               "a", "b", "strong", "i", "em", "u"]
       body = sanitizer.sanitize(self.body, tags: tags, attributes: %w(style class href))
