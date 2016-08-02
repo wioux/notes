@@ -39,6 +39,8 @@
     }
 
     > ul {
+      font-size: 14px;
+
       > li > a { padding-left: 20px }
       > li {
         font-weight: bold;
@@ -49,6 +51,11 @@
 
         li {
           font-weight: normal;
+        }
+
+        > li > ul {
+          font-size: 12px;
+          > li > a { padding-left: 60px; }
         }
       }
     }
