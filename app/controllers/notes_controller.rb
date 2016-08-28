@@ -103,7 +103,10 @@ class NotesController < ApplicationController
             tags: { only: :id, methods: :short_label }
           }
         )
-        results.each{ |item| item["url"] = note_path(item["id"], f: params[:f]) }
+        results.each do|item|
+          item["url"] = note_path(item["id"], f: params[:f])
+          item["id"] = "notes/#{item['id']}"
+        end
       end
   end
 

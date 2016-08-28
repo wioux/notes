@@ -9,17 +9,15 @@
 </head>
 <body>
   <div id="app_container">
-    <%= react_component "App", {
+    <%= react_component_with_content "App", {
           searchPath: notes_path,
           autoCompletePath: autocomplete_path,
-          initialTags: tag_labels,
-          initialFilters: [],
+          searchPlaceholder: "search notes by term or .tag",
+
           initialFilter: params[:f],
           initialResults: filter_results,
-          initialActive: { id: @note ? "notes/#{@note.id}" : "notes",
-                           url: request.fullpath,
-                           html: yield              }
-        }, prerender: true %>
+          initialSelectedResult: @note ? "notes/#{@note.id}" : "notes"
+        }, prerender: true do %><%= yield %><% end %>
   </div>
 </body>
 </html>

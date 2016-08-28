@@ -1,10 +1,6 @@
 
 Note = {
-  submit: function(viewport, callback) {
-    var form = $("form", viewport.refs.ui)[0];
-    if (!form)
-      return;
-
+  submit: function(form, callback) {
     var date = '';
     var now = new Date();
     date += 1900 + now.getYear() + '/';
@@ -16,7 +12,7 @@ Note = {
 
     var fd = new FormData(form);
     fd.append("note[date]", date);
-    fd.append("note[body]", $(".editor", viewport.refs.ui).html());
+    fd.append("note[body]", $(".editor", form).html());
 
     $.ajax({
       url: form.action,

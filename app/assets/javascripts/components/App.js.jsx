@@ -1,106 +1,155 @@
 
 var App = React.createClass({
-  getInitialState: function() {
-    return {
-      active: this.props.initialActive
-    };
-  },
-
   componentDidMount: function() {
     var self = this;
-    $("input[type=search]", this.refs.browser.refs.filterer).autocomplete({
+    $(this.refs.browser.refs.filter).autocomplete({
       source: this.props.autoCompletePath,
-      appendTo: this.refs.browser.refs.filterer,
+      appendTo: this.refs.browser.refs.filter.parentNode,
       delay: 0,
 
-      open: function(e, ui) {
-        if (!$(this).parents('.filter_mode')[0])
-          $(this).autocomplete('close');
-      },
-
       select: function(e, select) {
-        self.filter(select.item.value);
+        self.refs.browser.filter(select.item.value);
       }
     });
+
+    $(window).bind("beforeunload", function() {
+      if (self.hasUnsavedChanges())
+        return "There are unsaved changes.";
+    });
+
+    $(this.refs.browser.refs.ui)
+      .on("click", "a[data-tag]", function(e) {
+        if (!e.metaKey) {
+          e.preventDefault();
+          self.refs.browser.filter("."+this.dataset.tag);
+        }
+      })
+      .on("submit", "form[id^=edit_note_],form#new_note", function(e) {
+        e.preventDefault();
+        self.save();
+      })
+      .on("click", ".browser-app-actions a[data-search-action=true]", function(e) {
+        e.preventDefault();
+        $("#browser").show();
+        window.scrollTo(0, 0);
+      })
+      .on("click", ".browser-app-actions .navigate a:not([data-search-action])", function(e) {
+        e.preventDefault();
+        self.load(this.href);
+      })
+      .on("click", ".browser-app-results .actions .destroyer", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        self.destroy($(this).closest("li")[0]);
+      });
+
+    this.onViewportLoad();
+  },
+
+  getDefaultProps: function() {
+    return {
+      onLoad: function() {}
+    }
   },
 
   hasUnsavedChanges: function() {
-    return !!$("form.hasUnsavedChanges", this.refs.viewport.refs.ui).length;
-  },
-
-  filter: function(f, callbacks) {
-    var cb = callbacks === undefined ? this.props.onfilter : undefined;
-    this.refs.browser.filter(f, cb);
+    return !!$("form.hasUnsavedChanges", this.refs.browser.refs.ui).length;
   },
 
   save: function() {
     var self = this;
-    var viewport = this.refs.viewport;
-    var create = $("form", viewport.refs.ui).attr("id").match(/^new_/);
-    Note.submit(viewport, function(resp) {
+    var form = $(".browser-app-viewport-content form", this.refs.browser.refs.ui);
+    var create = (form.attr("id") || "").match(/^new_/);
+    Note.submit(form[0], function(resp) {
       if (create)
         self.load(resp.url);
-      self.refs.browser.refresh();
+      self.refs.browser.refreshFilter();
     });
   },
 
-  activate: function(url) {
-    this.load(url, true, this.props.onactivate);
-  },
+  destroy: function(ui) {
+    var preview = $(ui).find(".preview").text();
+    var url = $(ui).find(".destroyer").attr("href");
 
-  load: function(url, signal, callback) {
-    if (this.hasUnsavedChanges() && !confirm('There are unsaved changes. Really navigate away?'))
-      return this.props["onload"](this.state.active.url.split("?", 2)[0]);
+    if (!confirm("Confirm to destroy:\n\n" + preview))
+      return;
 
-    var self = this;
-    $.get(url, function(html) {
-      var id = url.split("?", 2)[0].match(/([^\/]+\/[^\/]+)(\/edit)?$/);
-      id = id ? id[1] : url.split("?", 2)[0].match(/[^\/]*$/)[0];
-      id = id.split("#", 2)[0];
-      self.refs.browser.setState({ active : id });
-      self.setState({
-        active: {
-          id: id,
-          url: url,
-          html: html
-        }
-      });
-      if (signal !== false)
-        self.props["onload"](url.split("?", 2)[0]);
-      callback && callback();
-    });
-  },
-
-  destroy: function(url, callback) {
     var self = this;
     $.ajax({
       method: "post",
       data: { "_method": "delete" },
       url: url,
+
       success: function() {
-        self.props.ondestroy(url);
-        callback && callback();
+        self.props.onDestroy(url);
+        $(ui).css("position", "relative").
+          animate({left: -$(ui).width()}, "slow", function() {
+            var newResults = self.refs.browser.state.results
+              .filter(function(i) { return i.url != url });
+            self.refs.browser.setState({ results: newResults });
+          });
       }
     });
   },
 
+  checkForUnsavedChanges: function() {
+    if (this.hasUnsavedChanges() && !confirm("There are unsaved changes. Really navigate away?"))
+      return false;
+  },
+
+  load: function(url) {
+    if (this.checkForUnsavedChanges() !== false)
+      this.refs.browser.setViewport(url, null, true);
+  },
+
+  onViewportLoad: function() {
+    $(".note input[name*=tag_list]").autocomplete({
+      source: "/tags/autocomplete",
+      position: { my: "left bottom", at: "left top" },
+      delay: 0
+    });
+
+    if ($(".editor textarea", this.refs.ui)[0]) {
+      var source = $(".editor textarea", this.refs.ui).val();
+      $(".editor textarea", this.refs.ui).remove();
+
+      var editor = new MediumEditor([$(".editor", this.refs.ui)[0]], {
+        autoLink: true,
+        buttonLabels: "fontawesome",
+        toolbar: {
+          buttons: ["h2", "h3", "bold", "italic", "underline", "anchor",
+            "quote", "pre", "abc", "orderedlist", "unorderedlist", "table",
+            "outdent", "indent", "hr"]
+        },
+        paste: {
+          forcePlainText: false,
+          cleanPastedHTML: true
+        },
+        extensions: {
+          "abc": new AbcButton(),
+          "tables": new MediumEditorTable()
+        }
+      });
+
+      editor.setContent(source.length ? source : "<p></p>", 0);
+      editor.subscribe("editableInput", Note.makeDirty);
+
+      $(".editor", this.refs.ui).focus();
+
+      this.editor = editor;
+    } else {
+      Note.renderAbc();
+    }
+
+    this.props.onLoad.apply(window, arguments);
+  },
+
   render: function() {
     return (
-      <div id="app" className="container-fluid">
-        <Browser ref="browser"
-                 initialTags={this.props.initialTags}
-                 initialFilters={this.props.initialFilters}
-                 initialFilter={this.props.initialFilter}
-                 initialResults={this.props.initialResults}
-                 initialActive={this.state.active.id}
-                 searchPath={this.props.searchPath}
-                 search={this.props.onfilter}
-                 activate={this.activate}
-                 destroy={this.destroy} />
-        <Viewport ref="viewport"
-                  id={this.state.active.id}
-                  html={this.state.active.html} />
-      </div>
+      <BrowserApp ref="browser" {...this.props}
+                  resultTag="FilterResult"
+                  onLoad={ this.onViewportLoad }
+                  onUnload={ this.checkForUnsavedChanges } />
     );
   }
 });

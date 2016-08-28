@@ -19,3 +19,81 @@
 
 @import "font-awesome-sprockets";
 @import "font-awesome";
+
+#app_container {
+  height: 100%;
+  padding: 6px;
+
+  > [data-react-class="App"] {
+    height: 100%;
+  }
+}
+
+
+#filter-tags-dropdown {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.browser-app-results li {
+  position: relative;
+  overflow-x: auto;
+
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-top: 1px dashed #ddd;
+
+  a {
+    color: #000;
+  }
+
+  &:first-child {
+    border-top: none;
+  }
+
+  .preview {
+    display: block;
+    font-weight: bold;
+  }
+
+  .actions {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+  }
+
+  &:not(:hover) .actions {
+    display: none;
+  }
+
+  .tag {
+    font-size: 0.9em;
+  }
+}
+
+.browser-app-actions {
+  .fa {
+    color: #888;
+    font-size: 24px;
+  }
+
+  > span, > a, > button {
+    display: block;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+
+  button {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background-color: #fff;
+  }
+
+  [data-search-action=true] {
+      display: none;
+  }
+}

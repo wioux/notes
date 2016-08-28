@@ -37,7 +37,7 @@ module ApplicationHelper
                              "class": "fa fa-sign-in")
     end
 
-    content_tag(:div, id: "actions"){ actions.join.html_safe }
+    content_tag(:div, class: "browser-app-actions"){ actions.join.html_safe }
   end
 
   def tag_labels

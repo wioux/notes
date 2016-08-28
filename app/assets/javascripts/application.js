@@ -9,7 +9,7 @@
 //= require components
 //= require_tree .
 
-function pushState(url) {
+function pushState(url, filter) {
   url = url || location.pathname;
   if (app.refs.browser.state.filter.match(/\S/))
     url += "?f="+encodeURIComponent(app.refs.browser.state.filter);
@@ -33,53 +33,29 @@ function popState() {
 
 $(document).ready(function() {
   var props = $("#app_container *").data("reactProps");
-  props.onload = function(url) {
+  props.onLoad = function(url) {
     // this has the effect of hiding the browser on small screens,
     // while making sure it is shown if the window is expanded
     $("#browser").css("display", "");
 
     pushState(url);
-  }
-  props.onfilter = pushState;
-  props.ondestroy = function(url) {
+  };
+
+  props.onDestroy = function(url) {
     if (url.split("?", 2)[0] == location.pathname)
       pushState("/notes")
   };
-  props.onactivate = function() {
-    window.scrollTo(0, $("#viewport").offset().top);
+
+  props.onSelect = function() {
+//    window.scrollTo(0, $("#viewport").offset().top);
   };
+
+  props.onFilter = function(search) { pushState() }
+
   window.onpopstate = popState;
 
   window.app = ReactDOM.render(React.createElement(App, props),
                                $('#app_container *')[0]);
-
-  $(window).bind('beforeunload', function() {
-    if (app.hasUnsavedChanges())
-      return 'There are unsaved changes.';
-  });
-
-  $(document).on('click', 'a[data-tag]', function(e) {
-    if (!e.metaKey) {
-      e.preventDefault();
-      app.filter("."+this.dataset.tag);
-    }
-  });
-
-  $(document).on('submit', '.note form[id^=edit_note_], .note form#new_note', function(e) {
-    e.preventDefault();
-    app.save();
-  });
-
-  $(document).on("click", "#actions a[data-search-action=true]", function(e) {
-    e.preventDefault();
-    $("#browser").show();
-    window.scrollTo(0, 0);
-  });
-
-  $(document).on("click", "#actions .navigate a:not([data-search-action])",function(e) {
-    e.preventDefault();
-    app.load(this.href);
-  });
 
   $(window).on('keydown', function(e) {
     var url;
@@ -87,7 +63,7 @@ $(document).ready(function() {
     case 'n':
       if (e.ctrlKey && !e.altKey && !e.metaKey) {
         e.preventDefault();
-        url = $("#actions a[data-new-action]").attr("href");
+        url = $(".browser-app-actions a[data-new-action]").attr("href");
         url && app.load(url);
       }
       break;
@@ -95,7 +71,7 @@ $(document).ready(function() {
     case 'e':
       if (!e.ctrlKey && !e.altKey && e.metaKey) {
         e.preventDefault();
-        url = $("#actions a[data-edit-action]").attr("href");
+        url = $(".browser-app-actions a[data-edit-action]").attr("href");
         url && app.load(url);
       }
       break;
