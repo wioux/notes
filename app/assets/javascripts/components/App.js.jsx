@@ -98,8 +98,11 @@ var App = React.createClass({
   },
 
   load: function(url) {
-    if (this.checkForUnsavedChanges() !== false)
-      this.refs.browser.setViewport(url, null, true);
+    var id = url.split("?", 2)[0].match(/([^\/]+\/[^\/]+)(\/edit)?$/);
+    id = id ? id[1] : url.split("?", 2)[0].match(/[^\/]*$/)[0];
+    id = id.split("#", 2)[0];
+
+    this.refs.browser.setViewport(url, id, true);
   },
 
   onViewportLoad: function() {

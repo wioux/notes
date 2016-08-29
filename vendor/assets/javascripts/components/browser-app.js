@@ -11,6 +11,7 @@ exports.BrowserApp = React.createClass({
     searchPath: React.PropTypes.string.isRequired,
     searchPlaceholder: React.PropTypes.string,
 
+    // Tag to wrap filter results with
     resultTag: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]),
 
     initialFilter: React.PropTypes.string,
@@ -34,7 +35,8 @@ exports.BrowserApp = React.createClass({
     return {
       onFilter: function () {},
       onSelect: function () {},
-      onLoad: function () {}
+      onLoad: function () {},
+      onUnload: function () {}
     };
   },
 
@@ -98,6 +100,8 @@ exports.BrowserApp = React.createClass({
   },
 
   setViewport: function (url, id, signal, callback) {
+    if (this.props.onUnload() === false) return false;
+
     var self = this;
     $.get(url, function (html) {
       self.setState({
@@ -110,6 +114,8 @@ exports.BrowserApp = React.createClass({
 
       callback && callback();
     });
+
+    return true;
   },
 
   onFilterInputChange: function (e) {
