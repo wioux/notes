@@ -22,7 +22,7 @@ html, body {
 
 .browser-app-viewport {
   flex: 1 0;
-  padding-right: 40px; /* leave room for actions */
+  padding-right: 80px; /* leave room for actions */
 }
 
 .browser-app-viewport-content {
@@ -118,6 +118,74 @@ html, body {
 .browser-app-filter-container .browser-app-filter-clear a {
   color: #00f;
 }
+
+
+/* Font styling */
+.browser-app {
+  color: #333;
+}
+
+.browser-app-viewport {
+  font-family: Sans-Serif;
+  font-size: 12pt;
+  line-height: 150%;
+}
+
+.browser-app-viewport h1,
+.browser-app-viewport h2,
+.browser-app-viewport h3,
+.browser-app-filter-container {
+  line-height: 150%;
+  font-family: "Georgia", "Times New Roman", Serif;
+}
+
+.browser-app-viewport {
+  text-align: justify;
+}
+
+.browser-app-viewport h1,
+.browser-app-viewport h2,
+.browser-app-viewport h3,
+.browser-app-viewport h4 {
+  text-align: left;
+  font-weight: bold;
+  line-height: 30px; /* this puts the first header level with the search box */
+  margin-bottom: 0.3em;
+}
+
+.browser-app-viewport h1 + p,
+.browser-app-viewport h2 + p,
+.browser-app-viewport h3 + p,
+.browser-app-viewport h4 + p {
+  margin-top: 0px;
+}
+
+.browser-app-viewport h1 {
+  font-size: 1.8em;
+}
+
+.browser-app-viewport h2 {
+  font-size: 1.5em;
+}
+
+.browser-app-viewport h3 {
+  font-size: 1.2em;
+}
+
+.browser-app-viewport h4 {
+  font-weight: bold;
+  font-size: 100%;
+  margin-bottom: 0px;
+}
+
+.browser-app-results {
+  font-family: Sans-Serif;
+  font-size: 11pt;
+  line-height: normal;
+}
+
+
+
 
 /* Results list */
 .browser-app-results {
