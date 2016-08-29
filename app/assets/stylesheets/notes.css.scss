@@ -12,6 +12,8 @@
     }
 
     .body {
+      > p { text-align: justify }
+
         &:not(.editor) {
           margin-top: 8px;
         }
