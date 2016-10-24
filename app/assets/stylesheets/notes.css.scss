@@ -12,7 +12,7 @@
     }
 
     .body {
-      > p { text-align: justify }
+      > p, .ProseMirror-content > p { text-align: justify }
 
         &:not(.editor) {
           margin-top: 8px;
@@ -112,8 +112,22 @@
         bottom: 0px;
       }
 
-      &.medium-editor-element {
-        top: 34px;
+      .ProseMirror {
+        height: 100%;
+      }
+
+      .ProseMirror-menubar {
+        border-top: 1px solid #ccc;
+        border-left: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        border-bottom: 1px dashed #ccc;
+      }
+
+      .ProseMirror-content {
+        position: absolute;
+        top: 29px;
+        bottom: 0px;
+        width: 100%;
         overflow-y: auto;
         border-left: 1px solid #ccc;
         border-right: 1px solid #ccc;
@@ -178,19 +192,6 @@
     embed {
       display: none ! important;
     }
-}
-
-/* a little touch up on the medium editor theme (beagle) */
-.medium-editor-toolbar li button {
-  padding-top: 11px;
-
-  &:hover {
-    color: #ccc;
-  }
-
-  &.medium-editor-button-active:hover {
-    color: #a2d7c7;
-  }
 }
 
 

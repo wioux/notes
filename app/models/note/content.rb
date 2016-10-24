@@ -45,15 +45,18 @@ class Note
 
     private
 
+    include ActionView::Helpers::TextHelper
+
     def fix_html
       sanitizer = Rails::Html::WhiteListSanitizer.new
 
-      # i'd prefer not to permit any attributes (except href), but
-      # "indent" command needs custom style and abc notes uses class="abc"
+      # abc notes uses class="abc"
       tags = [*"h1".."h7", "p", "ol", "ul", "li", "br", "hr",
               "blockquote", "pre", "table", "thead", "tbody", "tr", "th", "td",
-              "a", "b", "strong", "i", "em", "u"]
-      body = sanitizer.sanitize(self.body, tags: tags, attributes: %w(style class href))
+              "a", "b", "strong", "i", "em", "u", "code"]
+      body = sanitizer.sanitize(self.body, tags: tags, attributes: %w(class href))
+
+      body = auto_link(body, link: :urls)
 
       doc = Nokogiri::HTML::DocumentFragment.parse(body)
 
@@ -64,6 +67,10 @@ class Note
       doc.css("h1, h2, h3, h4, h5, h6, h7").each_with_index do |node, inode|
         id = node.text.gsub(/\s+/, "-") + "-#{inode}"
         node.set_attribute("id", id.downcase)
+      end
+
+      doc.css("a").each do |node|
+        node.set_attribute("target", "_blank")
       end
 
       self.body = doc.to_s

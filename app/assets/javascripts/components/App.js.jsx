@@ -60,7 +60,7 @@ var App = React.createClass({
     var self = this;
     var form = $(".browser-app-viewport-content form", this.refs.browser.refs.ui);
     var create = (form.attr("id") || "").match(/^new_/);
-    Note.submit(form[0], function(resp) {
+    Note.submit(this, form[0], function(resp) {
       if (create)
         self.load(resp.url);
       self.refs.browser.refreshFilter();
@@ -112,32 +112,30 @@ var App = React.createClass({
       delay: 0
     });
 
-    if ($(".editor textarea", this.refs.ui)[0]) {
+    if ($(".editor textarea", this.refs.browser.refs.ui)[0]) {
       var source = $(".editor textarea", this.refs.ui).val();
       $(".editor textarea", this.refs.ui).remove();
 
-      var editor = new MediumEditor([$(".editor", this.refs.ui)[0]], {
-        autoLink: true,
-        buttonLabels: "fontawesome",
-        toolbar: {
-          buttons: ["h2", "h3", "bold", "italic", "underline", "anchor",
-            "quote", "pre", "abc", "orderedlist", "unorderedlist", "table",
-            "outdent", "indent", "hr"]
-        },
-        paste: {
-          forcePlainText: false,
-          cleanPastedHTML: true
-        },
-        extensions: {
-          "abc": new AbcButton(),
-          "tables": new MediumEditorTable()
-        }
+      var frag = document.createElement("div");
+      frag.innerHTML = source;
+
+
+      var editor = new ProseMirror({
+        menuBar: true,
+        place: $(".editor", this.refs.browser.refs.ui)[0],
+        schema: ProseMirrorSchema,
+        doc: ProseMirrorSchema.parseDOM(frag),
+        plugins: ProseMirrorPlugins
       });
 
-      editor.setContent(source.length ? source : "<p></p>", 0);
-      editor.subscribe("editableInput", Note.makeDirty);
+      editor.on.transform.add(function() {
+        if (editor.history.undoDepth)
+          Note.makeDirty();
+        else
+          Note.makeClean();
+      });
 
-      $(".editor", this.refs.ui).focus();
+      editor.focus();
 
       this.editor = editor;
     } else {

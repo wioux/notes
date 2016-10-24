@@ -1,6 +1,6 @@
 
 Note = {
-  submit: function(form, callback) {
+  submit: function(app, form, callback) {
     var date = '';
     var now = new Date();
     date += 1900 + now.getYear() + '/';
@@ -10,9 +10,12 @@ Note = {
     date += now.getMinutes() + '/';
     date += now.getSeconds();
 
+    var frag = document.createElement("div");
+    frag.appendChild(app.editor.doc.content.toDOM());
+
     var fd = new FormData(form);
     fd.append("note[date]", date);
-    fd.append("note[body]", $(".editor", form).html());
+    fd.append("note[body]", frag.innerHTML);
 
     $.ajax({
       url: form.action,

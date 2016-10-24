@@ -17,6 +17,8 @@ gem 'abcjs-rails'
 
 gem 'react-rails'
 
+gem 'rails_autolink'
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'pry'
